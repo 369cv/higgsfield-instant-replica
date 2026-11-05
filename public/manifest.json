@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "Higgsfield Instant",
+  "version": "1.3.2",
+  "description": "Recreate any image or video with Higgsfield AI and Soul identity preservation directly from your browser.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "permissions": [
+    "storage",
+    "sidePanel",
+    "activeTab",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "http://localhost:9876/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.instagram.com/*",
+        "https://*.pinterest.com/*",
+        "https://*.x.com/*",
+        "https://*.twitter.com/*",
+        "https://*.cosmos.so/*",
+        "https://*.shutterstock.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*",
+        "gallery/*",
+        "assets/*"
+      ],
+      "matches": ["https://*/*", "http://*/*"]
+    }
+  ]
+}

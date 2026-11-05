@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-lime: #d1fe17;
+  --color-black-1: #0b0c0e;
+  --color-black-2: #121318;
+  --color-gray-border: #23252e;
+  --color-text-secondary: #717684;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0c0e;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+}
+
+/* Custom scrollbar matching Higgsfield */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0c0e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #23252e;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3e4e;
+}
+
+/* Smooth badge pulse */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 1.8s infinite ease-in-out;
+}
