@@ -39,7 +39,8 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
   if (!item) return null;
 
-  const currentDisplayImage = inspectingRef ? (item.referenceImage || item.imageUrl) : item.imageUrl;
+  const heroImage = item.fullImageUrl || item.imageUrl;
+  const currentDisplayImage = inspectingRef ? (item.referenceImage || heroImage) : heroImage;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(item.prompt);

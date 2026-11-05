@@ -11,6 +11,7 @@ export interface VaultItem {
   prompt: string;
   referenceImage: string;
   imageUrl: string;
+  fullImageUrl?: string;
   model: string;
   jobType: string;
   moodboard: string;

@@ -11,22 +11,39 @@ export const App: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
   const [lastViewedId, setLastViewedId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load live tracked generations from Higgsfield CLI
+  // Load and continuously sync live tracked generations
   useEffect(() => {
-    async function init() {
-      setIsLoading(true);
+    let isMounted = true;
+
+    async function loadVault() {
       try {
-        const vaultItems = await HiggsfieldService.getVault();
-        setVault(vaultItems);
+        const details = await HiggsfieldService.getVaultDetails();
+        if (isMounted) {
+          setVault(details.items);
+          setInProgressCount(details.inProgressCount);
+          if (details.inProgressCount > 0) {
+            setIsGenerating(true);
+          } else {
+            setIsGenerating(false);
+          }
+        }
       } catch (err) {
         console.error(err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     }
-    init();
+
+    loadVault();
+    const interval = setInterval(loadVault, 3500);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const handleTurnToVideo = (_item: VaultItem) => {
@@ -50,7 +67,7 @@ export const App: React.FC = () => {
             <GeneratingQueue
               isGenerating={true}
               progressText={isLoading ? "Loading Soul" : "Generating"}
-              activeCount={4}
+              activeCount={inProgressCount > 0 ? inProgressCount : 4}
             />
           </div>
         )}

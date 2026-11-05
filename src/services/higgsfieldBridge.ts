@@ -33,13 +33,17 @@ export const HiggsfieldService = {
     return [];
   },
 
-  async getVault(): Promise<VaultItem[]> {
+  async getVaultDetails(): Promise<{ items: VaultItem[]; total: number; inProgressCount: number }> {
     try {
       const res = await fetch(`${BRIDGE_URL}/vault`);
       if (res.ok) {
         const data = await res.json();
         if (data.items && data.items.length > 0) {
-          return data.items;
+          return {
+            items: data.items,
+            total: data.total || data.items.length,
+            inProgressCount: data.inProgressCount || 0
+          };
         }
       }
     } catch {
@@ -51,13 +55,22 @@ export const HiggsfieldService = {
       const staticRes = await fetch('/data/soul-generations.json');
       if (staticRes.ok) {
         const staticData = await staticRes.json();
-        return staticData.items || [];
+        return {
+          items: staticData.items || [],
+          total: staticData.total || (staticData.items || []).length,
+          inProgressCount: 0
+        };
       }
     } catch (e) {
       console.warn('Could not load static soul-generations.json', e);
     }
 
-    return [];
+    return { items: [], total: 0, inProgressCount: 0 };
+  },
+
+  async getVault(): Promise<VaultItem[]> {
+    const details = await this.getVaultDetails();
+    return details.items;
   },
 
   async extractPrompt(imageUrl: string): Promise<{ prompt: string; model: string; aspectRatio: string }> {

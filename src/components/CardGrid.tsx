@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Heart,
   Download,
@@ -23,6 +23,9 @@ interface CardGridProps {
   onSelectItem: (item: VaultItem) => void;
 }
 
+const INITIAL_BATCH = 24;
+const BATCH_INCREMENT = 24;
+
 export const CardGrid: React.FC<CardGridProps> = ({
   items,
   layout,
@@ -32,6 +35,57 @@ export const CardGrid: React.FC<CardGridProps> = ({
   onSelectItem
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_BATCH);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Auto-expand visibleCount if items array starts smaller or expands
+  useEffect(() => {
+    if (items.length > 0 && visibleCount < INITIAL_BATCH) {
+      setVisibleCount(Math.min(INITIAL_BATCH, items.length));
+    }
+  }, [items.length]);
+
+  // Infinite Scroll with IntersectionObserver
+  useEffect(() => {
+    if (visibleCount >= items.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && !isLoadingMore) {
+          setIsLoadingMore(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + BATCH_INCREMENT, items.length));
+            setIsLoadingMore(false);
+          }, 180);
+        }
+      },
+      { rootMargin: '500px' }
+    );
+
+    const sentinel = sentinelRef.current;
+    if (sentinel) observer.observe(sentinel);
+
+    return () => {
+      if (sentinel) observer.unobserve(sentinel);
+    };
+  }, [visibleCount, items.length, isLoadingMore]);
+
+  // Fallback scroll listener for instant responsiveness
+  useEffect(() => {
+    const handleScroll = () => {
+      if (visibleCount >= items.length) return;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const threshold = document.documentElement.scrollHeight - 700;
+      if (scrollPosition >= threshold) {
+        setVisibleCount((prev) => Math.min(prev + BATCH_INCREMENT, items.length));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [visibleCount, items.length]);
 
   const getColClass = () => {
     switch (cardSize) {
@@ -180,6 +234,8 @@ export const CardGrid: React.FC<CardGridProps> = ({
     );
   };
 
+  const displayedItems = items.slice(0, visibleCount);
+
   if (items.length === 0) {
     return (
       <div className="w-full py-8">
@@ -190,7 +246,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
 
   if (splitByDate) {
     const groups: { [date: string]: VaultItem[] } = {};
-    items.forEach((item) => {
+    displayedItems.forEach((item) => {
       const dateKey = item.createdAt.split(' at ')[0] || item.createdAt;
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(item);
@@ -209,14 +265,48 @@ export const CardGrid: React.FC<CardGridProps> = ({
             </div>
           </div>
         ))}
+
+        {/* Infinite Scroll Sentinel */}
+        {visibleCount < items.length && (
+          <div
+            ref={sentinelRef}
+            className="w-full py-10 flex flex-col items-center justify-center gap-2.5 select-none"
+          >
+            <div className="relative w-8 h-8 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+              <div className="absolute inset-0 rounded-full border-2 border-[#d1fe17] border-t-transparent animate-spin" />
+            </div>
+            <span className="text-[11px] font-medium text-[#717684] tracking-wider uppercase">
+              Loading more Soul generations...
+            </span>
+          </div>
+        )}
       </div>
     );
   }
 
   {/* Zero gap between images */}
   return (
-    <div className={`grid gap-0 pb-12 ${getColClass()}`}>
-      {items.map(renderCard)}
+    <div className="w-full pb-12">
+      <div className={`grid gap-0 ${getColClass()}`}>
+        {displayedItems.map(renderCard)}
+      </div>
+
+      {/* Infinite Scroll Sentinel */}
+      {visibleCount < items.length && (
+        <div
+          ref={sentinelRef}
+          className="w-full py-10 flex flex-col items-center justify-center gap-2.5 select-none"
+        >
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+            <div className="absolute inset-0 rounded-full border-2 border-[#d1fe17] border-t-transparent animate-spin" />
+          </div>
+          <span className="text-[11px] font-medium text-[#717684] tracking-wider uppercase">
+            Loading more Soul generations...
+          </span>
+        </div>
+      )}
     </div>
   );
 };
