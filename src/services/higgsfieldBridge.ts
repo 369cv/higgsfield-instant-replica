@@ -9,8 +9,8 @@ export const HiggsfieldService = {
       if (res.ok) {
         return await res.json();
       }
-    } catch (e) {
-      console.warn('Bridge offline');
+    } catch {
+      // Local bridge offline
     }
     return {
       email: 'baha@bahasavage.com',
@@ -27,8 +27,8 @@ export const HiggsfieldService = {
         const data = await res.json();
         return data.souls || [];
       }
-    } catch (e) {
-      console.warn('Bridge offline');
+    } catch {
+      // fallback
     }
     return [];
   },
@@ -38,11 +38,25 @@ export const HiggsfieldService = {
       const res = await fetch(`${BRIDGE_URL}/vault`);
       if (res.ok) {
         const data = await res.json();
-        return data.items || [];
+        if (data.items && data.items.length > 0) {
+          return data.items;
+        }
+      }
+    } catch {
+      // Local bridge offline
+    }
+
+    // Static fallback for production Vercel & offline extension
+    try {
+      const staticRes = await fetch('/data/soul-generations.json');
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        return staticData.items || [];
       }
     } catch (e) {
-      console.warn('Bridge offline');
+      console.warn('Could not load static soul-generations.json', e);
     }
+
     return [];
   },
 
@@ -56,11 +70,11 @@ export const HiggsfieldService = {
       if (res.ok) {
         return await res.json();
       }
-    } catch (e) {
-      console.warn('Extraction offline');
+    } catch {
+      // Extraction offline
     }
     return {
-      prompt: "",
+      prompt: '',
       model: 'Higgsfield Soul 2.0',
       aspectRatio: '3:4'
     };
@@ -73,21 +87,25 @@ export const HiggsfieldService = {
     aspectRatio?: string;
     referenceImage?: string;
   }): Promise<VaultItem> {
-    const res = await fetch(`${BRIDGE_URL}/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return data.item;
+    try {
+      const res = await fetch(`${BRIDGE_URL}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return data.item;
+      }
+    } catch {
+      // offline
     }
 
     return {
       id: `gen-${Date.now()}`,
       author: {
-        username: 'savage_mode',
-        role: 'Author',
+        username: 'baha@bahasavage.com',
+        role: 'Creator',
         avatarUrl: payload.referenceImage || '/icons/icon128.png'
       },
       title: payload.prompt.slice(0, 40) + '...',

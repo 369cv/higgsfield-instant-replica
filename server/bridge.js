@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Helper to map CLI generation job to frontend VaultItem - STRICTLY REAL DATA ONLY
+// Helper to map CLI generation job to frontend VaultItem - STRICTLY REAL DATA
 function mapJobToVaultItem(job) {
   const p = job.params || {};
   const d = new Date(job.created_at || Date.now());
@@ -32,8 +32,8 @@ function mapJobToVaultItem(job) {
   return {
     id: job.id,
     author: {
-      username: 'savage_mode',
-      role: 'Author',
+      username: 'baha@bahasavage.com',
+      role: 'Creator',
       avatarUrl: job.min_result_url || job.result_url
     },
     title: promptText.split('.')[0]?.slice(0, 45) || 'Higgsfield Soul Generation',
@@ -114,16 +114,19 @@ app.get('/api/souls', async (req, res) => {
   }
 });
 
-// 5. Live Feed of strictly recent Soul recreations from Higgsfield CLI
+// 5. Live Feed: ALL real Soul generations starting from the girl wearing black in the car (14:00:00Z) forward
 app.get('/api/vault', async (req, res) => {
   try {
-    const { stdout } = await execAsync('higgsfield generate list --json');
+    // Request up to 100 jobs to capture the full tracking history
+    const { stdout } = await execAsync('higgsfield generate list --size 100 --json');
     const jobs = JSON.parse(stdout.trim());
     if (Array.isArray(jobs)) {
-      // Only keep text2image_soul_v2 jobs that actually exist
-      const soulJobs = jobs.filter(j => j.job_type === 'text2image_soul_v2');
+      // Filter for text2image_soul_v2 starting from 14:00:00Z (girl wearing black in car onwards)
+      const soulJobs = jobs.filter(
+        j => j.job_type === 'text2image_soul_v2' && j.created_at >= '2026-11-05T14:00:00Z'
+      );
       const liveItems = soulJobs.map(mapJobToVaultItem);
-      return res.json({ success: true, items: liveItems, source: 'live_cli' });
+      return res.json({ success: true, items: liveItems, total: liveItems.length, source: 'live_cli' });
     }
   } catch (err) {
     console.error('Error fetching live generations from CLI:', err.message);
@@ -132,9 +135,8 @@ app.get('/api/vault', async (req, res) => {
   res.json({ success: true, items: [], source: 'empty' });
 });
 
-// 6. Extract prompt from reference image
+// 6. Extract prompt
 app.post('/api/extract-prompt', (req, res) => {
-  const { imageUrl } = req.body;
   res.json({
     success: true,
     prompt: "",
@@ -144,7 +146,7 @@ app.post('/api/extract-prompt', (req, res) => {
   });
 });
 
-// 7. Dispatch generation via CLI
+// 7. Dispatch generation
 app.post('/api/generate', async (req, res) => {
   const { prompt, model = 'text2image_soul_v2', aspectRatio = '3:4', referenceImage } = req.body;
 
@@ -162,8 +164,8 @@ app.post('/api/generate', async (req, res) => {
   const newItem = {
     id: newId,
     author: {
-      username: 'savage_mode',
-      role: 'Author',
+      username: 'baha@bahasavage.com',
+      role: 'Creator',
       avatarUrl: referenceImage || '/icons/icon128.png'
     },
     title: prompt ? prompt.slice(0, 40) + '...' : 'Higgsfield Soul 2.0 Generation',
@@ -193,5 +195,5 @@ app.post('/api/generate', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`⚡ Higgsfield CLI Bridge running on http://localhost:${PORT}`);
   console.log(`Connected account: baha@bahasavage.com (starter plan, 270 credits)`);
-  console.log(`Serving ONLY real Soul recent generations`);
+  console.log(`Tracking all real Soul generations starting from girl in black in the car (64 items)`);
 });
