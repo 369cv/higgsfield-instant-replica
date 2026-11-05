@@ -1,5 +1,4 @@
 import React from 'react';
-import { Maximize2, Sparkles, Heart } from 'lucide-react';
 import { VaultItem, LayoutMode } from '../types';
 
 interface CardGridProps {
@@ -17,7 +16,6 @@ export const CardGrid: React.FC<CardGridProps> = ({
   splitByDate,
   onSelectItem
 }) => {
-  // Determine column classes based on card size
   const getColClass = () => {
     switch (cardSize) {
       case 1:
@@ -39,9 +37,9 @@ export const CardGrid: React.FC<CardGridProps> = ({
       <div
         key={item.id}
         onClick={() => onSelectItem(item)}
-        className="group relative cursor-pointer overflow-hidden rounded-xl bg-[#121318] border border-[#1f212a] hover:border-[#3a3e4e] transition-all duration-200 shadow-md hover:shadow-xl hover:scale-[1.01]"
+        className="group relative cursor-pointer overflow-hidden rounded-xl bg-[#121318] border border-[#1f212a] hover:border-[#3a3e4e] transition-all duration-200 shadow-md hover:shadow-xl hover:scale-[1.008]"
       >
-        {/* Pure Image Container - ZERO TEXT OVERLAY */}
+        {/* Pure Image Container - Clean, Zero Text, Zero Overlays */}
         <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-auto'}`}>
           <img
             src={item.imageUrl}
@@ -50,22 +48,23 @@ export const CardGrid: React.FC<CardGridProps> = ({
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
-
-        {/* Minimal Subtle Floating Action on Hover - No Text Clutter */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-start justify-between p-2.5">
-          <div className="w-7 h-7 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80">
-            <Sparkles className="w-3.5 h-3.5 text-lime" />
-          </div>
-          <div className="w-7 h-7 rounded-full bg-black/60 backdrop-blur-md flex items-center justify-center text-white/80 hover:text-white">
-            <Maximize2 className="w-3.5 h-3.5" />
-          </div>
-        </div>
       </div>
     );
   };
 
+  if (items.length === 0) {
+    return (
+      <div className="py-20 flex flex-col items-center justify-center text-center text-[#717684]">
+        <div className="w-12 h-12 rounded-2xl bg-[#121318] border border-[#23252e] flex items-center justify-center text-lime mb-3">
+          <img src="/icons/icon32.png" alt="" className="w-6 h-6 object-contain" />
+        </div>
+        <div className="text-sm font-medium text-white mb-1">No Soul Generations Yet</div>
+        <div className="text-xs">Click Recreate above to start generating with Soul 2.0</div>
+      </div>
+    );
+  }
+
   if (splitByDate) {
-    // Group items by created date
     const groups: { [date: string]: VaultItem[] } = {};
     items.forEach((item) => {
       const dateKey = item.createdAt.split(' at ')[0] || item.createdAt;

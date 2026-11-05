@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Sparkles, User, RefreshCw, Wand2 } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { SoulCharacter } from '../types';
 
 interface InPageFloatingWidgetProps {
@@ -20,13 +20,12 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
   isOpen,
   onClose,
   referenceImage,
-  initialPrompt = "A three-quarter view, medium close-up photograph centers on a young Caucasian woman in her mid-20s seated in the driver's seat of a luxury sports car...",
+  initialPrompt = "",
   souls,
   onGenerate
 }) => {
-  const [useSoul, setUseSoul] = useState(true);
-  const [selectedSoulId, setSelectedSoulId] = useState<string>(souls[0]?.id || 'soul-savage');
-  const [aspectRatio, setAspectRatio] = useState<string>('1:1');
+  const [selectedSoulId, setSelectedSoulId] = useState<string>(souls[0]?.id || '');
+  const [aspectRatio, setAspectRatio] = useState<string>('3:4');
   const [prompt, setPrompt] = useState<string>(initialPrompt);
 
   if (!isOpen) return null;
@@ -35,7 +34,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
     e.preventDefault();
     onGenerate({
       prompt,
-      soulId: useSoul ? selectedSoulId : undefined,
+      soulId: selectedSoulId || undefined,
       aspectRatio,
       referenceImage
     });
@@ -44,17 +43,14 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-lg rounded-3xl bg-[#121318] border border-[#282b37] shadow-2xl p-6 overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-2xl bg-[#121318] border border-[#282b37] shadow-2xl p-5 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#23252e]">
-          <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-lg bg-black flex items-center justify-center text-lime font-black text-base border border-[#2e313d]">
-              〰
-            </span>
-            <span className="font-bold text-sm tracking-tight text-white">Recreate with Soul</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-lime/15 text-lime border border-lime/30">
-              Higgsfield 2.0
-            </span>
+        <div className="flex items-center justify-between pb-3 border-b border-[#23252e]">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-[#14151b] border border-[#282b37] flex items-center justify-center p-1">
+              <img src="/icons/icon32.png" alt="" className="w-full h-full object-contain" />
+            </div>
+            <span className="font-semibold text-sm tracking-tight text-white">Recreate with Soul</span>
           </div>
 
           <button
@@ -66,63 +62,34 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
         </div>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-          {/* Reference Image + Prompt preview */}
-          <div className="flex gap-3 bg-[#181920] p-3 rounded-2xl border border-[#23252e]">
-            <img
-              src={referenceImage}
-              alt="Source"
-              className="w-20 h-20 rounded-xl object-cover border border-white/10 flex-shrink-0"
-            />
-            <div className="flex-1 space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] text-[#717684]">
-                <span>VISION PROMPT DECONSTRUCTION</span>
-                <span className="text-lime flex items-center gap-1 font-medium">
-                  <Wand2 className="w-3 h-3" /> Auto-Extracted
-                </span>
-              </div>
+          {/* Style Reference (Official Higgsfield component) */}
+          <div className="space-y-1.5">
+            <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
+              Style Reference
+            </div>
+            <div className="flex gap-3 bg-[#181920] p-3 rounded-xl border border-[#23252e]">
+              {referenceImage && (
+                <img
+                  src={referenceImage}
+                  alt="Reference"
+                  className="w-16 h-16 rounded-lg object-cover border border-white/10 flex-shrink-0"
+                />
+              )}
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
+                placeholder="Enter prompt description or leave as style reference..."
                 rows={2}
-                className="w-full bg-transparent text-xs text-[#dee0e3] resize-none focus:outline-none"
+                className="w-full bg-transparent text-xs text-[#dee0e3] resize-none focus:outline-none placeholder-[#5e636e]"
               />
             </div>
           </div>
 
-          {/* Soul Identity Toggle */}
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-[#181920] border border-[#23252e]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-lime/10 border border-lime/20 flex items-center justify-center text-lime">
-                <User className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="text-xs font-semibold text-white">Apply Character Soul</div>
-                <div className="text-[11px] text-[#717684]">
-                  {useSoul ? 'Keeps chosen facial identity & likeness' : 'Generates 4 variations of original scene'}
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setUseSoul(!useSoul)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                useSoul ? 'bg-lime' : 'bg-[#282b37]'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  useSoul ? 'translate-x-6 bg-black' : 'translate-x-1'
-                }`}
-              />
-            </button>
-          </div>
-
-          {/* Avatar Carousel (if Soul active) */}
-          {useSoul && (
-            <div className="space-y-2">
+          {/* Character / Soul Selector (if available) */}
+          {souls.length > 0 && (
+            <div className="space-y-1.5">
               <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
-                Select Identity
+                Character
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {souls.map((soul) => (
@@ -130,36 +97,36 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
                     key={soul.id}
                     type="button"
                     onClick={() => setSelectedSoulId(soul.id)}
-                    className={`flex flex-col items-center gap-2 p-2.5 rounded-xl border text-center transition-all ${
+                    className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${
                       selectedSoulId === soul.id
-                        ? 'bg-lime/10 border-lime text-white'
+                        ? 'bg-[#d1fe17]/10 border-[#d1fe17] text-white'
                         : 'bg-[#181920] border-[#23252e] text-[#8e93a4] hover:border-[#3a3e4e]'
                     }`}
                   >
                     <img
                       src={soul.avatarUrl}
                       alt={soul.name}
-                      className="w-10 h-10 rounded-full object-cover border border-white/10"
+                      className="w-7 h-7 rounded-full object-cover border border-white/10"
                     />
-                    <span className="text-[11px] font-medium truncate w-full">{soul.name}</span>
+                    <span className="text-xs font-medium truncate">{soul.name}</span>
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Aspect Ratio Row */}
+          {/* Aspect Ratio Selector */}
           <div className="space-y-1.5">
             <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
-              Aspect Ratio
+              Aspect ratio
             </div>
             <div className="grid grid-cols-4 gap-2">
-              {['1:1', '9:16', '16:9', '3:4'].map((ratio) => (
+              {['3:4', '1:1', '9:16', '16:9'].map((ratio) => (
                 <button
                   key={ratio}
                   type="button"
                   onClick={() => setAspectRatio(ratio)}
-                  className={`py-1.5 rounded-xl text-xs font-medium border transition-colors ${
+                  className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     aspectRatio === ratio
                       ? 'bg-white/15 border-white text-white'
                       : 'bg-[#181920] border-[#23252e] text-[#717684] hover:text-white'
@@ -171,13 +138,13 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
             </div>
           </div>
 
-          {/* Submit Action */}
+          {/* Generate CTA */}
           <button
             type="submit"
-            className="w-full py-3 rounded-2xl bg-lime hover:bg-lime-hover text-black font-bold text-xs flex items-center justify-center gap-2 transition-transform active:scale-[0.98] shadow-lg shadow-lime/25"
+            className="w-full py-2.5 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-xs flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] shadow-md shadow-[#d1fe17]/20"
           >
-            <Sparkles className="w-4 h-4 fill-black" />
-            <span>Generate 4 Variations (Soul 2.0)</span>
+            <Sparkles className="w-3.5 h-3.5 fill-black" />
+            <span>Generate</span>
           </button>
         </form>
       </div>

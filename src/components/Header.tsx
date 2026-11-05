@@ -1,5 +1,5 @@
 import React from 'react';
-import { SlidersHorizontal, LayoutGrid, Plus, Sparkles } from 'lucide-react';
+import { SlidersHorizontal, LayoutGrid, Sparkles } from 'lucide-react';
 import { AccountInfo } from '../types';
 
 interface HeaderProps {
@@ -16,26 +16,29 @@ export const Header: React.FC<HeaderProps> = ({
   activeFilterCount = 0
 }) => {
   return (
-    <header className="sticky top-0 z-40 bg-[#0b0c0e]/95 backdrop-blur-md border-b border-[#1f212a] px-4 py-3 flex items-center justify-between">
-      {/* Brand & Account */}
+    <header className="sticky top-0 z-40 bg-[#0b0c0e] border-b border-[#1f212a] px-4 py-3 flex items-center justify-between">
+      {/* Brand & Account Info */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          {/* Official Higgsfield Squiggly Glyph */}
-          <div className="w-8 h-8 rounded-lg bg-[#121318] border border-[#282b37] flex items-center justify-center text-lime font-black text-xl shadow-inner">
-            〰
+        {/* Official Higgsfield Icon Squircle */}
+        <div className="w-9 h-9 rounded-xl bg-[#14151b] border border-[#23252e] flex items-center justify-center p-1.5 shadow-sm">
+          <img
+            src="/icons/icon32.png"
+            alt="Higgsfield"
+            className="w-full h-full object-contain"
+          />
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-sm tracking-tight text-white">Higgsfield Instant</span>
+            <span className="text-[10px] font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#1b220e] text-[#d1fe17] border border-[#3b4716]">
+              SOUL 2.0
+            </span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-sm tracking-tight text-white">Higgsfield Instant</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-lime/15 text-lime border border-lime/30">
-                Soul 2.0
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-[#717684]">
-              <span>{account?.email || 'baha@bahasavage.com'}</span>
-              <span>•</span>
-              <span className="text-lime font-medium">{account?.credits ?? 270} credits</span>
-            </div>
+          <div className="flex items-center gap-1.5 text-xs text-[#717684]">
+            <span>{account?.email || 'baha@bahasavage.com'}</span>
+            <span>•</span>
+            <span className="text-[#d1fe17] font-semibold">{account?.credits ?? 270} credits</span>
           </div>
         </div>
       </div>
@@ -49,13 +52,13 @@ export const Header: React.FC<HeaderProps> = ({
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span>Filter</span>
           {activeFilterCount > 0 && (
-            <span className="w-4 h-4 rounded-full bg-lime text-black text-[10px] font-bold flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-[#d1fe17] text-black text-[10px] font-bold flex items-center justify-center">
               {activeFilterCount}
             </span>
           )}
         </button>
 
-        {/* View popover trigger */}
+        {/* View button */}
         <button
           onClick={onOpenView}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#181920] hover:bg-[#1f212a] text-[#babdc5] hover:text-white text-xs font-medium border border-[#282b37] transition-colors"
@@ -67,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Recreate CTA */}
         <button
           onClick={onOpenRecreate}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-lime hover:bg-lime-hover text-black text-xs font-bold transition-transform active:scale-95 shadow-md shadow-lime/20"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold transition-transform active:scale-95 shadow-md shadow-[#d1fe17]/20"
         >
           <Sparkles className="w-3.5 h-3.5 fill-black" />
           <span>Recreate</span>
