@@ -12,8 +12,8 @@ import {
   MoreHorizontal,
   ChevronDown,
   ChevronUp,
-  ExternalLink,
-  Image as ImageIcon
+  Upload,
+  Maximize2
 } from 'lucide-react';
 import { VaultItem } from '../types';
 
@@ -59,41 +59,23 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 md:p-6 overflow-hidden">
       {/* Modal Container */}
       <div className="relative w-full max-w-6xl h-[92vh] rounded-3xl bg-[#0f1015] border border-[#23252e] flex flex-col md:flex-row overflow-hidden shadow-2xl">
-        {/* Left Side: Hero Image Display */}
+        {/* Left Side: Hero Image Display - ZERO text on image, pure visual */}
         <div className="flex-1 bg-black/75 flex items-center justify-center relative p-4 overflow-hidden">
           <img
             src={currentDisplayImage}
-            alt={item.title}
-            className="max-h-full max-w-full object-contain rounded-xl shadow-2xl transition-all duration-300"
+            alt=""
+            className="max-h-full max-w-full object-contain rounded-xl shadow-2xl transition-all duration-200"
           />
 
-          {/* Floating bottom pill */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-xs text-white/80">
-            <span className="font-mono">{item.aspectRatio}</span>
-            <span>•</span>
-            <span>{inspectingRef ? 'Original Source' : item.quality}</span>
-            {inspectingRef ? (
-              <>
-                <span>•</span>
-                <button
-                  onClick={() => setInspectingRef(false)}
-                  className="text-[#d1fe17] font-semibold hover:underline flex items-center gap-1"
-                >
-                  Viewing Original Reference (Click to switch back)
-                </button>
-              </>
-            ) : item.referenceImage ? (
-              <>
-                <span>•</span>
-                <button
-                  onClick={() => setInspectingRef(true)}
-                  className="text-white/60 hover:text-[#d1fe17] transition-colors flex items-center gap-1"
-                >
-                  <ImageIcon className="w-3 h-3" />
-                  <span>View Original Reference</span>
-                </button>
-              </>
-            ) : null}
+          {/* Minimal Fullscreen / Expand control at bottom right */}
+          <div className="absolute bottom-4 right-4 flex items-center gap-2 pointer-events-auto">
+            <button
+              onClick={() => window.open(currentDisplayImage, '_blank')}
+              className="w-8 h-8 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 hover:bg-black/60 flex items-center justify-center text-white/70 hover:text-white transition-colors"
+              title="Full size"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
@@ -101,15 +83,24 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
         <div className="w-full md:w-[420px] bg-[#121318] border-l border-[#23252e] flex flex-col justify-between overflow-y-auto">
           {/* Top Section */}
           <div className="p-5 space-y-4">
-            {/* Header with Close */}
+            {/* Header with User Info & Close */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-[#14151b] border border-[#282b37] flex items-center justify-center p-1">
-                  <img src="/icons/icon32.png" alt="" className="w-full h-full object-contain" />
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20">
+                  <img
+                    src={item.imageUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="font-semibold text-xs tracking-tight text-white uppercase tracking-wider">
-                  Generation Details
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-xs tracking-tight text-white">
+                    {item.author.username || 'Creator'}
+                  </span>
+                  <span className="text-[10px] text-[#717684]">
+                    {item.author.role || 'Author'}
+                  </span>
+                </div>
               </div>
 
               <button
@@ -168,33 +159,33 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
                 </button>
               </div>
 
-              {/* Prompt Text Box with Clickable Original Reference Thumbnail */}
-              <div className="rounded-2xl bg-[#181920] border border-[#23252e] p-3.5 space-y-3">
+              {/* Prompt Text Box with Official Reference Thumbnail */}
+              <div className="rounded-2xl bg-[#181920] border border-[#23252e] p-3.5 space-y-2">
                 <div className="flex gap-3 items-start">
-                  {/* Clickable Original Reference Image */}
+                  {/* Reference Image Thumbnail with Upload/Reference Icon */}
                   {item.referenceImage ? (
                     <div
                       onClick={() => setInspectingRef(!inspectingRef)}
                       className="relative group/thumb cursor-pointer flex-shrink-0"
-                      title={inspectingRef ? "Switch to generated output" : "Click to view original reference photo"}
+                      title={inspectingRef ? "Show generated output" : "Click to view reference photo"}
                     >
                       <img
                         src={item.referenceImage}
-                        alt="Original Reference"
+                        alt=""
                         className={`w-14 h-14 rounded-lg object-cover border transition-all ${
                           inspectingRef
-                            ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40 scale-105'
-                            : 'border-white/10 group-hover/thumb:border-white/40'
+                            ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40'
+                            : 'border-white/15 group-hover/thumb:border-white/40'
                         }`}
                       />
-                      {/* Icon overlay on thumbnail */}
-                      <div className="absolute inset-x-0 bottom-0 bg-black/60 rounded-b-lg py-0.5 flex items-center justify-center">
-                        <ImageIcon className="w-3 h-3 text-white/90" />
+                      {/* Upload / Reference icon in center bottom matching Screenshot 2 */}
+                      <div className="absolute inset-x-0 bottom-0 bg-black/50 backdrop-blur-sm rounded-b-lg py-0.5 flex items-center justify-center">
+                        <Upload className="w-3 h-3 text-white/90" />
                       </div>
                     </div>
                   ) : null}
 
-                  {/* Prompt Text */}
+                  {/* Prompt Text with expansion */}
                   <div className="flex-1 text-xs leading-relaxed text-[#dee0e3] font-normal">
                     <p className={expandedPrompt ? '' : 'line-clamp-4'}>
                       {item.prompt}
@@ -211,18 +202,6 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
                     </button>
                   </div>
                 </div>
-
-                {inspectingRef && (
-                  <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[11px] text-[#d1fe17]">
-                    <span>Viewing original reference image</span>
-                    <button
-                      onClick={() => setInspectingRef(false)}
-                      className="underline text-white/70 hover:text-white"
-                    >
-                      Switch to Generation
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -234,12 +213,8 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between py-1 border-b border-[#1f212a]">
-                  <span className="text-[#717684]">
-                    {inspectingRef ? 'Asset Type' : 'Model'}
-                  </span>
-                  <span className="text-white font-medium">
-                    {inspectingRef ? 'Original Reference Photo' : item.model}
-                  </span>
+                  <span className="text-[#717684]">Model</span>
+                  <span className="text-white font-medium">{item.model}</span>
                 </div>
 
                 <div className="flex justify-between py-1 border-b border-[#1f212a]">
@@ -267,7 +242,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
             </div>
           </div>
 
-          {/* Sticky Bottom Actions */}
+          {/* Sticky Bottom Actions - Exact Replica of Screenshot 2 */}
           <div className="p-4 bg-[#0e0f14] border-t border-[#23252e] space-y-2.5">
             {/* Big Lime 'Turn to video' button */}
             <button
@@ -278,7 +253,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
               <span>Turn to video</span>
             </button>
 
-            {/* Action Row */}
+            {/* Action Row: Recreate, Reference */}
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onRecreate(item)}
@@ -298,10 +273,11 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
               <button
                 onClick={handleDownload}
-                className="p-2 rounded-xl bg-[#181920] hover:bg-[#23252e] text-[#babdc5] hover:text-white border border-[#2b2e3b] transition-colors"
+                className="flex items-center gap-1.5 py-2 px-3 rounded-xl bg-[#181920] hover:bg-[#23252e] text-[#babdc5] hover:text-white border border-[#2b2e3b] text-xs font-medium transition-colors"
                 title="Download"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-3.5 h-3.5" />
+                <span>Download</span>
               </button>
 
               <button

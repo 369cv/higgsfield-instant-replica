@@ -72,86 +72,104 @@ export const CardGrid: React.FC<CardGridProps> = ({
         onClick={() => onSelectItem(item)}
         className="group relative cursor-pointer overflow-hidden rounded-md bg-[#121318] hover:opacity-95 transition-all duration-200"
       >
-        {/* Pure Image Container - Zero gap / tightly packed */}
+        {/* Pure Image Container - Tightly packed */}
         <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'}`}>
           <img
             src={item.imageUrl}
             alt=""
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.01]"
           />
         </div>
 
         {/* Resting State 'Last viewed' pill ONLY if user actually clicked & viewed it */}
         {isLastViewed && (
-          <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white/90 text-[10px] font-medium pointer-events-none group-hover:opacity-0 transition-opacity">
+          <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white/90 text-[10px] font-medium pointer-events-none group-hover:opacity-0 transition-opacity shadow-lg">
             <Eye className="w-3 h-3 text-[#d1fe17]" />
             <span>Last viewed</span>
           </div>
         )}
 
-        {/* Higgsfield Hover Overlay */}
-        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex flex-col justify-between p-2 pointer-events-none">
-          {/* Top Row */}
-          <div className="flex items-center justify-between pointer-events-auto">
-            {/* Top-Left Selection Square */}
-            <div className="w-5 h-5 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/70 hover:text-white">
-              <div className="w-3 h-3 rounded-sm border border-white/60" />
+        {/* Higgsfield Glassmorphic Hover Overlay */}
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex flex-col justify-between p-2.5 pointer-events-none">
+          {/* Top Row: Left Selection Square, Right Vertical Action Stack */}
+          <div className="flex items-start justify-between pointer-events-auto">
+            {/* Top-Left Selection Square (Glassmorphic) */}
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 hover:border-white/30 flex items-center justify-center text-white/80 transition-all shadow-md"
+              title="Select"
+            >
+              <div className="w-3.5 h-3.5 rounded-sm border border-white/70" />
             </div>
 
-            {/* Top-Right Quick Action Icons */}
-            <div className="flex items-center gap-1">
+            {/* Top-Right Vertical Icon Stack (Glassmorphic) */}
+            <div className="flex flex-col items-center gap-1.5">
               <button
-                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 hover:border-white/30 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-md"
                 onClick={(e) => {
                   e.stopPropagation();
                   item.isLiked = !item.isLiked;
                 }}
+                title="Like"
               >
-                <Heart className={`w-3 h-3 ${item.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+                <Heart className={`w-3.5 h-3.5 ${item.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
               </button>
 
               <button
                 onClick={(e) => handleDownload(e, item)}
-                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 hover:border-white/30 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-md"
                 title="Download"
               >
-                <Download className="w-3 h-3" />
+                <Download className="w-3.5 h-3.5" />
               </button>
 
               <button
                 onClick={(e) => handleCopyPrompt(e, item)}
-                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 hover:border-white/30 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-md"
                 title="Copy prompt"
               >
                 {copiedId === item.id ? (
-                  <Check className="w-3 h-3 text-[#d1fe17]" />
+                  <Check className="w-3.5 h-3.5 text-[#d1fe17]" />
                 ) : (
-                  <Copy className="w-3 h-3" />
+                  <Copy className="w-3.5 h-3.5" />
                 )}
               </button>
 
               <button
                 onClick={(e) => e.stopPropagation()}
-                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-7 h-7 rounded-lg bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 hover:border-white/30 flex items-center justify-center text-white/80 hover:text-white transition-all shadow-md"
+                title="More"
               >
-                <MoreHorizontal className="w-3 h-3" />
+                <MoreHorizontal className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
-          {/* Bottom Row Tooling */}
+          {/* Bottom Row Tooling (Glassmorphic pills matching Screenshot) */}
           <div className="flex items-center justify-end gap-1 pointer-events-auto">
-            <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1 bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 rounded-md px-2 py-1 text-white/80 text-[10px] transition-colors shadow-md"
+              title="Image tool"
+            >
               <ImageIcon className="w-3 h-3" />
             </div>
 
-            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-0.5 bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 rounded-md px-2 py-1 text-white/80 text-[10px] transition-colors shadow-md"
+              title="Video tool"
+            >
               <Video className="w-3 h-3" />
               <ChevronDown className="w-2.5 h-2.5 opacity-60" />
             </div>
 
-            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-0.5 bg-black/40 backdrop-blur-md border border-white/15 hover:bg-black/60 rounded-md px-2 py-1 text-white/80 text-[10px] transition-colors shadow-md"
+              title="Expand tool"
+            >
               <Maximize2 className="w-3 h-3" />
               <ChevronDown className="w-2.5 h-2.5 opacity-60" />
             </div>
@@ -187,7 +205,6 @@ export const CardGrid: React.FC<CardGridProps> = ({
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] mb-2 px-0.5">
               {date}
             </div>
-            {/* Tightly packed grid: gap-1.5 */}
             <div className={`grid gap-1.5 ${getColClass()}`}>
               {groupItems.map(renderCard)}
             </div>
@@ -197,7 +214,6 @@ export const CardGrid: React.FC<CardGridProps> = ({
     );
   }
 
-  {/* Tightly packed grid: gap-1.5 */}
   return (
     <div className={`grid gap-1.5 pb-12 ${getColClass()}`}>
       {items.map(renderCard)}
