@@ -9,10 +9,36 @@ import { VaultItem } from './types';
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
-  const [lastViewedId, setLastViewedId] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Favorites state persisted in localStorage
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem('halalfans_favorites');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      try {
+        localStorage.setItem('halalfans_favorites', JSON.stringify(Array.from(next)));
+      } catch (e) {
+        console.error('Failed to save favorites to localStorage', e);
+      }
+      return next;
+    });
+  };
 
   // Load and continuously sync live tracked generations
   useEffect(() => {
@@ -72,23 +98,23 @@ export const App: React.FC = () => {
           </div>
         )}
 
-        {/* Clean Zero-Gap Gallery */}
+        {/* Clean Zero-Gap Gallery - Only Heart on Hover, No Last Viewed */}
         <CardGrid
           items={vault}
           layout="masonry"
           cardSize={3}
           splitByDate={false}
-          lastViewedId={lastViewedId}
-          onSelectItem={(item) => {
-            setSelectedItem(item);
-            setLastViewedId(item.id);
-          }}
+          favorites={favorites}
+          onToggleFavorite={toggleFavorite}
+          onSelectItem={(item) => setSelectedItem(item)}
         />
       </main>
 
       {/* Full Prompt Vault Inspector with Original Reference click support */}
       <InspectorModal
         item={selectedItem}
+        isFavorited={selectedItem ? favorites.has(selectedItem.id) : false}
+        onToggleFavorite={toggleFavorite}
         onClose={() => setSelectedItem(null)}
         onRecreate={() => {
           setSelectedItem(null);

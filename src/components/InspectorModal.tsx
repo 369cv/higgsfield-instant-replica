@@ -4,8 +4,7 @@ import {
   Copy,
   Check,
   Video,
-  RotateCcw,
-  Sparkles,
+  UserPlus,
   Download,
   Heart,
   Share2,
@@ -13,7 +12,9 @@ import {
   ChevronDown,
   ChevronUp,
   Upload,
-  Maximize2
+  Maximize2,
+  FileText,
+  Info
 } from 'lucide-react';
 import { VaultItem } from '../types';
 
@@ -23,18 +24,21 @@ interface InspectorModalProps {
   onRecreate: (item: VaultItem) => void;
   onTurnToVideo: (item: VaultItem) => void;
   onSelectReferenceItem?: (refUrl: string) => void;
+  isFavorited?: boolean;
+  onToggleFavorite?: (id: string) => void;
 }
 
 export const InspectorModal: React.FC<InspectorModalProps> = ({
   item,
   onClose,
   onRecreate,
-  onTurnToVideo
+  onTurnToVideo,
+  isFavorited = false,
+  onToggleFavorite
 }) => {
   const [activeTab, setActiveTab] = useState<'info' | 'edit' | 'comments'>('info');
   const [copied, setCopied] = useState(false);
   const [expandedPrompt, setExpandedPrompt] = useState(false);
-  const [liked, setLiked] = useState(item?.isLiked || false);
   const [inspectingRef, setInspectingRef] = useState(false);
 
   // Close on Escape key
@@ -104,17 +108,17 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-full overflow-hidden bg-black ring-1 ring-white/10 flex-shrink-0">
               <img
-                src={item.imageUrl}
-                alt=""
+                src="/icons/icon128.png"
+                alt="Halal Fans"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-[13px] tracking-tight text-white leading-tight">
-                {item.author.username || 'savage_mode'}
+                Halal Fans
               </span>
               <span className="text-[11px] text-[#717684] leading-tight">
-                {item.author.role || 'Author'}
+                Author
               </span>
             </div>
           </div>
@@ -170,7 +174,8 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#717684] uppercase">
               <span className="flex items-center gap-1.5">
-                <span className="text-[12px]">📄</span> PROMPT
+                <FileText className="w-3.5 h-3.5 text-[#717684]" />
+                <span>PROMPT</span>
               </span>
               <button
                 onClick={handleCopy}
@@ -227,7 +232,8 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           {/* DETAILS Section */}
           <div className="space-y-2 pt-1">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] flex items-center gap-1.5">
-              <span>ℹ</span> DETAILS
+              <Info className="w-3.5 h-3.5 text-[#717684]" />
+              <span>DETAILS</span>
             </div>
 
             <div className="space-y-1 text-[12px]">
@@ -239,7 +245,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
               <div className="flex justify-between py-2 border-b border-[#1b1c24]">
                 <span className="text-[#717684]">Moodboard</span>
                 <span className="text-white font-medium flex items-center gap-1">
-                  {item.moodboard} 🎬
+                  {item.moodboard}
                 </span>
               </div>
 
@@ -278,7 +284,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
               onClick={() => onRecreate(item)}
               className="py-2 px-3 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#e2e4ea] text-[12px] font-semibold flex items-center justify-center gap-1.5 border border-[#262833] transition-colors cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-white/80" />
+              <Copy className="w-3.5 h-3.5 text-white/80" />
               <span>Recreate</span>
             </button>
 
@@ -286,7 +292,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
               onClick={() => onRecreate(item)}
               className="py-2 px-3 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#e2e4ea] text-[12px] font-semibold flex items-center justify-center gap-1.5 border border-[#262833] transition-colors cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#d1fe17]" />
+              <UserPlus className="w-3.5 h-3.5 text-white/90" />
               <span>Reference</span>
             </button>
           </div>
@@ -303,13 +309,13 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
             </button>
 
             <button
-              onClick={() => setLiked(!liked)}
+              onClick={() => onToggleFavorite && onToggleFavorite(item.id)}
               className={`p-2 rounded-xl bg-[#16171d] hover:bg-[#20222a] border border-[#262833] transition-colors cursor-pointer ${
-                liked ? 'text-red-500' : 'text-[#babdc5] hover:text-white'
+                isFavorited ? 'text-red-500' : 'text-[#babdc5] hover:text-white'
               }`}
-              title="Like"
+              title={isFavorited ? "Remove from favorites" : "Favorite"}
             >
-              <Heart className={`w-4 h-4 ${liked ? 'fill-red-500' : ''}`} />
+              <Heart className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : ''}`} />
             </button>
 
             <button
