@@ -50,7 +50,7 @@ export const App: React.FC = () => {
     setIsGenerating(true);
     setTimeout(() => {
       setIsGenerating(false);
-      alert('Job queued on Higgsfield CLI: turning into video with Google Veo 3 / Kling 3.0.');
+      alert('Job queued on Halal Fans: turning into video with Google Veo 3 / Kling 3.0.');
     }, 2500);
   };
 

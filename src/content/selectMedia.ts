@@ -1,14 +1,14 @@
-// Higgsfield Instant - Content Script for Media Selection & Hover Overlay
-// Disassembled & adapted from official select-media.js (v1.3.2)
+// Halal Fans - Content Script for Media Selection & Hover Overlay
+// Disassembled & adapted from official select-media.js
 
-console.log('[Higgsfield Instant] Media selector active');
+console.log('[Halal Fans] Media selector active');
 
 let activeHoverButton: HTMLElement | null = null;
 let currentTargetImage: HTMLImageElement | null = null;
 
 function createHoverButton() {
   const btn = document.createElement('div');
-  btn.id = 'higgsfield-hover-recreate-btn';
+  btn.id = 'halalfans-hover-recreate-btn';
   btn.style.position = 'absolute';
   btn.style.zIndex = '999999';
   btn.style.display = 'none';
@@ -47,17 +47,17 @@ function createHoverButton() {
     if (!currentTargetImage) return;
 
     const imageUrl = currentTargetImage.src || currentTargetImage.currentSrc;
-    console.log('[Higgsfield Instant] Triggered recreate on:', imageUrl);
+    console.log('[Halal Fans] Triggered recreate on:', imageUrl);
 
     // Notify extension background worker
     if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
       chrome.runtime.sendMessage({
-        type: 'HIGGSFIELD_RECREATE_IMAGE',
+        type: 'HALALFANS_RECREATE_IMAGE',
         imageUrl
       });
     } else {
       // In standalone browser test, dispatch custom event
-      window.dispatchEvent(new CustomEvent('HIGGSFIELD_RECREATE_IMAGE', { detail: { imageUrl } }));
+      window.dispatchEvent(new CustomEvent('HALALFANS_RECREATE_IMAGE', { detail: { imageUrl } }));
     }
   });
 

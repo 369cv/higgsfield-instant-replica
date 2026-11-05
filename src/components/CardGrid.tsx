@@ -112,7 +112,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
     e.stopPropagation();
     const a = document.createElement('a');
     a.href = item.imageUrl;
-    a.download = `higgsfield-${item.id}.png`;
+    a.download = `halalfans-${item.id}.png`;
     a.target = '_blank';
     a.click();
   };

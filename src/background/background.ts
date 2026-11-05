@@ -1,18 +1,18 @@
-// Higgsfield Instant - Service Worker (Manifest V3)
+// Halal Fans - Service Worker (Manifest V3)
 
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('[Higgsfield Instant] Extension installed');
+  console.log('[Halal Fans] Extension installed');
 
   // Create context menu item
   chrome.contextMenus.create({
-    id: 'higgsfield-recreate-context',
-    title: 'Recreate with Higgsfield Instant',
+    id: 'halalfans-recreate-context',
+    title: 'Recreate with Halal Fans',
     contexts: ['image', 'link']
   });
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === 'higgsfield-recreate-context' && tab?.id) {
+  if (info.menuItemId === 'halalfans-recreate-context' && tab?.id) {
     const targetUrl = info.srcUrl || info.linkUrl;
     if (targetUrl) {
       chrome.storage.local.set({ lastRecreateImage: targetUrl }, () => {
@@ -30,7 +30,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'HIGGSFIELD_RECREATE_IMAGE' && sender.tab?.id) {
+  if ((message.type === 'HALALFANS_RECREATE_IMAGE' || message.type === 'HIGGSFIELD_RECREATE_IMAGE') && sender.tab?.id) {
     const imageUrl = message.imageUrl;
     chrome.storage.local.set({ lastRecreateImage: imageUrl }, () => {
       if (chrome.sidePanel && typeof chrome.sidePanel.open === 'function') {

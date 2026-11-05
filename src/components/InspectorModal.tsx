@@ -51,7 +51,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = currentDisplayImage;
-    link.download = `higgsfield-${item.id}${inspectingRef ? '-reference' : ''}.png`;
+    link.download = `halalfans-${item.id}${inspectingRef ? '-reference' : ''}.png`;
     link.target = '_blank';
     link.click();
   };
