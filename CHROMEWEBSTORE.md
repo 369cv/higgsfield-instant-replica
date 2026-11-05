@@ -17,6 +17,7 @@
 - **Category**: Productivity / Creative Tools
 - **Version**: 1.3.7
 - **Language**: English
+- **Live Production URL**: [https://halalfans.me](https://halalfans.me) (aliased to [https://www.halalfans.me](https://www.halalfans.me))
 
 ---
 
