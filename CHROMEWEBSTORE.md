@@ -15,7 +15,7 @@
   - **Direct CLI & API Integration**: Powered directly by your Higgsfield workspace account (`@higgsfield/cli`), credits, and presets.
 
 - **Category**: Productivity / Creative Tools
-- **Version**: 1.3.3
+- **Version**: 1.3.4
 - **Language**: English
 
 ---

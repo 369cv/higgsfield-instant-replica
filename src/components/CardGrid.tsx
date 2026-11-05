@@ -40,7 +40,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
         return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
       case 3:
       default:
-        return 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4';
+        return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4';
       case 4:
         return 'grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2';
     }
@@ -70,88 +70,88 @@ export const CardGrid: React.FC<CardGridProps> = ({
       <div
         key={item.id}
         onClick={() => onSelectItem(item)}
-        className="group relative cursor-pointer overflow-hidden rounded-xl bg-[#121318] border border-[#1f212a] hover:border-[#3a3e4e] transition-all duration-200 shadow-md hover:shadow-xl"
+        className="group relative cursor-pointer overflow-hidden rounded-md bg-[#121318] hover:opacity-95 transition-all duration-200"
       >
-        {/* Pure Image Container - Zero Text in Resting State */}
+        {/* Pure Image Container - Zero gap / tightly packed */}
         <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'}`}>
           <img
             src={item.imageUrl}
             alt=""
             loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </div>
 
-        {/* Resting State 'Last viewed' pill if this card was the last inspected */}
+        {/* Resting State 'Last viewed' pill ONLY if user actually clicked & viewed it */}
         {isLastViewed && (
-          <div className="absolute bottom-2.5 right-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white/90 text-[11px] font-medium pointer-events-none group-hover:opacity-0 transition-opacity">
-            <Eye className="w-3.5 h-3.5 text-[#d1fe17]" />
+          <div className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md border border-white/10 text-white/90 text-[10px] font-medium pointer-events-none group-hover:opacity-0 transition-opacity">
+            <Eye className="w-3 h-3 text-[#d1fe17]" />
             <span>Last viewed</span>
           </div>
         )}
 
-        {/* Exact Higgsfield Hover Overlay matching Screenshot 1 */}
-        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-between p-2.5 pointer-events-none">
+        {/* Higgsfield Hover Overlay */}
+        <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex flex-col justify-between p-2 pointer-events-none">
           {/* Top Row */}
           <div className="flex items-center justify-between pointer-events-auto">
             {/* Top-Left Selection Square */}
-            <div className="w-6 h-6 rounded-md bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/70 hover:text-white">
-              <div className="w-3.5 h-3.5 rounded border border-white/60" />
+            <div className="w-5 h-5 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/70 hover:text-white">
+              <div className="w-3 h-3 rounded-sm border border-white/60" />
             </div>
 
             {/* Top-Right Quick Action Icons */}
             <div className="flex items-center gap-1">
               <button
-                className="w-7 h-7 rounded-md bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
                 onClick={(e) => {
                   e.stopPropagation();
                   item.isLiked = !item.isLiked;
                 }}
               >
-                <Heart className={`w-3.5 h-3.5 ${item.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+                <Heart className={`w-3 h-3 ${item.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
               </button>
 
               <button
                 onClick={(e) => handleDownload(e, item)}
-                className="w-7 h-7 rounded-md bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
                 title="Download"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-3 h-3" />
               </button>
 
               <button
                 onClick={(e) => handleCopyPrompt(e, item)}
-                className="w-7 h-7 rounded-md bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
                 title="Copy prompt"
               >
                 {copiedId === item.id ? (
-                  <Check className="w-3.5 h-3.5 text-[#d1fe17]" />
+                  <Check className="w-3 h-3 text-[#d1fe17]" />
                 ) : (
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy className="w-3 h-3" />
                 )}
               </button>
 
               <button
                 onClick={(e) => e.stopPropagation()}
-                className="w-7 h-7 rounded-md bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
+                className="w-6 h-6 rounded bg-black/50 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white"
               >
-                <MoreHorizontal className="w-3.5 h-3.5" />
+                <MoreHorizontal className="w-3 h-3" />
               </button>
             </div>
           </div>
 
           {/* Bottom Row Tooling */}
           <div className="flex items-center justify-end gap-1 pointer-events-auto">
-            <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md border border-white/10 rounded-md px-1.5 py-1 text-white/80 text-[10px]">
+            <div className="flex items-center gap-1 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
               <ImageIcon className="w-3 h-3" />
             </div>
 
-            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-md px-1.5 py-1 text-white/80 text-[10px]">
+            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
               <Video className="w-3 h-3" />
               <ChevronDown className="w-2.5 h-2.5 opacity-60" />
             </div>
 
-            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-md px-1.5 py-1 text-white/80 text-[10px]">
+            <div className="flex items-center gap-0.5 bg-black/50 backdrop-blur-md border border-white/15 rounded px-1.5 py-0.5 text-white/80 text-[10px]">
               <Maximize2 className="w-3 h-3" />
               <ChevronDown className="w-2.5 h-2.5 opacity-60" />
             </div>
@@ -164,11 +164,10 @@ export const CardGrid: React.FC<CardGridProps> = ({
   if (items.length === 0) {
     return (
       <div className="py-24 flex flex-col items-center justify-center text-center text-[#717684]">
-        <div className="w-12 h-12 rounded-2xl bg-[#121318] border border-[#23252e] flex items-center justify-center text-[#d1fe17] mb-3">
-          <img src="/icons/icon32.png" alt="" className="w-6 h-6 object-contain" />
+        <div className="w-10 h-10 rounded-xl bg-[#121318] border border-[#23252e] flex items-center justify-center text-[#d1fe17] mb-2">
+          <img src="/icons/icon32.png" alt="" className="w-5 h-5 object-contain" />
         </div>
-        <div className="text-sm font-medium text-white mb-1">No Soul Generations Found</div>
-        <div className="text-xs">Generating your tracked Soul jobs...</div>
+        <div className="text-xs font-medium text-white">Loading Soul Generations...</div>
       </div>
     );
   }
@@ -182,13 +181,14 @@ export const CardGrid: React.FC<CardGridProps> = ({
     });
 
     return (
-      <div className="space-y-8 pb-24">
+      <div className="space-y-6 pb-12">
         {Object.entries(groups).map(([date, groupItems]) => (
           <div key={date}>
-            <div className="text-xs font-semibold uppercase tracking-wider text-[#717684] mb-3 px-1">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] mb-2 px-0.5">
               {date}
             </div>
-            <div className={`grid gap-3 ${getColClass()}`}>
+            {/* Tightly packed grid: gap-1.5 */}
+            <div className={`grid gap-1.5 ${getColClass()}`}>
               {groupItems.map(renderCard)}
             </div>
           </div>
@@ -197,8 +197,9 @@ export const CardGrid: React.FC<CardGridProps> = ({
     );
   }
 
+  {/* Tightly packed grid: gap-1.5 */}
   return (
-    <div className={`grid gap-3 pb-24 ${getColClass()}`}>
+    <div className={`grid gap-1.5 pb-12 ${getColClass()}`}>
       {items.map(renderCard)}
     </div>
   );

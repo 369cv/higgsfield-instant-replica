@@ -12,7 +12,7 @@ async function run() {
   await page.setViewport({ width: 1440, height: 900 });
 
   console.log('Navigating to http://localhost:5174/ ...');
-  await page.goto('http://localhost:5174/', { waitUntil: 'networkidle0', timeout: 30000 });
+  await page.goto('http://localhost:5174/', { waitUntil: 'domcontentloaded' });
 
   await new Promise(r => setTimeout(r, 2000));
 
@@ -21,33 +21,33 @@ async function run() {
     fs.mkdirSync(outDir, { recursive: true });
   }
 
-  // 1. Capture Dashboard View with PromoBanner, Grid, Last viewed, and FloatingPromptBar
-  await page.screenshot({ path: path.join(outDir, '01-exact-feed-with-promo-and-bar.png') });
-  console.log('Saved 01-exact-feed-with-promo-and-bar.png');
+  // 1. Capture clean tight feed
+  await page.screenshot({ path: path.join(outDir, '01-clean-minimal-feed.png') });
+  console.log('Saved 01-clean-minimal-feed.png');
 
-  // 2. Click the first image to open InspectorModal
+  // 2. Click an image to test inspector and verify "Last viewed" only shows after viewing
   const cards = await page.$$('div.group.relative.cursor-pointer');
   if (cards.length > 0) {
     await cards[0].click();
     await new Promise(r => setTimeout(r, 1000));
-    await page.screenshot({ path: path.join(outDir, '02-inspector-modal-with-prompt-thumb.png') });
-    console.log('Saved 02-inspector-modal-with-prompt-thumb.png');
+    await page.screenshot({ path: path.join(outDir, '02-inspector-clean.png') });
+    console.log('Saved 02-inspector-clean.png');
 
-    // 3. Click the reference thumbnail in the prompt box
-    const refThumb = await page.$('.group\\/thumb');
-    if (refThumb) {
-      await refThumb.click();
-      await new Promise(r => setTimeout(r, 1000));
-      await page.screenshot({ path: path.join(outDir, '03-inspector-modal-inspecting-reference.png') });
-      console.log('Saved 03-inspector-modal-inspecting-reference.png');
+    // Close inspector
+    const closeBtn = await page.$('button[title="Close"]');
+    if (closeBtn) {
+      await closeBtn.click();
+      await new Promise(r => setTimeout(r, 800));
+      await page.screenshot({ path: path.join(outDir, '03-feed-with-actual-last-viewed.png') });
+      console.log('Saved 03-feed-with-actual-last-viewed.png');
     }
   }
 
   await browser.close();
-  console.log('Verification finished successfully.');
+  console.log('Verification done.');
 }
 
 run().catch(err => {
-  console.error('Error running verification:', err);
+  console.error(err);
   process.exit(1);
 });
