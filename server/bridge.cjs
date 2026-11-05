@@ -20,6 +20,8 @@ const CUTOFF_JOB_ID = '0053510b-b56a-455f-a6e4-b230eebbe09e'; // Nov 5, 2026 6:4
 let inMemoryItems = [];
 let inProgressJobs = [];
 let lastSyncTime = 0;
+let lastKnownLatestId = null;
+let isDeploying = false;
 
 function getCredentials() {
   try {
@@ -151,14 +153,39 @@ async function syncFromHiggsfield() {
       .map(formatSoulItem);
 
     if (completed.length > 0) {
+      const currentLatestId = completed[0].id;
+      const isNewGeneration = lastKnownLatestId && currentLatestId !== lastKnownLatestId;
+      lastKnownLatestId = currentLatestId;
       inMemoryItems = completed;
       lastSyncTime = Date.now();
-      // Persist to static file
-      fs.writeFileSync(DATA_FILE, JSON.stringify({
+
+      const dataPayload = JSON.stringify({
         success: true,
         total: completed.length,
         items: completed
-      }, null, 2));
+      }, null, 2);
+
+      // Persist to static data files
+      fs.writeFileSync(DATA_FILE, dataPayload);
+      const distFile = path.join(__dirname, '../dist/data/soul-generations.json');
+      if (fs.existsSync(path.dirname(distFile))) {
+        fs.writeFileSync(distFile, dataPayload);
+      }
+
+      // Automated Cloud Sync to halalfans.me whenever a new generation arrives
+      if (isNewGeneration && !isDeploying) {
+        isDeploying = true;
+        console.log(`🚀 [Auto-Sync] Detected new generation: ${currentLatestId} (${completed.length} total). Syncing to live cloud...`);
+        const { exec } = require('child_process');
+        exec('npx vercel --prod --yes', { cwd: path.join(__dirname, '..') }, (err) => {
+          isDeploying = false;
+          if (err) {
+            console.error('Vercel auto-deploy notice:', err.message);
+          } else {
+            console.log(`✅ [Auto-Sync] Cloud production deployment updated on halalfans.me!`);
+          }
+        });
+      }
     }
   } catch (err) {
     console.error('Sync error:', err.message);

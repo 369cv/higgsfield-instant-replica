@@ -34,6 +34,24 @@ export const HiggsfieldService = {
   },
 
   async getVaultDetails(): Promise<{ items: VaultItem[]; total: number; inProgressCount: number }> {
+    // 1. Primary: Cloud serverless endpoint (works on mobile, web, halalfans.me)
+    try {
+      const res = await fetch('/api/vault');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items && data.items.length > 0) {
+          return {
+            items: data.items,
+            total: data.total || data.items.length,
+            inProgressCount: data.inProgressCount || 0
+          };
+        }
+      }
+    } catch {
+      // Cloud API not reachable or running in pure file context
+    }
+
+    // 2. Secondary: Local bridge daemon (when running locally)
     try {
       const res = await fetch(`${BRIDGE_URL}/vault`);
       if (res.ok) {
@@ -50,7 +68,7 @@ export const HiggsfieldService = {
       // Local bridge offline
     }
 
-    // Static fallback for production Vercel & offline extension
+    // 3. Static fallback for production Vercel & offline extension
     try {
       const staticRes = await fetch('/data/soul-generations.json');
       if (staticRes.ok) {

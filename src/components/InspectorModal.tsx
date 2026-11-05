@@ -74,8 +74,8 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col md:flex-row w-screen h-screen bg-[#070709] overflow-hidden select-none">
-      {/* Left Side: Full-Screen Hero Image Display with Ambient Glow Backdrop */}
-      <div className="flex-1 h-full relative flex items-center justify-center overflow-hidden bg-black">
+      {/* Hero Image Stage: Top on Mobile, Left on Desktop */}
+      <div className="w-full md:flex-1 h-[42vh] md:h-full relative flex items-center justify-center overflow-hidden bg-black shrink-0">
         {/* Soft atmospheric ambient glow matching image colors */}
         <div
           className="absolute inset-0 bg-cover bg-center blur-3xl opacity-20 scale-110 pointer-events-none"
@@ -86,25 +86,34 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
         <img
           src={currentDisplayImage}
           alt=""
-          className="relative max-h-full max-w-full object-contain shadow-2xl transition-all duration-200 z-10"
+          className="relative max-h-full max-w-full object-contain shadow-2xl transition-all duration-200 z-10 p-2 md:p-6"
         />
 
+        {/* Close Button on Mobile (Top Right of image) */}
+        <button
+          onClick={onClose}
+          className="md:hidden absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
+          title="Close"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
         {/* Minimal Fullscreen / Open in New Tab control at bottom right */}
-        <div className="absolute bottom-5 right-5 z-20">
+        <div className="absolute bottom-3 right-3 md:bottom-5 md:right-5 z-20">
           <button
             onClick={() => window.open(currentDisplayImage, '_blank')}
-            className="w-8 h-8 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/85 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer shadow-lg"
+            className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/85 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer shadow-lg"
             title="Open full size"
           >
-            <Maximize2 className="w-4 h-4" />
+            <Maximize2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </button>
         </div>
       </div>
 
-      {/* Right Side: Exact Sidebar Drawer Structure */}
-      <div className="w-full md:w-[380px] lg:w-[400px] h-full bg-[#0d0e12] border-l border-[#1a1b22] flex flex-col justify-between shrink-0 z-20 overflow-hidden">
-        {/* Top Header with User Info & Close */}
-        <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-[#181920]">
+      {/* Sidebar Drawer: Bottom on Mobile, Right on Desktop */}
+      <div className="w-full md:w-[380px] lg:w-[400px] flex-1 md:h-full bg-[#0d0e12] border-t md:border-t-0 md:border-l border-[#1a1b22] flex flex-col justify-between z-20 overflow-hidden min-h-0">
+        {/* Top Header with User Info & Desktop Close */}
+        <div className="px-4 pt-3 pb-2.5 md:pt-4 md:pb-3 flex items-center justify-between border-b border-[#181920] shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-full overflow-hidden bg-black ring-1 ring-white/10 flex-shrink-0">
               <img
@@ -125,7 +134,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#717684] hover:text-white transition-colors cursor-pointer"
+            className="hidden md:flex w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 items-center justify-center text-[#717684] hover:text-white transition-colors cursor-pointer"
             title="Close"
           >
             <X className="w-4 h-4" />
