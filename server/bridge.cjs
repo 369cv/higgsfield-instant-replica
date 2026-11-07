@@ -17,20 +17,45 @@ const CONFIG_FILE = path.join(process.env.HOME || '/Users/savage', '.config/higg
 
 const CUTOFF_JOB_ID = '0053510b-b56a-455f-a6e4-b230eebbe09e'; // Nov 5, 2026 6:49 AM
 
+const { execSync, exec } = require('child_process');
+
 let inMemoryItems = [];
 let inProgressJobs = [];
 let lastSyncTime = 0;
 let lastKnownLatestId = null;
 let isDeploying = false;
 
+function refreshHiggsfieldToken() {
+  try {
+    const freshToken = execSync('higgsfield auth token', { encoding: 'utf8' }).trim();
+    if (freshToken && freshToken.startsWith('oat_')) {
+      return freshToken;
+    }
+  } catch (e) {
+    console.error('Failed to run higgsfield auth token:', e.message);
+  }
+  return null;
+}
+
 function getCredentials() {
   try {
     if (fs.existsSync(CREDS_FILE)) {
-      const creds = JSON.parse(fs.readFileSync(CREDS_FILE, 'utf8'));
+      let creds = JSON.parse(fs.readFileSync(CREDS_FILE, 'utf8'));
+      const nowSec = Math.floor(Date.now() / 1000);
+      
+      // If token is expired or within 10 minutes of expiry, refresh it
+      if (creds.expires_at && nowSec > (creds.expires_at - 600)) {
+        console.log('🔄 Token close to expiry, refreshing via Higgsfield CLI...');
+        const fresh = refreshHiggsfieldToken();
+        if (fresh && fs.existsSync(CREDS_FILE)) {
+          creds = JSON.parse(fs.readFileSync(CREDS_FILE, 'utf8'));
+        }
+      }
+
       const config = fs.existsSync(CONFIG_FILE) ? JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8')) : {};
       return {
         token: creds.access_token,
-        workspaceId: config.active_workspace_id || '2aaba1d1-1494-48db-b962-bcb047481c9a'
+        workspaceId: config.active_workspace_id || config.workspace_id || '2aaba1d1-1494-48db-b962-bcb047481c9a'
       };
     }
   } catch (e) {

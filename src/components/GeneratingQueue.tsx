@@ -14,8 +14,8 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
   if (!isGenerating) return null;
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
+    <div className="w-full mb-1 sm:mb-1.5">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-1 sm:gap-1.5">
         {Array.from({ length: activeCount }).map((_, idx) => (
           <div
             key={idx}

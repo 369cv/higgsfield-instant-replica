@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const token = process.env.HIGGSFIELD_TOKEN || 'oat_O778R6AQT3M8835QV4QAGAETAK7NZBQY';
+  const token = process.env.HIGGSFIELD_TOKEN || 'oat_O7KY63444YM6W8EM25GE4G2FJXDRPHMB';
   const workspaceId = process.env.HIGGSFIELD_WORKSPACE_ID || '2aaba1d1-1494-48db-b962-bcb047481c9a';
 
   try {

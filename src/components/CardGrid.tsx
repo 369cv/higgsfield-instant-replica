@@ -160,8 +160,8 @@ export const CardGrid: React.FC<CardGridProps> = ({
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] mb-2 px-2">
               {date}
             </div>
-            {/* Zero gap between images */}
-            <div className={`grid gap-0 ${getColClass()}`}>
+            {/* Fine line separation between images */}
+            <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
               {groupItems.map(renderCard)}
             </div>
           </div>
@@ -186,10 +186,10 @@ export const CardGrid: React.FC<CardGridProps> = ({
     );
   }
 
-  {/* Zero gap between images */}
+  {/* Fine line separation between images */}
   return (
     <div className="w-full pb-12">
-      <div className={`grid gap-0 ${getColClass()}`}>
+      <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
         {displayedItems.map(renderCard)}
       </div>
 
