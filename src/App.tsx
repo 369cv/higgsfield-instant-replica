@@ -164,7 +164,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main View Router */}
-      {activeTab === 'vault' && (
+      {(activeTab === 'vault' || activeTab === 'explore') && (
         <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
           {/* Active Generation Queue - Only when actively generating */}
           {isGenerating && (
