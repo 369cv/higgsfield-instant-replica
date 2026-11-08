@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
-import { MoodBoardScreen } from './components/MoodBoardScreen';
-import { CreateHubScreen } from './components/CreateHubScreen';
 import { AssetsScreen } from './components/AssetsScreen';
+import { LockedScreen } from './components/LockedScreen';
 import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
-import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
-import { InfluencerScreen } from './components/InfluencerScreen';
 import { PromptsNicheSubheader, ClassificationFilters } from './components/PromptsNicheSubheader';
-import { ExploreScreen } from './components/ExploreScreen';
-import { VideoStudioScreen } from './components/VideoStudioScreen';
 import { HiggsfieldProfileModal } from './components/HiggsfieldProfileModal';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
@@ -29,7 +24,7 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTabState] = useState<NavTab>(() => {
     try {
       const saved = localStorage.getItem(ACTIVE_TAB_KEY);
-      if (saved && ['vault', 'moodboard', 'create', 'influencer', 'video', 'assets', 'explore'].includes(saved)) {
+      if (saved && ['vault', 'moodboard', 'influencer', 'video', 'assets', 'explore'].includes(saved)) {
         return saved as NavTab;
       }
     } catch {}
@@ -107,10 +102,6 @@ export const App: React.FC = () => {
       localStorage.setItem(SELECTED_CATEGORY_KEY, 'All Drops');
     } catch {}
   };
-
-  // Sidebar Drawer State
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [sidebarMode, setSidebarMode] = useState<SidebarMode>('create');
 
   // Favorites state persisted in localStorage
   const [favorites, setFavorites] = useState<Set<string>>(() => {
@@ -221,38 +212,23 @@ export const App: React.FC = () => {
     return true;
   });
 
-  const handleOpenSidebar = (mode: SidebarMode) => {
-    setSidebarMode(mode);
-    setIsSidebarOpen(true);
-  };
-
-  const handleGenerateDrop = (prompt: string, model: string, ratio: string) => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setIsGenerating(false);
-      alert(`Queued generation on ${model} (${ratio}): "${prompt.slice(0, 50)}..."`);
-    }, 2000);
-  };
-
-  const handleAnimateVideo = (motionType: string) => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setIsGenerating(false);
-      alert(`Camera motion queued with trajectory: ${motionType}.`);
-    }, 2500);
-  };
-
-  const handleCreateAction = (action: 'influencer' | 'moodboard' | 'project') => {
-    if (action === 'moodboard') {
-      setActiveTab('moodboard');
-    } else if (action === 'influencer') {
-      setActiveTab('influencer');
-    } else if (action === 'project') {
-      setActiveTab('vault');
-      setSearchQuery('');
-      setSelectedCategory('All Drops');
-      handleOpenSidebar('create');
-    }
+  const LOCKED_COPY: Record<'influencer' | 'moodboard' | 'video' | 'explore', { title: string; description: string }> = {
+    influencer: {
+      title: 'AI Influencer',
+      description: 'Build and manage consistent AI characters. This feature is unlocking soon.',
+    },
+    moodboard: {
+      title: 'Moodboard',
+      description: 'Curated style boards you can apply to any prompt. Unlocking soon.',
+    },
+    video: {
+      title: 'Cinema Studio',
+      description: 'Motion and cinematic video prompts are on the way. Unlocking soon.',
+    },
+    explore: {
+      title: 'Explore',
+      description: 'Discover trending prompts from the community. Unlocking soon.',
+    },
   };
 
   return (
@@ -303,59 +279,17 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {/* Explore Tab - Curated Live Channels & Exploration Feed */}
-      {activeTab === 'explore' && (
+      {/* Locked sections: kept in the nav, shown as a blurred page with a lock */}
+      {(activeTab === 'influencer' ||
+        activeTab === 'moodboard' ||
+        activeTab === 'video' ||
+        activeTab === 'explore') && (
         <main className="flex-1 w-full flex flex-col">
-          <ExploreScreen
-            vaultItems={vault}
-            onSelectItem={(item) => setSelectedItem(item)}
-            onReturnToVault={() => setActiveTab('vault')}
-          />
-        </main>
-      )}
-
-      {/* Moodboard Screen - Built strictly following Higgsfield User Flow */}
-      {activeTab === 'moodboard' && (
-        <main className="flex-1 w-full flex flex-col">
-          <MoodBoardScreen
-            vaultItems={vault}
-            onReturnToVault={() => setActiveTab('vault')}
-            onSelectItem={(item) => setSelectedItem(item)}
-          />
-        </main>
-      )}
-
-      {/* Full-Page Create New Screen */}
-      {activeTab === 'create' && (
-        <main className="flex-1 w-full">
-          <CreateHubScreen
-            onReturnHome={() => setActiveTab('vault')}
-            onSelectAction={handleCreateAction}
-          />
-        </main>
-      )}
-
-      {/* AI Influencer Screen */}
-      {activeTab === 'influencer' && (
-        <main className="flex-1 w-full flex flex-col">
-          <InfluencerScreen
-            vaultItems={vault}
-            onSelectInfluencerDrops={(dropIds, influencerName) => {
-              setSelectedCategory('All Drops');
-              setSearchQuery(influencerName);
-              setActiveTab('vault');
-            }}
-            onOpenPromptVault={() => setActiveTab('vault')}
-            onSelectVideoStudio={() => setActiveTab('video')}
-          />
-        </main>
-      )}
-
-      {/* Video Studio Screen - Built strictly following Higgsfield User Flow */}
-      {activeTab === 'video' && (
-        <main className="flex-1 w-full flex flex-col">
-          <VideoStudioScreen
-            vaultItems={vault}
+          <LockedScreen
+            key={activeTab}
+            title={LOCKED_COPY[activeTab].title}
+            description={LOCKED_COPY[activeTab].description}
+            previewItems={vault}
             onReturnToVault={() => setActiveTab('vault')}
           />
         </main>
@@ -371,9 +305,9 @@ export const App: React.FC = () => {
             onSelectItem={(item) => setSelectedItem(item)}
             onReturnToVault={() => setActiveTab('vault')}
             onNavigateToStudio={(studio) => {
-              if (studio === 'create') setActiveTab('create');
-              else if (studio === 'video') setActiveTab('video');
+              if (studio === 'video') setActiveTab('video');
               else if (studio === 'influencer') setActiveTab('influencer');
+              else setActiveTab('vault');
             }}
           />
         </main>
@@ -384,7 +318,16 @@ export const App: React.FC = () => {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onSearchChange={(q) => {
+          setSearchQuery(q);
+          if (activeTab !== 'vault') setActiveTab('vault');
+        }}
+        onSelectCategory={(cat) => {
+          setSelectedCategory(cat);
+          if (activeTab !== 'vault') setActiveTab('vault');
+        }}
+        onSelectItem={(item) => setSelectedItem(item)}
+        vaultItems={vault}
       />
 
       {/* Inspector Modal */}
@@ -393,36 +336,12 @@ export const App: React.FC = () => {
         isFavorited={selectedItem ? favorites.has(selectedItem.id) : false}
         onToggleFavorite={toggleFavorite}
         onClose={() => setSelectedItem(null)}
-        onRecreate={() => {
-          setSelectedItem(null);
-          handleOpenSidebar('create');
-        }}
-        onTurnToVideo={() => {
-          handleOpenSidebar('motion');
-        }}
       />
 
-      {/* Studio Sidebar Drawer */}
-      <HiggsfieldSidebar
-        isOpen={isSidebarOpen}
-        mode={sidebarMode}
-        onClose={() => setIsSidebarOpen(false)}
-        activeItem={selectedItem}
-        onGenerateDrop={handleGenerateDrop}
-        onAnimateVideo={handleAnimateVideo}
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          setIsSidebarOpen(false);
-        }}
-      />
       {/* Higgsfield Profile & Settings Modal */}
       <HiggsfieldProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
-        onOpenCreate={() => {
-          setIsProfileOpen(false);
-          setActiveTab('create');
-        }}
       />
     </div>
   );

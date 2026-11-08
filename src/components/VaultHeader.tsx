@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { InfluencerStore } from '../services/influencerStore';
+import React from 'react';
+import { Lock, User } from 'lucide-react';
 
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets' | 'explore';
+
+/** Tabs that stay in the nav but open a blurred "unlocking soon" page. */
+export const LOCKED_TABS: NavTab[] = ['influencer', 'moodboard', 'video', 'explore'];
 
 interface VaultHeaderProps {
   activeTab: NavTab;
@@ -16,25 +19,6 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   onOpenSearch,
   onOpenProfile,
 }) => {
-  const [avatarUrl, setAvatarUrl] = useState<string>(() =>
-    InfluencerStore.getActiveHeadshot()
-  );
-
-  useEffect(() => {
-    const handleHeadshotChange = (e: Event) => {
-      const customEvent = e as CustomEvent<string>;
-      if (customEvent.detail) {
-        setAvatarUrl(customEvent.detail);
-      } else {
-        setAvatarUrl(InfluencerStore.getActiveHeadshot());
-      }
-    };
-
-    window.addEventListener('halalfans_headshot_changed', handleHeadshotChange);
-    return () => {
-      window.removeEventListener('halalfans_headshot_changed', handleHeadshotChange);
-    };
-  }, []);
   const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
     {
       id: 'vault',
@@ -140,9 +124,9 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 h-16 px-6 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all select-none">
+    <header className="sticky top-0 z-40 h-16 px-3 sm:px-6 gap-2 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all select-none">
       {/* Left: Minimal Brand Logo Icon Only */}
-      <div className="flex items-center">
+      <div className="flex items-center shrink-0">
         <button
           onClick={() => onSelectTab('vault')}
           className="group cursor-pointer focus:outline-none"
@@ -167,15 +151,18 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
       </div>
 
       {/* Center: The Navigation Menu Options (Prompts Vault, AI Influencer, Moodboard, Explore) */}
-      <nav className="flex items-center gap-1 sm:gap-2 p-1 rounded-2xl bg-white/[0.03] border border-white/5">
+      <nav className="flex items-center gap-0.5 sm:gap-2 p-1 rounded-2xl bg-white/[0.03] border border-white/5 min-w-0 overflow-x-auto no-scrollbar">
         {navItems.map((item) => {
           const isActive =
             activeTab === item.id || (item.id === 'vault' && activeTab === 'create');
+          const isLocked = LOCKED_TABS.includes(item.id);
           return (
             <button
               key={item.id}
               onClick={() => onSelectTab(item.id)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+              title={isLocked ? `${item.label}: unlocking soon` : item.label}
+              aria-label={item.label}
+              className={`relative shrink-0 flex items-center gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                 isActive
                   ? 'bg-[#d1fe17] text-black font-bold shadow-[0_0_15px_rgba(209,254,23,0.25)]'
                   : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
@@ -184,18 +171,26 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
               <span className={isActive ? 'text-black' : 'text-neutral-400'}>
                 {item.icon}
               </span>
-              <span>{item.label}</span>
+              <span className="hidden lg:inline">{item.label}</span>
+              {isLocked && (
+                <Lock
+                  aria-hidden="true"
+                  className={`w-2.5 h-2.5 lg:w-3 lg:h-3 absolute top-0.5 right-0.5 lg:static ${
+                    isActive ? 'text-black/60' : 'text-neutral-500'
+                  }`}
+                />
+              )}
             </button>
           );
         })}
       </nav>
 
       {/* Right: Search, Assets & Profile Avatar Cluster */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         {/* Search Icon Button */}
         <button
           onClick={onOpenSearch}
-          className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
           title="Search"
         >
           <svg
@@ -215,7 +210,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         {/* Assets Icon Button (Solid Folder) */}
         <button
           onClick={() => onSelectTab('assets')}
-          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
+          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
             activeTab === 'assets'
               ? 'bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30'
               : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
@@ -230,16 +225,12 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         {/* Profile Avatar Button */}
         <button
           onClick={onOpenProfile}
-          className="ml-1 cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95"
-          title="Open Profile & Settings"
-          aria-label="Open Profile & Settings"
+          className="sm:ml-1 cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95"
+          title="Profile"
+          aria-label="Profile"
         >
-          <div className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none overflow-hidden">
-            <img
-              src={avatarUrl}
-              alt="Profile Avatar"
-              className="w-full h-full rounded-full object-cover object-top"
-            />
+          <div className="w-9 h-9 rounded-full bg-white/[0.08] border border-white/15 flex items-center justify-center text-neutral-300">
+            <User className="w-4 h-4" />
           </div>
         </button>
       </div>
