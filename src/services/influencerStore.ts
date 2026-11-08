@@ -1,107 +1,160 @@
-import { StoredInfluencer } from '../types';
+import { StoredInfluencer, StudioHeadshot } from '../types';
 
-const STORAGE_KEY = 'halalfans_influencers';
+const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot';
+const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots';
 
-let cachedInfluencers: StoredInfluencer[] | null = null;
+export const GABRIELA_SANCHEZ: StoredInfluencer = {
+  id: 'gabriela-sanchez-official',
+  name: 'Gabriela Sanchez',
+  instagramHandle: '@gabrielasanchezs',
+  referenceImage: '/images/influencer-avatar.png',
+  sampleImageUrl: '/images/influencer-avatar.png',
+  headshotImage: '/images/studio/headshot-1-master.png',
+  category: 'Fashion & Editorial',
+  ethnicity: 'Latina',
+  hair: 'Long Brunette',
+  age: 23,
+  dropsCount: 1604,
+  signaturePrompt:
+    'A high-fashion portrait of Gabriela Sanchez (@gabrielasanchezs) on a neutral studio gray background, softbox lighting, 85mm f/1.4 lens, natural skin texture, editorial elegance.',
+  createdAt: 'Official Influencer',
+  isVaultPreset: true,
+};
+
+export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
+  {
+    id: 'hs-1',
+    title: 'Neutral Master Studio',
+    imageUrl: '/images/studio/headshot-1-master.png',
+    lighting: 'Master Softbox',
+    angle: 'Frontal Eye-Level',
+    background: '18% Neutral Gray',
+    createdAt: 'Default',
+  },
+  {
+    id: 'hs-2',
+    title: 'Softbox Diffused Glow',
+    imageUrl: '/images/studio/headshot-2-softbox.png',
+    lighting: 'Softbox Diffused',
+    angle: 'Slight Tilt',
+    background: 'Soft Studio Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-3',
+    title: 'Rembrandt High-Contrast',
+    imageUrl: '/images/studio/headshot-3-rembrandt.png',
+    lighting: 'Rembrandt Dramatic',
+    angle: '3/4 Editorial Angle',
+    background: 'Deep Charcoal Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-4',
+    title: 'Editorial Slate Tone',
+    imageUrl: '/images/studio/headshot-4-slate.png',
+    lighting: 'Cool Slate Fill',
+    angle: 'Direct Eye-Level',
+    background: 'Cool Slate Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-5',
+    title: 'High-Key Luminous',
+    imageUrl: '/images/studio/headshot-5-highkey.png',
+    lighting: 'High-Key Beauty',
+    angle: 'Frontal',
+    background: 'Light Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-6',
+    title: 'Beauty Close-Up Crop',
+    imageUrl: '/images/studio/headshot-6-closecrop.png',
+    lighting: 'Macro Ring Light',
+    angle: 'Tight Portrait',
+    background: 'Studio Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-7',
+    title: 'Cinematic 35mm Rim',
+    imageUrl: '/images/studio/headshot-7-cinematic.png',
+    lighting: 'Warm Rim Light',
+    angle: '3/4 Angle',
+    background: 'Neutral Gray',
+    createdAt: 'Studio Pass',
+  },
+  {
+    id: 'hs-8',
+    title: 'Monochrome Editorial',
+    imageUrl: '/images/studio/headshot-8-monochrome.png',
+    lighting: 'High-Contrast B&W',
+    angle: 'Frontal Direct',
+    background: 'Matte Gray',
+    createdAt: 'Studio Pass',
+  },
+];
 
 export const InfluencerStore = {
-  async getAll(): Promise<StoredInfluencer[]> {
-    if (cachedInfluencers && cachedInfluencers.length > 0) {
-      return cachedInfluencers;
-    }
-
-    let presets: StoredInfluencer[] = [];
-
-    // 1. Fetch from consolidated curated dataset
-    try {
-      const res = await fetch('/data/consolidated-influencers.json');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.influencers && Array.isArray(data.influencers)) {
-          presets = data.influencers;
-        }
-      }
-    } catch (e) {
-      console.warn('Could not load /data/consolidated-influencers.json', e);
-    }
-
-    // 2. Read user-created influencers from localStorage
-    let userCreated: StoredInfluencer[] = [];
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        userCreated = JSON.parse(stored);
-      }
-    } catch (e) {
-      console.error('Error reading localStorage for influencers', e);
-    }
-
-    // 3. Merge: user creations first, then vault presets
-    const combined = [...userCreated, ...presets];
-    cachedInfluencers = combined;
-    return combined;
-  },
-
-  getUserCreated(): StoredInfluencer[] {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  },
-
-  save(influencer: Partial<StoredInfluencer>): StoredInfluencer {
-    const existing = this.getUserCreated();
-    const id = influencer.id || `custom-inf-${Date.now()}`;
-    const newRecord: StoredInfluencer = {
-      id,
-      name: influencer.name || 'Custom Influencer',
-      referenceImage:
-        influencer.referenceImage ||
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
-      sampleImageUrl:
-        influencer.sampleImageUrl ||
-        influencer.referenceImage ||
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80',
-      category: influencer.category || 'Editorial & Luxury',
-      ethnicity: influencer.ethnicity || 'International',
-      hair: influencer.hair || 'Brunette',
-      age: influencer.age || 22,
-      dropsCount: influencer.dropsCount || 1,
-      associatedDropIds: influencer.associatedDropIds || [],
-      signaturePrompt:
-        influencer.signaturePrompt ||
-        'A portrait photograph of a beautiful fashion model with elegant features...',
-      fullPrompt: influencer.fullPrompt || influencer.signaturePrompt,
-      createdAt: new Date().toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-      isVaultPreset: false,
+  getInfluencer(): StoredInfluencer {
+    const activeHeadshot = this.getActiveHeadshot();
+    return {
+      ...GABRIELA_SANCHEZ,
+      headshotImage: activeHeadshot,
+      referenceImage: activeHeadshot,
+      sampleImageUrl: activeHeadshot,
     };
-
-    const updated = [newRecord, ...existing.filter((item) => item.id !== id)];
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    } catch (e) {
-      console.error('Failed to save influencer to localStorage', e);
-    }
-
-    // Invalidate cache
-    cachedInfluencers = null;
-    return newRecord;
   },
 
-  delete(id: string): void {
-    const existing = this.getUserCreated();
-    const updated = existing.filter((item) => item.id !== id);
+  getActiveHeadshot(): string {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      const saved = localStorage.getItem(ACTIVE_HEADSHOT_KEY);
+      if (saved) return saved;
     } catch (e) {
-      console.error('Failed to delete influencer from localStorage', e);
+      console.warn('localStorage error', e);
     }
-    cachedInfluencers = null;
+    return '/images/studio/headshot-1-master.png';
+  },
+
+  setActiveHeadshot(imageUrl: string): void {
+    try {
+      localStorage.setItem(ACTIVE_HEADSHOT_KEY, imageUrl);
+      // Dispatch a storage event so other components (like header) can update reactively
+      window.dispatchEvent(new CustomEvent('halalfans_headshot_changed', { detail: imageUrl }));
+    } catch (e) {
+      console.error('Failed to set active headshot', e);
+    }
+  },
+
+  getStudioHeadshots(): StudioHeadshot[] {
+    let custom: StudioHeadshot[] = [];
+    try {
+      const stored = localStorage.getItem(CUSTOM_HEADSHOTS_KEY);
+      if (stored) {
+        custom = JSON.parse(stored);
+      }
+    } catch (e) {
+      console.warn('Failed to parse custom headshots', e);
+    }
+    return [...custom, ...INITIAL_STUDIO_HEADSHOTS];
+  },
+
+  addStudioHeadshot(headshot: StudioHeadshot): void {
+    try {
+      const existing = this.getStudioHeadshots().filter(
+        (h) => !INITIAL_STUDIO_HEADSHOTS.some((init) => init.id === h.id)
+      );
+      const updated = [headshot, ...existing];
+      localStorage.setItem(CUSTOM_HEADSHOTS_KEY, JSON.stringify(updated));
+      this.setActiveHeadshot(headshot.imageUrl);
+    } catch (e) {
+      console.error('Failed to add studio headshot', e);
+    }
+  },
+
+  async getAll(): Promise<StoredInfluencer[]> {
+    // Only one single real influencer: Gabriela Sanchez
+    return [this.getInfluencer()];
   },
 };

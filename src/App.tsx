@@ -235,10 +235,11 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {/* AI Influencer Vault & Creation Studio Screen */}
+      {/* AI Influencer Screen */}
       {activeTab === 'influencer' && (
         <main className="flex-1 w-full flex flex-col">
           <InfluencerScreen
+            vaultItems={vault}
             onSelectInfluencerDrops={(dropIds, influencerName) => {
               setSelectedCategory('All Drops');
               setSearchQuery(influencerName);

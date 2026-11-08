@@ -44,39 +44,39 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
       id: 'general',
       name: 'GENERAL',
       model: 'Seedance 2.0',
-      thumbnail: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp',
     },
     {
       id: 'cgi-breakdown',
       name: 'CGI BREAKDOWN',
       model: 'Seedance 2.0',
-      thumbnail: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp',
       tag: 'NEW',
     },
     {
       id: 'neon-city',
       name: 'NEON CITY',
       model: 'Kling 3.0',
-      thumbnail: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp',
       tag: 'NEW',
     },
     {
       id: 'soul-fighter',
       name: 'SOUL FIGHTER',
       model: 'Kling 3.0',
-      thumbnail: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp',
     },
     {
       id: 'nightline',
       name: 'NIGHTLINE',
       model: 'Seedance 2.0',
-      thumbnail: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_d976d760-0475-445e-9ab3-2bb95860981c_min.webp',
     },
     {
       id: 'apex-hunter',
       name: 'APEX HUNTER',
       model: 'Kling 3.0',
-      thumbnail: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop&q=80',
+      thumbnail: 'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032629_50852861-9ff2-406b-81f9-ef02fb7a2ab5_min.webp',
     },
   ];
 
@@ -434,7 +434,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
               <div className="p-5 rounded-3xl bg-[#121217] border border-white/10 flex flex-col justify-between space-y-4">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/60 relative">
                   <img
-                    src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&auto=format&fit=crop&q=80"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -452,7 +452,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
               <div className="p-5 rounded-3xl bg-[#121217] border border-white/10 flex flex-col justify-between space-y-4">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black relative">
                   <img
-                    src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&auto=format&fit=crop&q=80"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />

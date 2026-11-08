@@ -61,73 +61,108 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
     }
   }, [myBoards]);
 
-  // Curated reference moodboards (matching reference app)
+  // Curated reference moodboards built from real prompt vault drops
   const curatedBoards: MoodBoardRecord[] = [
     {
       id: 'curated-1',
-      title: 'Warm ambient',
+      title: 'Burj Luxury & Evening',
       status: 'ready',
-      imagesCount: 24,
+      imagesCount: 276,
       sampleImages: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp',
       ],
       datasetImages: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_c42263f6-eaf5-4d50-ac9c-9296754064bb_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_37588442-d291-49b6-a020-f3ee0edbf8b6_min.webp',
       ],
       createdAt: 'Curated Preset',
       isCurated: true,
     },
     {
       id: 'curated-2',
-      title: 'Y2K studio',
+      title: 'Gym & Athletic Glow',
       status: 'ready',
-      imagesCount: 32,
+      imagesCount: 108,
       sampleImages: [
-        'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_3a157abc-1c93-43f4-b51c-0ebf90d0c925_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_e290e455-ed20-487e-9b88-3f3ef9dc0ac7_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_b979c3b2-4abe-4b76-b75c-a745b4f9c94c_min.webp',
       ],
       datasetImages: [
-        'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032744_2f69ccba-1f9d-4235-bf49-563e71156b8b_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032744_6bec0e98-36f9-4e8e-8d27-d763a616f067_min.webp',
       ],
       createdAt: 'Curated Preset',
       isCurated: true,
     },
     {
       id: 'curated-3',
-      title: 'Swag era',
+      title: 'Editorial Silk & Abaya',
       status: 'ready',
-      imagesCount: 28,
+      imagesCount: 200,
       sampleImages: [
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_2b705f3a-3c6e-4e99-822b-b91933c4a562_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_9de3bb3e-3999-4051-bc73-e89d2f54e539_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_7e31f19f-3412-4d0e-9b39-09e5cfdf8ea9_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_4cf98206-4879-4b96-931d-c2d49329431a_min.webp',
       ],
       datasetImages: [
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031408_f1089536-3a8f-43ee-b523-6b9a1d85812d_min.webp',
       ],
       createdAt: 'Curated Preset',
       isCurated: true,
     },
     {
       id: 'curated-4',
-      title: 'Theatrical light',
+      title: '35mm Night Flash',
       status: 'ready',
-      imagesCount: 40,
+      imagesCount: 476,
       sampleImages: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp',
       ],
       datasetImages: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp',
+      ],
+      createdAt: 'Curated Preset',
+      isCurated: true,
+    },
+    {
+      id: 'curated-5',
+      title: 'Yacht & Beach Resort',
+      status: 'ready',
+      imagesCount: 128,
+      sampleImages: [
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_b9851fa2-9e38-470f-823b-05a958efbe76_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_0fd7daf8-cd10-4e23-80fa-527cb2dcaf92_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_d12137ec-cf52-443a-baa7-01f709bf65b9_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_4fb5c768-c8f4-43d9-87cc-671248a60ca9_min.webp',
+      ],
+      datasetImages: [
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_023102_875d4f30-88da-4cdf-976d-d1ceedb0f284_min.webp',
+      ],
+      createdAt: 'Curated Preset',
+      isCurated: true,
+    },
+    {
+      id: 'curated-6',
+      title: 'Tokyo Neon Streetwear',
+      status: 'ready',
+      imagesCount: 64,
+      sampleImages: [
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_3be1039c-582d-46d6-9431-0f354ed12560_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_9ca8f7a7-00d4-4af2-979b-a7cd74a3ffa6_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_16000efb-29cc-4874-a521-d3fed3a0c75d_min.webp',
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_51fdbac1-c3f5-4d9a-bd73-ea96225cbd6e_min.webp',
+      ],
+      datasetImages: [
+        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031408_f1089536-3a8f-43ee-b523-6b9a1d85812d_min.webp',
       ],
       createdAt: 'Curated Preset',
       isCurated: true,
@@ -184,28 +219,28 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
             <div className="flex items-center justify-center -space-x-4 mb-8">
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80"
+                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp"
                   alt="Fanout 1"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
-                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&auto=format&fit=crop&q=80"
+                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp"
                   alt="Fanout 2"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
-                  src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&auto=format&fit=crop&q=80"
+                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp"
                   alt="Fanout 3"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
-                  src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=300&auto=format&fit=crop&q=80"
+                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp"
                   alt="Fanout 4"
                   className="w-full h-full object-cover"
                 />
@@ -382,10 +417,10 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
                 </div>
 
                 <div className="grid grid-cols-4 gap-1.5">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover" alt="" />
-                  <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover" alt="" />
-                  <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover" alt="" />
-                  <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" className="aspect-[3/4] rounded-lg object-cover" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp" className="aspect-[3/4] rounded-lg object-cover" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp" className="aspect-[3/4] rounded-lg object-cover" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp" className="aspect-[3/4] rounded-lg object-cover" alt="" />
                 </div>
               </div>
 
@@ -405,10 +440,10 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
                 </div>
 
                 <div className="grid grid-cols-4 gap-1.5">
-                  <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
-                  <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
-                  <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
-                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_d976d760-0475-445e-9ab3-2bb95860981c_min.webp" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032629_50852861-9ff2-406b-81f9-ef02fb7a2ab5_min.webp" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031931_f77b8f84-791f-4908-bcf7-569b64fb735f_min.webp" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
+                  <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_030515_d8028277-1131-4685-9254-f47cd2dc645e_min.webp" className="aspect-[3/4] rounded-lg object-cover border border-rose-500/40" alt="" />
                 </div>
               </div>
             </div>

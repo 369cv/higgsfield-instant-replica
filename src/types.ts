@@ -49,9 +49,20 @@ export interface ViewSettings {
   cardSize: number; // 1 to 4
 }
 
+export interface StudioHeadshot {
+  id: string;
+  title: string;
+  imageUrl: string;
+  lighting: string;
+  angle: string;
+  background: string;
+  createdAt: string;
+}
+
 export interface StoredInfluencer {
   id: string;
   name: string;
+  instagramHandle?: string;
   referenceImage: string;
   sampleImageUrl: string;
   headshotImage?: string;

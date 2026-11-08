@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { InfluencerStore } from '../services/influencerStore';
 
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets' | 'explore';
 
@@ -13,6 +14,25 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   onSelectTab,
   onOpenSearch,
 }) => {
+  const [avatarUrl, setAvatarUrl] = useState<string>(() =>
+    InfluencerStore.getActiveHeadshot()
+  );
+
+  useEffect(() => {
+    const handleHeadshotChange = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail) {
+        setAvatarUrl(customEvent.detail);
+      } else {
+        setAvatarUrl(InfluencerStore.getActiveHeadshot());
+      }
+    };
+
+    window.addEventListener('halalfans_headshot_changed', handleHeadshotChange);
+    return () => {
+      window.removeEventListener('halalfans_headshot_changed', handleHeadshotChange);
+    };
+  }, []);
   const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
     {
       id: 'vault',
@@ -185,7 +205,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         <div className="ml-1">
           <div className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none">
             <img
-              src="/images/influencer-avatar.png"
+              src={avatarUrl}
               alt="Profile Avatar"
               className="w-full h-full rounded-full object-cover"
             />
