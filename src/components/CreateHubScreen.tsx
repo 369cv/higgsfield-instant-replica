@@ -18,7 +18,10 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
             onClick={onReturnHome}
             className="text-xs font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-xl border border-white/10 transition-colors flex items-center gap-1.5 mb-3"
           >
-            <span>←</span>
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
             <span>Back to Home</span>
           </button>
           <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">
@@ -39,8 +42,11 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         >
           <div className="space-y-6">
             {/* Visual Icon / Avatar Preview */}
-            <div className="w-20 h-20 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
-              👤
+            <div className="w-20 h-20 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <svg className="w-10 h-10 text-fuchsia-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
             </div>
 
             <div className="space-y-2">
@@ -65,8 +71,11 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
             <span className="text-xs font-bold text-neutral-300 group-hover:text-white">
               Launch Influencer Studio
             </span>
-            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-fuchsia-500 text-white flex items-center justify-center text-xs font-bold transition-colors">
-              →
+            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-fuchsia-500 text-white flex items-center justify-center transition-colors">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
             </span>
           </div>
         </div>
@@ -78,8 +87,13 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         >
           <div className="space-y-6">
             {/* Visual Icon Preview */}
-            <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
-              📋
+            <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <svg className="w-10 h-10 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="7" height="9" x="3" y="3" rx="1" />
+                <rect width="7" height="5" x="14" y="3" rx="1" />
+                <rect width="7" height="9" x="14" y="12" rx="1" />
+                <rect width="7" height="5" x="3" y="16" rx="1" />
+              </svg>
             </div>
 
             <div className="space-y-2">
@@ -104,8 +118,11 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
             <span className="text-xs font-bold text-neutral-300 group-hover:text-white">
               Create Mood Board
             </span>
-            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-amber-400 group-hover:text-black text-white flex items-center justify-center text-xs font-bold transition-colors">
-              →
+            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-amber-400 group-hover:text-black text-white flex items-center justify-center transition-colors">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
             </span>
           </div>
         </div>
@@ -117,8 +134,10 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         >
           <div className="space-y-6">
             {/* Visual Icon Preview */}
-            <div className="w-20 h-20 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
-              📁
+            <div className="w-20 h-20 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <svg className="w-10 h-10 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
             </div>
 
             <div className="space-y-2">
@@ -143,8 +162,11 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
             <span className="text-xs font-bold text-neutral-300 group-hover:text-white">
               Open Canvas Project
             </span>
-            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-cyan-400 group-hover:text-black text-white flex items-center justify-center text-xs font-bold transition-colors">
-              →
+            <span className="w-8 h-8 rounded-full bg-white/5 group-hover:bg-cyan-400 group-hover:text-black text-white flex items-center justify-center transition-colors">
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
             </span>
           </div>
         </div>

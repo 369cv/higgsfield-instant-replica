@@ -45,7 +45,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
       channel: 'Instagram',
       handle: '@savage_mode',
       imageUrl: 'https://storage.googleapis.com/antigravity-media/higgsfield/0053510b-801a-4712-ae6a-b28ec4b953c8.webp',
-      caption: 'When it’s your turn, don’t feel bad. Go full savage mode. 🖤✨ #HalalFans #ModestFashion #Nightlife',
+      caption: 'When it’s your turn, don’t feel bad. Go full savage mode. #HalalFans #ModestFashion #Nightlife',
       scheduledTime: 'Tomorrow at 6:30 PM',
       status: 'queued'
     },
@@ -54,7 +54,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
       channel: 'Instagram',
       handle: '@savage_mode',
       imageUrl: 'https://storage.googleapis.com/antigravity-media/higgsfield/005a76c8-500b-4770-b74c-47bc63aa9a4a.webp',
-      caption: 'Golden hour reflections in luxury silk abaya. 🕊️ Direct from Halal Fans Soul studio. #Elegance #Editorial',
+      caption: 'Golden hour reflections in luxury silk abaya. Direct from Halal Fans Soul studio. #Elegance #Editorial',
       scheduledTime: 'Nov 10 at 12:00 PM',
       status: 'queued'
     }

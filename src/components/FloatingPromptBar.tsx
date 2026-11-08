@@ -83,10 +83,13 @@ export const FloatingPromptBar: React.FC<FloatingPromptBarProps> = ({
           {/* Generate Button in Lime */}
           <button
             type="submit"
-            className="px-4 py-2 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-xs flex items-center gap-1 transition-transform active:scale-95 shadow-md shadow-[#d1fe17]/25"
+            className="px-4 py-2 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-xs flex items-center gap-1.5 transition-transform active:scale-95 shadow-md shadow-[#d1fe17]/25"
           >
             <span>GENERATE</span>
-            <span className="text-[10px] font-black opacity-80">⤳ 1</span>
+            <svg className="w-3 h-3 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 10 4 15 9 20" />
+              <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+            </svg>
           </button>
         </div>
       </form>

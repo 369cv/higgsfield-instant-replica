@@ -80,7 +80,10 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
             </div>
             {/* Gem Badge */}
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-neutral-900 border border-white/10 rounded-full text-[11px] font-bold text-neutral-300 flex items-center gap-1 shadow-lg">
-              <span>💎</span>
+              <svg className="w-3 h-3 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="6 3 18 3 22 9 12 22 2 9 6 3" />
+                <line x1="2" y1="9" x2="22" y2="9" />
+              </svg>
               <span>0</span>
             </div>
           </div>

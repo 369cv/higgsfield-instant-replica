@@ -215,8 +215,11 @@ export const App: React.FC = () => {
       {/* Placeholders for upcoming user flows */}
       {activeTab === 'influencer' && (
         <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-fuchsia-500/10 text-fuchsia-400 mx-auto flex items-center justify-center text-2xl font-bold">
-            👤
+          <div className="w-16 h-16 rounded-3xl bg-fuchsia-500/10 text-fuchsia-400 mx-auto flex items-center justify-center">
+            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
           </div>
           <h2 className="text-2xl font-bold text-white">AI Influencer Studio</h2>
           <p className="text-xs text-neutral-400 max-w-md mx-auto">
@@ -224,17 +227,24 @@ export const App: React.FC = () => {
           </p>
           <button
             onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
           >
-            ← Return to Prompt Vault
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Return to Prompt Vault</span>
           </button>
         </main>
       )}
 
       {activeTab === 'video' && (
         <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-cyan-500/10 text-cyan-400 mx-auto flex items-center justify-center text-2xl font-bold">
-            🎬
+          <div className="w-16 h-16 rounded-3xl bg-cyan-500/10 text-cyan-400 mx-auto flex items-center justify-center">
+            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
           </div>
           <h2 className="text-2xl font-bold text-white">Video Studio</h2>
           <p className="text-xs text-neutral-400 max-w-md mx-auto">
@@ -242,17 +252,23 @@ export const App: React.FC = () => {
           </p>
           <button
             onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
           >
-            ← Return to Prompt Vault
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Return to Prompt Vault</span>
           </button>
         </main>
       )}
 
       {activeTab === 'assets' && (
         <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center text-2xl font-bold">
-            📁
+          <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center">
+            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2H4z" />
+            </svg>
           </div>
           <h2 className="text-2xl font-bold text-white">Assets Hub</h2>
           <p className="text-xs text-neutral-400 max-w-md mx-auto">
@@ -260,9 +276,13 @@ export const App: React.FC = () => {
           </p>
           <button
             onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
           >
-            ← Return to Prompt Vault
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Return to Prompt Vault</span>
           </button>
         </main>
       )}
