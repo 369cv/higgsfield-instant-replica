@@ -21,7 +21,7 @@ export const LockedScreen: React.FC<LockedScreenProps> = ({
   const tiles = previewItems.slice(0, 24);
 
   return (
-    <div className="relative flex-1 w-full min-h-[calc(100dvh-4rem)] overflow-hidden">
+    <div className="relative flex-1 w-full min-h-app-content overflow-hidden">
       {/* Blurred preview */}
       <div
         aria-hidden="true"
@@ -40,7 +40,7 @@ export const LockedScreen: React.FC<LockedScreenProps> = ({
       <div className="absolute inset-0 bg-[#070709]/60" aria-hidden="true" />
 
       {/* Lock card */}
-      <div className="relative z-10 flex items-center justify-center min-h-[calc(100dvh-4rem)] p-6">
+      <div className="relative z-10 flex items-center justify-center min-h-app-content p-6">
         <div className="w-full max-w-sm text-center rounded-3xl bg-[#111116]/85 border border-white/10 backdrop-blur-xl p-8 shadow-2xl">
           <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#d1fe17]/10 border border-[#d1fe17]/30 flex items-center justify-center">
             <Lock className="w-6 h-6 text-[#d1fe17]" />

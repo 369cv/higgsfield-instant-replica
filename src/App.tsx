@@ -8,6 +8,8 @@ import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
 import { PromptsNicheSubheader, ClassificationFilters } from './components/PromptsNicheSubheader';
 import { HiggsfieldProfileModal } from './components/HiggsfieldProfileModal';
+import { MobileNavBar, MobileTabBar, MobileDrawer, MobileView, MOBILE_TITLES } from './components/MobileShell';
+import { Heart } from 'lucide-react';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 import { getCanonicalNiche } from './utils/categorizationFramework';
@@ -31,8 +33,13 @@ export const App: React.FC = () => {
     return 'vault';
   });
 
+  // Mobile-only: the vault filtered to favourites ("Saved" tab) and the hamburger drawer.
+  const [savedOnly, setSavedOnly] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const setActiveTab = (tab: NavTab) => {
     setActiveTabState(tab);
+    setSavedOnly(false);
     try {
       localStorage.setItem(ACTIVE_TAB_KEY, tab);
     } catch {}
@@ -161,6 +168,9 @@ export const App: React.FC = () => {
 
   // Filter items by search, deterministic category formula, and classification filters
   const displayedItems = vault.filter((item) => {
+    // 0. Saved view (mobile tab): favourites only
+    if (savedOnly && !favorites.has(item.id)) return false;
+
     // 1. Natural Language Search / Search Bar
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -231,9 +241,46 @@ export const App: React.FC = () => {
     },
   };
 
+  const mobileView: MobileView = isProfileOpen
+    ? 'profile'
+    : activeTab === 'vault' && savedOnly
+      ? 'saved'
+      : activeTab;
+
+  const handleMobileNavigate = (view: MobileView | 'search') => {
+    if (view === 'search') {
+      setIsSearchOpen(true);
+      return;
+    }
+    if (view === 'profile') {
+      setIsProfileOpen(true);
+      return;
+    }
+    setIsProfileOpen(false);
+    if (view === 'saved') {
+      setActiveTabState('vault');
+      setSavedOnly(true);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+    if (view === activeTab && !savedOnly) {
+      window.scrollTo({ top: 0, behavior: 'smooth' }); // iOS: tap active tab to scroll to top
+      return;
+    }
+    setActiveTab(view);
+    window.scrollTo({ top: 0 });
+  };
+
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Pure-Icon Header Navigation with Search & Assets next to Profile */}
+      {/* Mobile (iOS-style): top nav bar with hamburger + search */}
+      <MobileNavBar
+        title={MOBILE_TITLES[mobileView] || 'Prompts'}
+        onOpenMenu={() => setIsMenuOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
+      />
+
+      {/* Desktop: pure-icon header navigation with search, assets and profile */}
       <VaultHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -243,7 +290,7 @@ export const App: React.FC = () => {
 
       {/* Main View Router */}
       {activeTab === 'vault' && (
-        <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12 flex flex-col">
+        <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-[calc(var(--m-tab-h)+1rem)] md:pb-12 flex flex-col">
           {/* Niche Subheader Navigation with Expandable Classification Filters */}
           <PromptsNicheSubheader
             selectedCategory={selectedCategory}
@@ -266,7 +313,21 @@ export const App: React.FC = () => {
             </div>
           )}
 
-          {/* 1,604 Drops Masonry Grid */}
+          {savedOnly && displayedItems.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-24">
+              <div className="w-14 h-14 rounded-2xl bg-white/[0.06] flex items-center justify-center mb-4">
+                <Heart className="w-6 h-6 text-neutral-400" />
+              </div>
+              <h2 className="text-[17px] font-semibold mb-1">No saved prompts yet</h2>
+              <p className="text-sm text-neutral-400 mb-6">Tap the heart on any prompt to keep it here.</p>
+              <button
+                onClick={() => handleMobileNavigate('vault')}
+                className="h-11 px-5 rounded-xl bg-[#d1fe17] text-black font-semibold text-sm active:scale-[0.98]"
+              >
+                Browse prompts
+              </button>
+            </div>
+          ) : (
           <CardGrid
             items={displayedItems}
             layout="masonry"
@@ -276,6 +337,7 @@ export const App: React.FC = () => {
             onToggleFavorite={toggleFavorite}
             onSelectItem={(item) => setSelectedItem(item)}
           />
+          )}
         </main>
       )}
 
@@ -328,6 +390,16 @@ export const App: React.FC = () => {
         }}
         onSelectItem={(item) => setSelectedItem(item)}
         vaultItems={vault}
+      />
+
+      {/* Mobile (iOS-style): bottom tab bar and hamburger drawer */}
+      <MobileTabBar active={mobileView} onSelect={handleMobileNavigate} />
+      <MobileDrawer
+        isOpen={isMenuOpen}
+        active={mobileView}
+        savedCount={favorites.size}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigate={handleMobileNavigate}
       />
 
       {/* Inspector Modal */}

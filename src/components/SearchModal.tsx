@@ -92,34 +92,53 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center sm:p-4 bg-black/75 backdrop-blur-md">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative z-10 w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[85vh] bg-[#111116] sm:border border-white/15 sm:rounded-3xl p-4 sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden">
+      <div className="relative z-10 w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[85vh] bg-[#0b0b0f] sm:bg-[#111116] sm:border border-white/15 sm:rounded-3xl px-4 pb-4 pt-[calc(env(safe-area-inset-top)+8px)] sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden">
         {/* Search input */}
+        <div className="flex items-center gap-3 shrink-0">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             runSearch(searchQuery);
           }}
-          className="flex items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus-within:border-[#d1fe17] transition-colors"
+          className="flex-1 flex items-center bg-white/[0.08] sm:bg-white/5 sm:border border-white/10 rounded-[10px] sm:rounded-2xl px-2.5 sm:px-4 h-9 sm:h-auto sm:py-3 sm:focus-within:border-[#d1fe17] transition-colors"
         >
-          <Search className="w-5 h-5 text-neutral-400 mr-3 shrink-0" />
+          <Search className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400 mr-2 sm:mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search prompts"
-            className="w-full bg-transparent text-base sm:text-sm text-white placeholder-neutral-500 focus:outline-none"
+            className="w-full bg-transparent text-[17px] sm:text-sm text-white placeholder-neutral-500 focus:outline-none"
             enterKeyHint="search"
           />
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 flex items-center justify-center shrink-0 cursor-pointer"
+            className="hidden sm:flex w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 items-center justify-center shrink-0 cursor-pointer"
             aria-label="Close search"
           >
             <X className="w-4 h-4" />
           </button>
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              className="sm:hidden w-5 h-5 rounded-full bg-white/30 text-black flex items-center justify-center shrink-0"
+              aria-label="Clear"
+            >
+              <X className="w-3 h-3" strokeWidth={3} />
+            </button>
+          )}
         </form>
+        <button
+          type="button"
+          onClick={onClose}
+          className="sm:hidden text-[17px] text-[#d1fe17] active:opacity-50 shrink-0"
+        >
+          Cancel
+        </button>
+        </div>
 
         {/* Live results */}
         {hasQuery && (

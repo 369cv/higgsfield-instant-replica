@@ -66,7 +66,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
       aria-label="Prompt"
     >
       {/* Image stage: top on mobile, left on desktop */}
-      <div className="relative w-full md:flex-1 h-[45vh] md:h-full flex items-center justify-center bg-black shrink-0 overflow-hidden">
+      <div className="relative w-full md:flex-1 h-[52dvh] md:h-full flex items-center justify-center bg-black shrink-0 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center blur-3xl opacity-20 scale-110 pointer-events-none"
           style={{ backgroundImage: `url(${image})` }}
@@ -75,25 +75,29 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           src={image}
           alt=""
           decoding="async"
-          className="relative z-10 max-h-full max-w-full object-contain p-3 md:p-8"
+          className="relative z-10 max-h-full max-w-full object-contain pt-[calc(env(safe-area-inset-top)+8px)] pb-6 md:p-8"
         />
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 md:top-5 md:left-5 md:right-auto z-20 w-9 h-9 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white cursor-pointer"
+          className="absolute top-[calc(env(safe-area-inset-top)+10px)] right-3 md:top-5 md:left-5 md:right-auto z-20 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/90 hover:text-white active:opacity-60 cursor-pointer"
           aria-label="Close"
         >
-          <X className="w-4 h-4" />
+          <X className="w-[18px] h-[18px]" />
         </button>
       </div>
 
       {/* Prompt panel: bottom on mobile, right on desktop */}
-      <div className="flex-1 md:flex-none md:w-[420px] min-h-0 flex flex-col bg-[#0d0e12] border-t md:border-t-0 md:border-l border-white/[0.06]">
-        <div className="px-5 pt-5 pb-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#717684]">
+      <div className="relative z-10 -mt-5 md:mt-0 flex-1 md:flex-none md:w-[420px] min-h-0 flex flex-col bg-[#121217] md:bg-[#0d0e12] rounded-t-[22px] md:rounded-none border-t md:border-t-0 md:border-l border-white/[0.08] shadow-[0_-12px_40px_rgba(0,0,0,0.5)] md:shadow-none animate-sheet-up md:animate-none">
+        {/* iOS sheet grabber (mobile) */}
+        <div className="md:hidden pt-2 flex justify-center" aria-hidden="true">
+          <div className="w-9 h-[5px] rounded-full bg-white/25" />
+        </div>
+        <div className="px-5 pt-3 md:pt-5 pb-2 text-[13px] md:text-[11px] font-semibold md:tracking-[0.14em] md:uppercase text-neutral-400 md:text-[#717684]">
           Prompt
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4">
-          <p className="text-[13.5px] leading-relaxed text-[#d8dbe2] whitespace-pre-wrap select-text">
+          <p className="text-[15px] md:text-[13.5px] leading-relaxed text-[#d8dbe2] whitespace-pre-wrap select-text">
             {prompt}
           </p>
         </div>
@@ -104,7 +108,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
         >
           <button
             onClick={handleCopy}
-            className="flex-1 h-12 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
+            className="flex-1 h-[50px] md:h-12 rounded-[14px] md:rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {copied ? 'Copied' : 'Copy prompt'}
@@ -112,7 +116,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           {onToggleFavorite && (
             <button
               onClick={() => onToggleFavorite(item.id)}
-              className={`w-12 h-12 rounded-xl bg-white/[0.05] hover:bg-white/10 border border-white/10 flex items-center justify-center cursor-pointer ${
+              className={`w-[50px] h-[50px] md:w-12 md:h-12 shrink-0 rounded-[14px] md:rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 flex items-center justify-center cursor-pointer ${
                 isFavorited ? 'text-red-500' : 'text-neutral-300'
               }`}
               aria-label={isFavorited ? 'Remove from favourites' : 'Save to favourites'}

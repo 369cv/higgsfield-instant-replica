@@ -124,7 +124,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-40 h-16 px-3 sm:px-6 gap-2 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all select-none">
+    <header className="hidden md:flex sticky top-0 z-40 h-16 px-3 sm:px-6 gap-2 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 items-center justify-between transition-all select-none">
       {/* Left: Minimal Brand Logo Icon Only */}
       <div className="flex items-center shrink-0">
         <button

@@ -48,3 +48,46 @@ body {
 .animate-soft-pulse {
   animation: softPulse 1.8s infinite ease-in-out;
 }
+
+/* ---------- Mobile app shell (iOS-style) ---------- */
+:root {
+  /* Height of the mobile top nav bar and bottom tab bar, including safe areas. */
+  --m-nav-h: calc(44px + env(safe-area-inset-top));
+  --m-tab-h: calc(52px + env(safe-area-inset-bottom));
+  /* Height of the app chrome around page content. */
+  --app-chrome-h: calc(var(--m-nav-h) + var(--m-tab-h));
+}
+
+@media (min-width: 768px) {
+  :root {
+    --app-chrome-h: 64px;
+  }
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+.h-app-content {
+  height: calc(100dvh - var(--app-chrome-h));
+}
+
+.min-h-app-content {
+  min-height: calc(100dvh - var(--app-chrome-h));
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-sheet-up {
+  animation: sheetUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}

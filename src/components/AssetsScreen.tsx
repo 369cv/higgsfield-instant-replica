@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { VaultItem } from '../types';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen, FolderOpen } from 'lucide-react';
 
 const SIDEBAR_COLLAPSED_KEY = 'assets_sidebar_collapsed_v1';
 
@@ -43,8 +43,9 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<AssetTab>('assets');
   // Expandable sidebar: icon rail when collapsed, full labels when expanded.
-  // Defaults to collapsed on small screens; remembered per browser.
+  // On mobile it always starts closed (it opens as a drawer); on desktop the choice is remembered.
   const [sidebarCollapsed, setSidebarCollapsedState] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
     try {
       const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
       if (saved !== null) return saved === '1';
@@ -53,6 +54,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
   });
   const setSidebarCollapsed = (v: boolean) => {
     setSidebarCollapsedState(v);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return; // don't persist mobile drawer state
     try {
       localStorage.setItem(SIDEBAR_COLLAPSED_KEY, v ? '1' : '0');
     } catch {}
@@ -396,7 +398,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
   ];
 
   return (
-    <div className="relative flex h-[calc(100dvh-64px)] w-full bg-[#070709] text-white overflow-hidden select-none">
+    <div className="relative flex h-app-content w-full bg-[#070709] text-white overflow-hidden select-none">
       {/* Mobile backdrop when the sidebar is expanded over content */}
       {!sidebarCollapsed && (
         <div
@@ -409,7 +411,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       <aside
         className={`shrink-0 bg-[#0c0c10] border-r border-white/5 flex flex-col justify-between overflow-y-auto overflow-x-hidden transition-[width] duration-200 ${
           sidebarCollapsed
-            ? 'w-16 p-2'
+            ? 'w-16 p-2 max-md:hidden'
             : 'w-60 p-3.5 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-30 max-md:shadow-2xl'
         }`}
       >
@@ -425,13 +427,18 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
             title={sidebarCollapsed ? 'Expand' : 'Collapse'}
           >
             {sidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
-            {!sidebarCollapsed && <span>Collapse</span>}
+            {!sidebarCollapsed && (
+              <>
+                <span className="md:hidden">Close</span>
+                <span className="hidden md:inline">Collapse</span>
+              </>
+            )}
           </button>
 
           {/* Back Navigation to Prompt Vault */}
           <button
             onClick={onReturnToVault}
-            className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors ${
+            className={`max-md:hidden w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors ${
               sidebarCollapsed ? 'justify-center px-0' : ''
             }`}
             title="Prompt Vault"
@@ -525,10 +532,18 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       {/* ================= MAIN CONTENT WORKSPACE ================= */}
       <section className="flex-1 flex flex-col overflow-hidden bg-[#070709]">
         {/* Top Control Bar */}
-        <header className="h-16 px-4 md:px-8 gap-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-[#0a0a0d]/50 backdrop-blur-sm">
+        <header className="h-14 md:h-16 px-4 md:px-8 gap-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-[#0a0a0d]/50 backdrop-blur-sm">
           {/* Left Title / Sub-tabs */}
-          <div className="flex items-center gap-6 min-w-0 overflow-x-auto no-scrollbar">
-            <h1 className="text-xl font-black text-white capitalize">
+          <div className="flex items-center gap-3 md:gap-6 min-w-0 overflow-x-auto no-scrollbar">
+            {/* Mobile: open the folders sidebar as a drawer */}
+            <button
+              onClick={() => setSidebarCollapsed(false)}
+              className="md:hidden shrink-0 w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-neutral-200 active:opacity-60"
+              aria-label="Open folders"
+            >
+              <FolderOpen className="w-[18px] h-[18px]" />
+            </button>
+            <h1 className="text-[17px] md:text-xl font-bold md:font-black text-white capitalize whitespace-nowrap">
               {activeTab === 'enhanced' ? 'Upscaled' : activeTab}
             </h1>
 
