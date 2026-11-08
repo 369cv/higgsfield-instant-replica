@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { VaultItem } from '../types';
+import { InfluencerStore, BAHA_SAVAGE } from '../services/influencerStore';
+import consolidatedData from '../data/consolidatedInfluencers.json';
 
 interface InfluencerScreenProps {
   vaultItems: VaultItem[];
@@ -23,9 +25,9 @@ export interface InfluencerCharacter {
   skinColor: string;
   imageUrl: string;
   prompt: string;
-  motionPreset?: string;
+  dropsCount: number;
+  category: string;
   isOfficial?: boolean;
-  isFavorited?: boolean;
 }
 
 const CHARACTER_TYPES = [
@@ -43,148 +45,83 @@ const CHARACTER_TYPES = [
 const GENDERS = ['Female', 'Male', 'Non-binary', 'Androgynous', 'Fluid'];
 const BUILDS = ['Athletic', 'Muscular', 'Slim', 'Curvy', 'Heavy', 'Petite', 'Broad'];
 const HAIRSTYLES = [
-  'Bowl Cut', 'Afro Volume', 'Mustache Mullet', 'Pixie Crop', 'Sleek Bob', 
-  'High Fade', 'Long Waves', 'Messy Bun', 'Braids & Cornrows', 'Buzz Cut',
-  'Middle Parting', 'Side Swept', 'Curtain Bangs', 'Top Knot', 'Wavy Shag',
-  'Slicked Back', 'Natural Curls', 'Micro Bangs', 'Textured Quiff', 'Ponytail',
-  'French Crop', 'Dreadlocks', 'Feathered 70s', 'Tapered Fade', 'Asymmetrical', 'Chignon'
+  'Long Dark Waves', 'Sleek Straight Part', 'Chignon & Updo', 'Voluminous Blowout', 
+  'Textured Waves', 'High Ponytail', 'Bob Cut', 'Pixie Crop', 'Afro Volume', 
+  'Mustache Mullet', 'High Fade', 'Curtain Bangs', 'Braids & Cornrows', 'Buzz Cut'
 ];
 const HAIR_COLORS = [
-  'Neon Green', 'Platinum Blonde', 'Dark Chocolate', 'Jet Black', 'Copper Red', 
-  'Pastel Pink', 'Honey Blonde', 'Ash Brown', 'Silver White', 'Electric Blue', 
-  'Golden Hazel', 'Burgundy Wine', 'Warm Auburn'
+  'Dark Chocolate Brown', 'Jet Black', 'Warm Auburn', 'Honey Caramel', 
+  'Platinum Blonde', 'Ash Brown', 'Burgundy Wine', 'Golden Hazel'
 ];
 const STYLES = [
-  '70s Retro Tracksuit', 'Green Velvet Power', 'Olive Knit Luxury', 'Navy Athleisure', 
-  'Futuristic Cyberwear', 'Minimalist Monochrome', 'Streetwear Oversized', 'Haute Couture Evening'
+  'Quiet Luxury & Sovereign Tailoring', 'Dubai Nightlife & Flash', 'Luxury Penthouse Silk', 
+  'Aesthetic Cafe & Wellness', 'Architectural Modernist', 'Haute Couture Evening', 
+  'Travel & Resort Minimalist', 'High-Fashion Streetwear'
 ];
 const ETHNICITIES = [
-  'Mediterranean / Levantine', 'East Asian', 'South Asian', 'African / Black', 'Caucasian', 'Hispanic / Latino'
+  'Mediterranean / Levantine', 'Middle Eastern', 'South Asian', 'East Asian', 
+  'African / Black', 'Caucasian', 'Hispanic / Latino'
 ];
 const AGES = ['Young Adult (18-25)', 'Prime Adult (26-35)', 'Mature (36-50)'];
 const SKIN_COLORS = [
-  'Warm Golden-Olive', 'Porcelain Fair', 'Warm Ivory', 'Sun-Kissed Honey', 
-  'Rich Bronze', 'Deep Espresso', 'Warm Caramel', 'Ebony Luminous'
+  'Warm Golden-Olive', 'Sun-Kissed Honey', 'Warm Ivory', 'Porcelain Fair', 
+  'Rich Bronze', 'Warm Caramel', 'Deep Espresso', 'Ebony Luminous'
 ];
 
 const MOTION_PRESETS = [
-  { id: 'dance', name: 'Viral Street Dance', speed: 'High Energy', description: 'Upbeat rhythmic hip-hop groove in street setting' },
-  { id: 'catwalk', name: 'Haute Catwalk Stroll', speed: 'Elegant', description: 'Smooth runway stride with direct camera gaze' },
-  { id: 'selfie', name: 'Mirror Selfie Turn', speed: 'Casual', description: 'Phone mirror turn with subtle smile and hair flip' },
-  { id: 'walking', name: 'Metropolitan Walk', speed: 'Cinematic', description: 'Urban avenue tracking shot with natural head movement' },
-  { id: 'headtilt', name: 'Dramatic 3D Turn', speed: 'Slow Motion', description: '180 degree dynamic head turn with specular lighting' },
-  { id: 'zoom', name: 'Direct Flash Push-In', speed: '35mm Film', description: 'Sudden camera push with paparazzi lens flare' },
+  { id: 'catwalk', name: 'Haute Catwalk Stroll', speed: 'Fluid Pace', description: 'Runway poise with natural posture and direct camera engagement' },
+  { id: 'selfie', name: 'Mirror Turn & Pose', speed: 'Social Pace', description: 'Editorial candid turn with subtle head tilt and gentle smile' },
+  { id: 'walking', name: 'Metropolitan Walk', speed: 'Cinematic Pace', description: 'Urban avenue tracking movement with natural fabric drift' },
+  { id: 'headtilt', name: '3D Portrait Angle', speed: 'Slow Motion', description: 'Smooth facial turn showcasing jawline contour and lighting shifts' },
+  { id: 'dance', name: 'Rhythmic Subtle Motion', speed: 'Dynamic Pace', description: 'Subtle rhythmic movement ideal for social clips' },
+  { id: 'zoom', name: '35mm Push-In', speed: 'Editorial', description: 'Gradual focal push-in accentuating eye detail and makeup contour' },
 ];
 
-const OFFICIAL_INFLUENCERS: InfluencerCharacter[] = [
+// Real influencers from consolidated vault data
+const REAL_INFLUENCERS: InfluencerCharacter[] = [
   {
-    id: 'char-1-muscular',
-    name: 'Viktor Thorne',
-    handle: '@vikthorn',
+    id: BAHA_SAVAGE.id,
+    name: BAHA_SAVAGE.name,
+    handle: BAHA_SAVAGE.instagramHandle || '@bahasavage',
     type: 'Extreme',
-    gender: 'Male',
-    build: 'Muscular',
-    hairstyle: 'Buzz Cut with Cap',
-    hairColor: 'Jet Black',
-    style: 'Green Velvet Power',
-    ethnicity: 'Caucasian',
+    gender: 'Female',
+    build: 'Athletic',
+    hairstyle: 'Long Dark Waves',
+    hairColor: 'Dark Chocolate Brown',
+    style: 'Quiet Luxury & Sovereign Tailoring',
+    ethnicity: 'Mediterranean / Levantine',
     age: 'Prime Adult (26-35)',
     skinColor: 'Warm Golden-Olive',
-    imageUrl: '/images/influencer-dashboard/cards/card_1_muscular.png',
-    prompt: 'Full-body portrait of a powerful muscular man with styled mustache and beanie, wearing tailored green velvet trousers and sleeveless leather vest, high fashion editorial lighting',
+    imageUrl: BAHA_SAVAGE.referenceImage,
+    prompt: BAHA_SAVAGE.signaturePrompt,
+    dropsCount: 1604,
+    category: BAHA_SAVAGE.category,
     isOfficial: true,
   },
-  {
-    id: 'char-2-bowlcut',
-    name: 'Felix Vance',
-    handle: '@vancevibe',
+  ...consolidatedData.influencers.map((inf) => ({
+    id: inf.id,
+    name: inf.name,
+    handle: `@${inf.name.toLowerCase().replace(/[^a-z]/g, '')}`,
     type: 'Bold',
-    gender: 'Male',
+    gender: 'Female',
     build: 'Slim',
-    hairstyle: 'Bowl Cut',
-    hairColor: 'Dark Chocolate',
-    style: '70s Retro Tracksuit',
-    ethnicity: 'Caucasian',
-    age: 'Young Adult (18-25)',
-    skinColor: 'Porcelain Fair',
-    imageUrl: '/images/influencer-dashboard/cards/card_2_bowlcut.png',
-    prompt: 'Retro 1970s styled young man with geometric bowl cut hair and vintage mustache, wearing white and yellow racing tracksuit, direct flash 35mm portrait',
-    isOfficial: true,
-  },
-  {
-    id: 'char-3-earmuffs',
-    name: 'Sora Nova',
-    handle: '@soranova',
-    type: 'Extreme',
-    gender: 'Female',
-    build: 'Petite',
-    hairstyle: 'Sleek Crop',
-    hairColor: 'Silver White',
-    style: 'Futuristic Cyberwear',
-    ethnicity: 'East Asian',
-    age: 'Young Adult (18-25)',
-    skinColor: 'Porcelain Fair',
-    imageUrl: '/images/influencer-dashboard/cards/card_3_earmuffs.png',
-    prompt: 'Futuristic avant-garde portrait of a woman wearing oversized bright orange fluffy ear warmers, sharp editorial profile, crisp studio backlight',
-    isOfficial: true,
-  },
-  {
-    id: 'char-4-afro',
-    name: 'Amina Sol',
-    handle: '@aminasol',
-    type: 'Average',
-    gender: 'Female',
-    build: 'Athletic',
-    hairstyle: 'Afro Volume',
-    hairColor: 'Platinum Blonde',
-    style: 'Olive Knit Luxury',
-    ethnicity: 'African / Black',
+    hairstyle: inf.hair || 'Long Dark Waves',
+    hairColor: 'Dark Chocolate Brown',
+    style: inf.category,
+    ethnicity: inf.ethnicity || 'Mediterranean / Levantine',
     age: 'Prime Adult (26-35)',
-    skinColor: 'Warm Caramel',
-    imageUrl: '/images/influencer-dashboard/cards/card_4_afro.png',
-    prompt: 'Stunning high-fashion portrait of a woman with a sculpted blonde afro puff, wearing an open-collar olive green mohair knit cardigan, minimalist neutral studio backdrop',
+    skinColor: 'Warm Golden-Olive',
+    imageUrl: inf.sampleImageUrl || inf.referenceImage,
+    prompt: `Editorial fashion portrait of ${inf.name} in ${inf.category} styling, high-contrast studio illumination`,
+    dropsCount: inf.dropsCount || 1,
+    category: inf.category,
     isOfficial: true,
-  },
-  {
-    id: 'char-5-mullet',
-    name: 'Dante Reyes',
-    handle: '@reyesdante',
-    type: 'Bold',
-    gender: 'Male',
-    build: 'Athletic',
-    hairstyle: 'Mustache Mullet',
-    hairColor: 'Jet Black',
-    style: 'Navy Athleisure',
-    ethnicity: 'Hispanic / Latino',
-    age: 'Young Adult (18-25)',
-    skinColor: 'Warm Ivory',
-    imageUrl: '/images/influencer-dashboard/cards/card_5_mullet.png',
-    prompt: 'Expressive young man with sculpted mustache and flowing mullet hairstyle, wearing navy blue tracksuit jacket with white trim, 35mm film flash aesthetic',
-    isOfficial: true,
-  },
-  {
-    id: 'char-6-blonde',
-    name: 'Elena Rostova',
-    handle: '@elenarostova',
-    type: 'Average',
-    gender: 'Female',
-    build: 'Slim',
-    hairstyle: 'Middle Parting',
-    hairColor: 'Platinum Blonde',
-    style: 'Minimalist Monochrome',
-    ethnicity: 'Caucasian',
-    age: 'Young Adult (18-25)',
-    skinColor: 'Porcelain Fair',
-    imageUrl: '/images/influencer-dashboard/cards/card_6_blonde.png',
-    prompt: 'Clean commercial fashion portrait of a young blonde model with natural freckles, wearing cream white ribbed knitwear, soft daylight window illumination',
-    isOfficial: true,
-  },
+  })),
 ];
 
 export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
   vaultItems,
   onSelectInfluencerDrops,
-  onOpenPromptVault,
   onSelectVideoStudio,
 }) => {
   // Navigation Tabs: 'explore' | 'history'
@@ -210,41 +147,41 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
 
   const [selectedGender, setSelectedGender] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_gender') || 'Male';
+      return localStorage.getItem('hf_inf_gender') || 'Female';
     } catch {
-      return 'Male';
+      return 'Female';
     }
   });
 
   const [selectedBuild, setSelectedBuild] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_build') || 'Muscular';
+      return localStorage.getItem('hf_inf_build') || 'Athletic';
     } catch {
-      return 'Muscular';
+      return 'Athletic';
     }
   });
 
   const [selectedHairstyle, setSelectedHairstyle] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_hairstyle') || 'Bowl Cut';
+      return localStorage.getItem('hf_inf_hairstyle') || 'Long Dark Waves';
     } catch {
-      return 'Bowl Cut';
+      return 'Long Dark Waves';
     }
   });
 
   const [selectedHairColor, setSelectedHairColor] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_haircolor') || 'Neon Green';
+      return localStorage.getItem('hf_inf_haircolor') || 'Dark Chocolate Brown';
     } catch {
-      return 'Neon Green';
+      return 'Dark Chocolate Brown';
     }
   });
 
   const [selectedStyle, setSelectedStyle] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_style') || '70s Retro Tracksuit';
+      return localStorage.getItem('hf_inf_style') || 'Quiet Luxury & Sovereign Tailoring';
     } catch {
-      return '70s Retro Tracksuit';
+      return 'Quiet Luxury & Sovereign Tailoring';
     }
   });
 
@@ -258,9 +195,9 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
 
   const [selectedAge, setSelectedAge] = useState<string>(() => {
     try {
-      return localStorage.getItem('hf_inf_age') || 'Young Adult (18-25)';
+      return localStorage.getItem('hf_inf_age') || 'Prime Adult (26-35)';
     } catch {
-      return 'Young Adult (18-25)';
+      return 'Prime Adult (26-35)';
     }
   });
 
@@ -276,7 +213,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
   const [freeGensRemaining, setFreeGensRemaining] = useState<number>(15);
 
   // Selected motion preset
-  const [selectedMotion, setSelectedMotion] = useState<string>('dance');
+  const [selectedMotion, setSelectedMotion] = useState<string>('catwalk');
 
   // Generating & Progress State
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -288,7 +225,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
   // Inspect Modal
   const [inspectCharacter, setInspectCharacter] = useState<InfluencerCharacter | null>(null);
 
-  // User Influencers Collection
+  // User Influencers Collection from local storage
   const [userInfluencers, setUserInfluencers] = useState<InfluencerCharacter[]>(() => {
     try {
       const saved = localStorage.getItem('hf_user_influencers_v7');
@@ -345,10 +282,10 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
     setSelectedEthnicity(randomItem(ETHNICITIES));
     setSelectedAge(randomItem(AGES));
     setSelectedSkinColor(randomItem(SKIN_COLORS));
-    showToast('Randomized influencer attributes');
+    showToast('Randomized attributes');
   };
 
-  // Generate Character Routine
+  // Generate Character Routine using vault drops
   const handleGenerate = () => {
     if (isGenerating) return;
     setIsGenerating(true);
@@ -368,16 +305,15 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       clearInterval(interval);
       setGenerationProgress(100);
 
-      // Pick an image from vaultItems or fallback to official crop
       const vaultMatch = vaultItems.length > 0
         ? vaultItems[Math.floor(Math.random() * vaultItems.length)].imageUrl
-        : '/images/influencer-dashboard/cards/card_1_muscular.png';
+        : '/images/archetypes/business-founder.png';
 
       const typeObj = CHARACTER_TYPES.find((t) => t.id === selectedType);
       const newChar: InfluencerCharacter = {
         id: `inf-${Date.now()}`,
-        name: `${selectedStyle.split(' ')[0]} ${typeObj ? typeObj.name : 'Model'}`,
-        handle: `@${(typeObj ? typeObj.name : 'influencer').toLowerCase()}_${Date.now().toString().slice(-4)}`,
+        name: `${selectedStyle.split(' ')[0]} Creator`,
+        handle: `@creator_${Date.now().toString().slice(-4)}`,
         type: typeObj ? typeObj.name : 'Extreme',
         gender: selectedGender,
         build: selectedBuild,
@@ -388,7 +324,9 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
         age: selectedAge,
         skinColor: selectedSkinColor,
         imageUrl: vaultMatch,
-        prompt: `High-fashion viral influencer portrait with ${selectedHairstyle} in ${selectedHairColor}, ${selectedBuild} build, wearing ${selectedStyle}, ${selectedEthnicity} heritage, cinematic lighting`,
+        prompt: `High-fashion portrait with ${selectedHairstyle} in ${selectedHairColor}, ${selectedBuild} build, wearing ${selectedStyle}, ${selectedEthnicity} heritage, crisp studio illumination`,
+        dropsCount: 1,
+        category: selectedStyle,
         isOfficial: false,
       };
 
@@ -398,15 +336,15 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       }
       setIsGenerating(false);
       setInspectCharacter(newChar);
-      showToast('New AI influencer created!');
+      showToast('New AI influencer created');
     }, 1800);
   };
 
-  // Combined Influencers for Grid
+  // Filtered influencers for gallery grid
   const displayedInfluencers = useMemo(() => {
-    let list = [...userInfluencers, ...OFFICIAL_INFLUENCERS];
+    let list = [...userInfluencers, ...REAL_INFLUENCERS];
     if (activeFilter === 'presets') {
-      list = OFFICIAL_INFLUENCERS;
+      list = REAL_INFLUENCERS;
     } else if (activeFilter === 'trends') {
       list = list.slice(0, 4);
     }
@@ -426,7 +364,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       )}
 
       {/* =================================================================== */}
-      {/* 1. LEFT SIDEBAR (THE HIGGSFIELD AI INFLUENCER BUILDER)             */}
+      {/* 1. LEFT CREATION & ATTRIBUTE BUILDER SIDEBAR                        */}
       {/* =================================================================== */}
       <aside className="w-full md:w-[320px] lg:w-[350px] bg-[#0c0c10] border-r border-white/10 flex flex-col shrink-0 h-full overflow-hidden">
         {/* Top Header */}
@@ -922,7 +860,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
               <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/10">
                 <h3 className="text-xs font-bold text-white mb-1">Select Motion Preset</h3>
                 <p className="text-[11px] text-neutral-400">
-                  Turn your AI influencer into an animated viral video using Higgsfield motion diffusion.
+                  Turn your AI influencer into an animated motion video.
                 </p>
               </div>
 
@@ -1077,18 +1015,6 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
               )}
             </button>
           </div>
-
-          {onOpenPromptVault && (
-            <button
-              onClick={onOpenPromptVault}
-              className="text-xs text-neutral-400 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <span>Browse 1,604 Prompt Drops</span>
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          )}
         </div>
 
         {activeView === 'explore' ? (
@@ -1100,7 +1026,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 {/* Card -2 (Far Left) */}
                 <div className="absolute left-4 sm:left-12 w-28 sm:w-36 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl opacity-60 transform -rotate-12 scale-90 translate-y-3 z-0 border border-white/20">
                   <img
-                    src="/images/influencer-dashboard/hero/hero_card_1.png"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -1109,7 +1035,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 {/* Card -1 (Mid Left) */}
                 <div className="absolute left-16 sm:left-32 w-32 sm:w-40 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl opacity-80 transform -rotate-6 scale-95 translate-y-1.5 z-10 border border-white/20">
                   <img
-                    src="/images/influencer-dashboard/hero/hero_card_2.png"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032226_ba56175c-b5d6-4183-aad0-5932f8023b3c_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -1118,16 +1044,16 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 {/* Center Card (Hero Front) */}
                 <div className="relative w-36 sm:w-44 aspect-[9/16] rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)] transform scale-105 z-20 border-2 border-white/40 ring-4 ring-[#d1fe17]/20">
                   <img
-                    src="/images/influencer-dashboard/hero/hero_card_3.png"
+                    src="/images/archetypes/business-founder.png"
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
 
                 {/* Card +1 (Mid Right) */}
                 <div className="absolute right-16 sm:right-32 w-32 sm:w-40 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl opacity-80 transform rotate-6 scale-95 translate-y-1.5 z-10 border border-white/20">
                   <img
-                    src="/images/influencer-dashboard/hero/hero_card_4.png"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_024800_6cdc5d8b-71ca-460f-a0f5-46c088e0694f_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -1136,7 +1062,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 {/* Card +2 (Far Right) */}
                 <div className="absolute right-4 sm:right-12 w-28 sm:w-36 aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl opacity-60 transform rotate-12 scale-90 translate-y-3 z-0 border border-white/20">
                   <img
-                    src="/images/influencer-dashboard/hero/hero_card_5.png"
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031737_bc164e3b-b104-4529-97ce-c92dde0980c8_min.webp"
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -1183,7 +1109,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
                   </svg>
-                  <span>Higgsfield Presets</span>
+                  <span>Curated Presets</span>
                 </button>
 
                 <button
@@ -1225,7 +1151,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                   {/* Top Badges */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[#d1fe17] font-bold border border-[#d1fe17]/30">
-                      {char.type}
+                      {char.category || char.type}
                     </span>
 
                     <button
@@ -1243,14 +1169,21 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
 
                   {/* Bottom Character Info */}
                   <div className="absolute bottom-3 left-3 right-3">
-                    <h4 className="text-sm font-bold text-white tracking-wide truncate">
-                      {char.name}
-                    </h4>
+                    <div className="flex items-center justify-between gap-1">
+                      <h4 className="text-sm font-bold text-white tracking-wide truncate">
+                        {char.name}
+                      </h4>
+                      {char.dropsCount > 1 && (
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-neutral-300 font-mono shrink-0">
+                          {char.dropsCount} drops
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[11px] text-neutral-400 font-mono block">
                       {char.handle}
                     </span>
-                    <p className="text-[10px] text-neutral-400 line-clamp-1 mt-1 font-sans">
-                      {char.style} • {char.hairstyle}
+                    <p className="text-[10px] text-neutral-400 line-clamp-1 mt-0.5 font-sans">
+                      {char.category} • {char.hairstyle}
                     </p>
                   </div>
                 </div>
@@ -1344,7 +1277,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 className="w-full h-full object-cover object-top"
               />
               <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#d1fe17] border border-[#d1fe17]/30">
-                {inspectCharacter.type}
+                {inspectCharacter.category || inspectCharacter.type}
               </span>
             </div>
 
@@ -1370,26 +1303,26 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 {/* Attributes Grid */}
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
-                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Build</span>
-                    <span className="text-neutral-200 font-medium">{inspectCharacter.build}</span>
+                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Category</span>
+                    <span className="text-neutral-200 font-medium">{inspectCharacter.category}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
                     <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Hairstyle</span>
                     <span className="text-neutral-200 font-medium">{inspectCharacter.hairstyle}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
-                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Hair Color</span>
-                    <span className="text-neutral-200 font-medium">{inspectCharacter.hairColor}</span>
+                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Ethnicity</span>
+                    <span className="text-neutral-200 font-medium">{inspectCharacter.ethnicity}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/5">
-                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Style</span>
-                    <span className="text-neutral-200 font-medium">{inspectCharacter.style}</span>
+                    <span className="text-[10px] text-neutral-500 uppercase block font-semibold">Total Drops</span>
+                    <span className="text-[#d1fe17] font-bold font-mono">{inspectCharacter.dropsCount}</span>
                   </div>
                 </div>
 
                 {/* Prompt */}
                 <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/5 space-y-1">
-                  <span className="text-[10px] text-[#d1fe17] uppercase font-bold tracking-wider">Master Prompt</span>
+                  <span className="text-[10px] text-[#d1fe17] uppercase font-bold tracking-wider">Prompt Specification</span>
                   <p className="text-xs text-neutral-300 leading-relaxed font-mono">
                     {inspectCharacter.prompt}
                   </p>
@@ -1413,23 +1346,23 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                   </button>
                 )}
 
-                <button
-                  onClick={() => {
-                    if (onSelectInfluencerDrops) {
+                {onSelectInfluencerDrops && (
+                  <button
+                    onClick={() => {
                       onSelectInfluencerDrops([], inspectCharacter.name);
-                    }
-                    setInspectCharacter(null);
-                  }}
-                  className="w-full py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="7" height="7" rx="1.5" />
-                    <rect x="14" y="3" width="7" height="7" rx="1.5" />
-                    <rect x="14" y="14" width="7" height="7" rx="1.5" />
-                    <rect x="3" y="14" width="7" height="7" rx="1.5" />
-                  </svg>
-                  <span>View in Prompt Vault</span>
-                </button>
+                      setInspectCharacter(null);
+                    }}
+                    className="w-full py-2.5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                      <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    </svg>
+                    <span>Filter Drops by Character</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>
