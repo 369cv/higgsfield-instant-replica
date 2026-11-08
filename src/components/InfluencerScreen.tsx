@@ -31,95 +31,88 @@ const AUDIENCE_ARCHETYPES: Record<AudienceMode, ArchetypeOption[]> = {
       name: 'Executive Founder',
       subtitle: 'Boardroom & Strategy',
       image: '/images/archetypes/business-founder.png',
-      defaultPrompt: 'Baha Savage as executive founder in tailored taupe blazer, boardroom penthouse backdrop, 85mm prime lens',
+      defaultPrompt: 'Baha Savage as executive founder in an oversized light gray tailored suit blazer, resting on polished black marble countertop, modern luxury interior, 85mm prime lens',
     },
     {
-      id: 'biz-ambassador',
-      name: 'Brand Ambassador',
-      subtitle: 'Commercial & E-Commerce',
-      image: '/images/archetypes/business-commercial.png',
-      defaultPrompt: 'Commercial brand ambassador portrait, bright studio softbox, clean commercial product placement ready',
+      id: 'biz-penthouse',
+      name: 'Metropolitan Executive',
+      subtitle: 'Penthouse & Silk',
+      image: '/images/archetypes/business-penthouse.png',
+      defaultPrompt: 'Executive woman in tailored black blazer, cream-white silk trousers, structured leather handbag in luxury urban hotel penthouse suite',
     },
     {
-      id: 'biz-realestate',
-      name: 'Luxury Real Estate',
-      subtitle: 'Dubai Skyline & Assets',
-      image: '/images/archetypes/business-realestate.png',
-      defaultPrompt: 'High-end real estate strategist with Dubai Burj Al Arab skyline backdrop, evening luxury lighting',
+      id: 'biz-power',
+      name: 'Architectural Power Suiting',
+      subtitle: 'Modernist Columns',
+      image: '/images/archetypes/business-power.png',
+      defaultPrompt: 'High-power business executive in architectural leather shoulder blazer and pinstriped trousers in front of monumental modernist stone columns',
     },
     {
-      id: 'biz-keynote',
-      name: 'Corporate Keynote',
-      subtitle: 'Authoritative Mentor',
-      image: '/images/baha/baha-headshot-blazer-gray.png',
-      defaultPrompt: 'Sovereign trajectory mentor on neutral gray stage, authoritative confident posture, 85mm lens',
+      id: 'biz-advisory',
+      name: 'Strategic Advisory',
+      subtitle: 'Jacquemus & Architecture',
+      image: '/images/archetypes/business-advisory.png',
+      defaultPrompt: 'Strategic modern advisory portrait in dark green tailored blazer with Jacquemus handbag, seated in modern architectural armchair with backlit minimalist shelves',
     },
   ],
   creator: [
+    {
+      id: 'cr-matcha',
+      name: 'Matcha & Cafe Lifestyle',
+      subtitle: 'Aesthetic Wellness',
+      image: '/images/archetypes/creator-matcha.png',
+      defaultPrompt: 'Aesthetic cafe lifestyle creator in pale yellow fitted crop top and narrow sunglasses, holding iced green matcha smoothie with white flowers backdrop',
+    },
     {
       id: 'cr-nightlife',
       name: 'Dubai Nightlife & Flash',
       subtitle: '35mm Direct Flash',
       image: '/images/archetypes/creator-nightlife.png',
-      defaultPrompt: 'High-flash 35mm candid of young woman in pink feather dress, poolside cabana, Burj Al Arab night view',
-    },
-    {
-      id: 'cr-editorial',
-      name: 'Couture Editorial',
-      subtitle: 'Vogue Silk & Runway',
-      image: '/images/archetypes/creator-editorial.png',
-      defaultPrompt: 'High fashion editorial model in draped satin trench coat, Paris cobblestone, moody cinematic lighting',
+      defaultPrompt: 'Direct flash nightlife candid of young woman in pastel pink feather halter dress, poolside terrace, illuminated Burj Al Arab night skyline',
     },
     {
       id: 'cr-fitness',
-      name: 'Gym & Active Wellness',
+      name: 'Gym & Athletic Wellness',
       subtitle: 'Workout Glow & Selfies',
       image: '/images/archetypes/creator-fitness.png',
-      defaultPrompt: 'Athletic wellness influencer in seamless ribbed activewear, gym mirror selfie, natural post-workout glow',
+      defaultPrompt: 'Athletic wellness mirror selfie in matching light gray gym set, warm olive complexion, natural post-workout glow',
     },
     {
-      id: 'cr-modest',
-      name: 'Modest Silk Luxury',
-      subtitle: 'Refined Abayas & Gold',
-      image: '/images/archetypes/creator-modest.png',
-      defaultPrompt: 'Elegant modest fashion in flowing earth-toned silk abaya, 18k solid gold hoops, quiet luxury',
-    },
-    {
-      id: 'cr-resort',
-      name: 'Resort & Yacht Club',
-      subtitle: 'Sun Terrace & Horizon',
-      image: '/images/archetypes/creator-resort.png',
-      defaultPrompt: 'Luxury resort influencer by terracotta infinity pool, sun-drenched golden hour, ocean horizon',
+      id: 'cr-supercar',
+      name: 'Supercar & Glamour Night',
+      subtitle: 'McLaren Nightlife',
+      image: '/images/archetypes/creator-supercar.png',
+      defaultPrompt: 'Glamorous nightlife creator standing beside an orange McLaren supercar with dihedral doors open, 35mm film flash',
     },
   ],
   actor: [
     {
-      id: 'act-theatrical',
-      name: 'Theatrical Drama Slate',
-      subtitle: '18% Neutral Gray Casting',
-      image: '/images/archetypes/actor-theatrical.png',
-      defaultPrompt: 'Standard casting headshot slate on 18% neutral gray background, open hair, clean studio key light',
-    },
-    {
       id: 'act-cinematic',
       name: 'Period & Cinematic Lead',
-      subtitle: 'Chiaroscuro & Mood Rim',
+      subtitle: 'Ferrari Interior Night Still',
       image: '/images/archetypes/actor-cinematic.png',
-      defaultPrompt: 'Dramatic cinematic character portrait, anamorphic lens flare, moody rim lighting, expressive gaze',
+      defaultPrompt: 'Pensive cinematic character portrait in luxury Ferrari interior at nighttime, moody warm sodium and cool ambient lighting, voluminous cascading hair',
     },
     {
-      id: 'act-commercial',
-      name: 'Commercial Audition',
-      subtitle: 'Warm Approachable Gaze',
-      image: '/images/baha/baha-headshot-openhair-gray.png',
-      defaultPrompt: 'Commercial television audition headshot, warm natural smile, high-definition natural skin texture',
+      id: 'act-theatrical',
+      name: 'Theatrical Gala & Premiere',
+      subtitle: 'Editorial Knot Gown',
+      image: '/images/archetypes/actor-theatrical.png',
+      defaultPrompt: 'Editorial dramatic portrait in off-the-shoulder white gown with high knot updo, theatrical key light from below against geometric textured wall',
     },
     {
-      id: 'act-turnaround',
-      name: '3-Angle Facial Turnaround',
-      subtitle: '3D & Motion Ready Seed',
-      image: '/images/baha/baha-headshot-ponytail-gray.png',
-      defaultPrompt: 'Three-angle character reference turnaround, high ponytail, clean jawline, Seedance motion ready',
+      id: 'act-casting',
+      name: 'Dramatic Casting Slate',
+      subtitle: 'Direct Gaze Close-Up',
+      image: '/images/archetypes/actor-casting.png',
+      defaultPrompt: 'Dramatic casting close-up portrait, intense direct camera gaze, contoured bone structure, bold red lip, soft clean studio key light',
+    },
+    {
+      id: 'act-noir',
+      name: 'Cinematic Noir & City Arrival',
+      subtitle: 'Luxury Car & Volumetric Coat',
+      image: '/images/archetypes/actor-noir.png',
+      defaultPrompt: 'Cinematic night shot stepping out of luxury black car, looking back over shoulder in volumetric black coat, direct flash 35mm noir',
     },
   ],
 };
@@ -554,7 +547,7 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                     }`}
                   >
                     <img
-                      src={inf.headshotImage || '/images/baha/baha-headshot-openhair-gray.png'}
+                      src={inf.headshotImage || '/images/archetypes/business-founder.png'}
                       alt={inf.name}
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                     />
@@ -598,33 +591,31 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                 // Active Influencer Portrait Canvas matching Higgsfield Web AI influencer 2.png
                 <>
                   <img
-                    src={activeHeadshotUrl || '/images/baha/baha-headshot-openhair-gray.png'}
+                    src={activeHeadshotUrl || '/images/archetypes/business-founder.png'}
                     alt={activeInfluencer?.name}
-                    className="w-full h-full object-cover select-none"
+                    className="w-full h-full object-cover object-top select-none"
                   />
 
-                  {/* Top Left Thumbnails Stack (Pose Variations) */}
+                  {/* Top Left Thumbnails Stack (Real Variations of Active Mode) */}
                   <div className="absolute top-3.5 left-3.5 flex flex-col gap-1.5">
-                    <div
-                      onClick={() => setActiveHeadshotUrl('/images/baha/baha-headshot-openhair-gray.png')}
-                      className={`w-9 h-9 rounded-xl overflow-hidden cursor-pointer transition-all ${
-                        activeHeadshotUrl.includes('openhair')
-                          ? 'border-2 border-white shadow-lg'
-                          : 'border border-white/30 opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img src="/images/baha/baha-headshot-openhair-gray.png" alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div
-                      onClick={() => setActiveHeadshotUrl('/images/baha/baha-headshot-blazer-gray.png')}
-                      className={`w-9 h-9 rounded-xl overflow-hidden cursor-pointer transition-all ${
-                        activeHeadshotUrl.includes('blazer')
-                          ? 'border-2 border-white shadow-lg'
-                          : 'border border-white/30 opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img src="/images/baha/baha-headshot-blazer-gray.png" alt="" className="w-full h-full object-cover" />
-                    </div>
+                    {AUDIENCE_ARCHETYPES[audienceMode].map((arch) => (
+                      <div
+                        key={arch.id}
+                        onClick={() => {
+                          setActiveHeadshotUrl(arch.image);
+                          setSelectedArchetype(arch.id);
+                          setCustomPrompt(arch.defaultPrompt);
+                          showToast(`Selected ${arch.name}`);
+                        }}
+                        className={`w-9 h-9 rounded-xl overflow-hidden cursor-pointer transition-all ${
+                          activeHeadshotUrl === arch.image
+                            ? 'border-2 border-[#d1fe17] shadow-lg ring-1 ring-[#d1fe17]/50'
+                            : 'border border-white/30 opacity-70 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={arch.image} alt="" className="w-full h-full object-cover object-top" />
+                      </div>
+                    ))}
                   </div>
 
                   {/* Top Right Actions: Heart, Download, Three-Dots */}
@@ -680,14 +671,17 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                       {/* 1. Re-roll variation */}
                       <button
                         onClick={() => {
-                          showToast('Generating studio variation on neutral gray background...');
-                          setTimeout(() => {
-                            setActiveHeadshotUrl('/images/baha/baha-headshot-blazer-gray.png');
-                            showToast('Studio variation updated!');
-                          }, 1000);
+                          const archs = AUDIENCE_ARCHETYPES[audienceMode];
+                          const currentIndex = archs.findIndex((a) => a.image === activeHeadshotUrl);
+                          const nextIndex = (currentIndex + 1) % archs.length;
+                          const nextArch = archs[nextIndex];
+                          setActiveHeadshotUrl(nextArch.image);
+                          setSelectedArchetype(nextArch.id);
+                          setCustomPrompt(nextArch.defaultPrompt);
+                          showToast(`Switched to ${nextArch.name}`);
                         }}
                         className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/30 text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer shadow-lg"
-                        title="Re-generate variation"
+                        title="Cycle variation"
                       >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
@@ -1616,9 +1610,9 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
             <div className="flex-1 bg-black/60 flex flex-col items-center justify-between p-6 relative overflow-hidden">
               <div className="relative flex-1 w-full max-w-md my-auto aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
                 <img
-                  src={activeHeadshotUrl || '/images/baha/baha-headshot-openhair-gray.png'}
+                  src={activeHeadshotUrl || '/images/archetypes/business-founder.png'}
                   alt={activeInfluencer.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
 

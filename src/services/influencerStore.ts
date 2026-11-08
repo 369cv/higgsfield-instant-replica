@@ -1,24 +1,24 @@
 import { StoredInfluencer, StudioHeadshot, VaultItem } from '../types';
 
-const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v5';
-const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id_v5';
-const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot_v5';
-const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots_v5';
+const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v6';
+const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id_v6';
+const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot_v6';
+const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots_v6';
 
 export const BAHA_SAVAGE: StoredInfluencer = {
   id: 'baha-savage-official',
   name: 'Baha Savage',
   instagramHandle: '@bahasavage',
-  referenceImage: '/images/baha/baha-headshot-openhair-gray.png',
-  sampleImageUrl: '/images/baha/baha-headshot-openhair-gray.png',
-  headshotImage: '/images/baha/baha-headshot-openhair-gray.png',
+  referenceImage: '/images/archetypes/business-founder.png',
+  sampleImageUrl: '/images/archetypes/business-founder.png',
+  headshotImage: '/images/archetypes/business-founder.png',
   category: 'Quiet Luxury & Sovereign Strategy',
   ethnicity: 'Mediterranean / Levantine',
   hair: 'Long Dark Chocolate Brown',
   age: 28,
   dropsCount: 1604,
   signaturePrompt:
-    'A refined high-contrast studio portrait of Baha Savage (@bahasavage) on a neutral studio gray background, softbox lighting, 85mm prime lens, natural skin texture with visible fine pores, elegant quiet luxury poise.',
+    'A refined high-contrast editorial portrait of Baha Savage (@bahasavage) in an oversized tailored suit blazer, resting on polished black and gold marble counter in modern luxury interior.',
   createdAt: 'Official Character',
   isVaultPreset: true,
 };
@@ -29,38 +29,38 @@ export const GABRIELA_SANCHEZ = BAHA_SAVAGE;
 export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
   {
     id: 'hs-1',
-    title: 'Neutral Studio Master (Open Hair)',
-    imageUrl: '/images/baha/baha-headshot-openhair-gray.png',
-    lighting: 'Master Softbox',
-    angle: 'Frontal Eye-Level',
-    background: '18% Neutral Gray',
+    title: 'Executive Oversized Suit (Marble Interior)',
+    imageUrl: '/images/archetypes/business-founder.png',
+    lighting: 'Diffuse Ambient Luxury',
+    angle: 'Frontal 3/4',
+    background: 'Modern Black Marble',
     createdAt: 'Default',
   },
   {
     id: 'hs-2',
-    title: 'Executive Taupe Blazer (Editorial Updo)',
-    imageUrl: '/images/baha/baha-headshot-blazer-gray.png',
-    lighting: 'Keyed Octabox',
-    angle: 'Frontal Eye-Level',
-    background: 'Studio Neutral Gray',
+    title: 'Urban Penthouse & Black Blazer',
+    imageUrl: '/images/archetypes/business-penthouse.png',
+    lighting: 'Soft Daylight',
+    angle: 'Frontal Medium',
+    background: 'Luxury Penthouse Suite',
     createdAt: 'Studio Pass',
   },
   {
     id: 'hs-3',
-    title: 'Silk Shirt & High Ponytail',
-    imageUrl: '/images/baha/baha-headshot-ponytail-gray.png',
-    lighting: 'High-Key Beauty',
-    angle: 'Frontal Direct',
-    background: 'Matte Gray',
+    title: 'Avant-Garde Architectural Power Blazer',
+    imageUrl: '/images/archetypes/business-power.png',
+    lighting: 'Overcast Architectural Key',
+    angle: 'Frontal 3/4',
+    background: 'Modernist Stone Columns',
     createdAt: 'Studio Pass',
   },
   {
     id: 'hs-4',
-    title: 'Executive Advisory Broadcast',
-    imageUrl: '/images/baha/baha-editorial-portrait.jpg',
-    lighting: 'Warm Environmental Studio Fill',
-    angle: 'Relaxed 3/4 Perspective',
-    background: 'Modern Architectural Studio',
+    title: 'Dark Green Tailored Blazer & Jacquemus',
+    imageUrl: '/images/archetypes/business-advisory.png',
+    lighting: 'Warm Backlit Ambient',
+    angle: 'Seated Mid-Length',
+    background: 'Minimalist Architecture',
     createdAt: 'Studio Pass',
   },
 ];
@@ -213,11 +213,18 @@ export const InfluencerStore = {
   getActiveHeadshot(): string {
     try {
       const saved = localStorage.getItem(ACTIVE_HEADSHOT_KEY);
-      if (saved) return saved;
+      if (
+        saved &&
+        !saved.includes('baha-headshot-openhair-gray.png') &&
+        !saved.includes('baha-headshot-blazer-gray.png') &&
+        !saved.includes('baha-headshot-ponytail-gray.png')
+      ) {
+        return saved;
+      }
     } catch {
       // fallback
     }
-    return '/images/baha/baha-headshot-openhair-gray.png';
+    return '/images/archetypes/business-founder.png';
   },
 
   setActiveHeadshot(imageUrl: string): void {
