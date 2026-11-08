@@ -346,6 +346,7 @@ export const App: React.FC = () => {
               setActiveTab('vault');
             }}
             onOpenPromptVault={() => setActiveTab('vault')}
+            onSelectVideoStudio={() => setActiveTab('video')}
           />
         </main>
       )}
