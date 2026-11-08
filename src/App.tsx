@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
+import { HiggsfieldSuiteHeader } from './components/HiggsfieldSuiteHeader';
 import { CardGrid } from './components/CardGrid';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
@@ -10,15 +10,18 @@ import { VaultItem } from './types';
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
-  const [activeTab, setActiveTab] = useState<'home' | 'favorites'>('home');
+  const [activeTab, setActiveTab] = useState<string>('vault');
   const [isGenerating, setIsGenerating] = useState(false);
   const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Search & Taxonomy state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Drops');
+
   // Higgsfield Sidebar Drawer State
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('create');
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   // Favorites state persisted in localStorage
   const [favorites, setFavorites] = useState<Set<string>>(() => {
@@ -76,9 +79,17 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // Filter items by category and favorites
+  // Filter items by search and category taxonomy
   const displayedItems = vault.filter(item => {
-    if (activeTab === 'favorites' && !favorites.has(item.id)) return false;
+    // 1. Natural Language Search
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchesPrompt = item.prompt.toLowerCase().includes(q);
+      const matchesTitle = item.title && item.title.toLowerCase().includes(q);
+      if (!matchesPrompt && !matchesTitle) return false;
+    }
+
+    // 2. Taxonomy Category
     if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'All Drops') {
       const cat = selectedCategory.toLowerCase();
       if (cat.includes('modest') || cat.includes('hijab')) {
@@ -90,10 +101,17 @@ export const App: React.FC = () => {
       if (cat.includes('luxury') || cat.includes('editorial')) {
         return item.prompt.toLowerCase().includes('luxury') || item.prompt.toLowerCase().includes('silk') || item.prompt.toLowerCase().includes('satin') || item.prompt.toLowerCase().includes('couture');
       }
-      if (cat.includes('gym') || cat.includes('fitness')) {
+      if (cat.includes('resort') || cat.includes('swim')) {
+        return item.prompt.toLowerCase().includes('pool') || item.prompt.toLowerCase().includes('resort') || item.prompt.toLowerCase().includes('cabana');
+      }
+      if (cat.includes('gym') || cat.includes('activewear')) {
         return item.prompt.toLowerCase().includes('gym') || item.prompt.toLowerCase().includes('fitness') || item.prompt.toLowerCase().includes('halter');
       }
+      if (cat.includes('podcast') || cat.includes('studio')) {
+        return item.prompt.toLowerCase().includes('podcast') || item.prompt.toLowerCase().includes('studio') || item.prompt.toLowerCase().includes('microphone');
+      }
     }
+
     return true;
   });
 
@@ -120,7 +138,23 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Header Navigation completely removed for clean canvas brainstorming */}
+      {/* Streamlined Higgsfield Suite Header (Concept 1) */}
+      <HiggsfieldSuiteHeader
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          if (tab === 'soul') handleOpenSidebar('persona');
+          else if (tab === 'motion') handleOpenSidebar('motion');
+          else if (tab === 'genjutsu') handleOpenSidebar('create');
+          else if (tab === 'influencer') handleOpenSidebar('persona');
+        }}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        onCreateClick={() => handleOpenSidebar('create')}
+        onPersonaClick={() => handleOpenSidebar('persona')}
+      />
 
       {/* Main Grid View */}
       <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
@@ -161,7 +195,7 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Higgsfield Aligned Studio Sidebar Drawer */}
+      {/* Aligned Higgsfield Studio Sidebar Drawer */}
       <HiggsfieldSidebar
         isOpen={isSidebarOpen}
         mode={sidebarMode}
