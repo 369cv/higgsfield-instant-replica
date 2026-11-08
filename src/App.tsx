@@ -10,6 +10,8 @@ import { InspectorModal } from './components/InspectorModal';
 import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
 import { InfluencerScreen } from './components/InfluencerScreen';
 import { PromptsNicheSubheader } from './components/PromptsNicheSubheader';
+import { ExploreScreen } from './components/ExploreScreen';
+import { VideoStudioScreen } from './components/VideoStudioScreen';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 
@@ -166,7 +168,7 @@ export const App: React.FC = () => {
       />
 
       {/* Main View Router */}
-      {(activeTab === 'vault' || activeTab === 'explore') && (
+      {activeTab === 'vault' && (
         <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12 flex flex-col">
           {/* Niche Subheader Navigation - Sits cleanly below header with 0 overlap */}
           <PromptsNicheSubheader
@@ -199,16 +201,20 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {/* User Flow 1: Mood Board Screen */}
+      {/* Explore Tab - Minimal Clean Empty Slate */}
+      {activeTab === 'explore' && (
+        <main className="flex-1 w-full flex flex-col">
+          <ExploreScreen onReturnToVault={() => setActiveTab('vault')} />
+        </main>
+      )}
+
+      {/* Moodboard Screen - Built strictly following Higgsfield User Flow */}
       {activeTab === 'moodboard' && (
-        <main className="flex-1 w-full">
+        <main className="flex-1 w-full flex flex-col">
           <MoodBoardScreen
             vaultItems={vault}
             onReturnToVault={() => setActiveTab('vault')}
             onSelectItem={(item) => setSelectedItem(item)}
-            onAnimateReel={(board) => {
-              handleOpenSidebar('motion');
-            }}
           />
         </main>
       )}
@@ -237,28 +243,13 @@ export const App: React.FC = () => {
         </main>
       )}
 
+      {/* Video Studio Screen - Built strictly following Higgsfield User Flow */}
       {activeTab === 'video' && (
-        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-cyan-500/10 text-cyan-400 mx-auto flex items-center justify-center">
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="23 7 16 12 23 17 23 7" />
-              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">Video Studio</h2>
-          <p className="text-xs text-neutral-400 max-w-md mx-auto">
-            Cinematic motion director & camera rigs. Next user flow in queue.
-          </p>
-          <button
-            onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
-          >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-            <span>Return to Prompt Vault</span>
-          </button>
+        <main className="flex-1 w-full flex flex-col">
+          <VideoStudioScreen
+            vaultItems={vault}
+            onReturnToVault={() => setActiveTab('vault')}
+          />
         </main>
       )}
 
