@@ -1,5 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { VaultItem } from '../types';
+import { PanelLeftClose, PanelLeftOpen, FolderOpen } from 'lucide-react';
+
+const SIDEBAR_COLLAPSED_KEY = 'assets_sidebar_collapsed_v1';
 
 export type AssetTab =
   | 'assets'
@@ -39,6 +42,24 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
   onNavigateToStudio,
 }) => {
   const [activeTab, setActiveTab] = useState<AssetTab>('assets');
+  // Expandable sidebar: icon rail when collapsed, full labels when expanded.
+  // On mobile it always starts closed (it opens as a drawer); on desktop the choice is remembered.
+  const [sidebarCollapsed, setSidebarCollapsedState] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return true;
+    try {
+      const saved = localStorage.getItem(SIDEBAR_COLLAPSED_KEY);
+      if (saved !== null) return saved === '1';
+    } catch {}
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  });
+  const setSidebarCollapsed = (v: boolean) => {
+    setSidebarCollapsedState(v);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return; // don't persist mobile drawer state
+    try {
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, v ? '1' : '0');
+    } catch {}
+  };
+  const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
   const [searchQuery, setSearchQuery] = useState('');
   const [projectCategory, setProjectCategory] = useState<string>('All');
   const [viewColumns, setViewColumns] = useState<3 | 4 | 6>(4);
@@ -377,20 +398,56 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
   ];
 
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full bg-[#070709] text-white overflow-hidden select-none">
+    <div className="relative flex h-app-content w-full bg-[#070709] text-white overflow-hidden select-none">
+      {/* Mobile backdrop when the sidebar is expanded over content */}
+      {!sidebarCollapsed && (
+        <div
+          className="md:hidden absolute inset-0 z-20 bg-black/60"
+          onClick={() => setSidebarCollapsed(true)}
+          aria-hidden="true"
+        />
+      )}
       {/* ================= LEFT SIDEBAR ================= */}
-      <aside className="w-60 shrink-0 bg-[#0c0c10] border-r border-white/5 flex flex-col justify-between p-3.5 space-y-6 overflow-y-auto">
+      <aside
+        className={`shrink-0 bg-[#0c0c10] border-r border-white/5 flex flex-col justify-between overflow-y-auto overflow-x-hidden transition-[width] duration-200 ${
+          sidebarCollapsed
+            ? 'w-16 p-2 max-md:hidden'
+            : 'w-60 p-3.5 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-30 max-md:shadow-2xl'
+        }`}
+      >
         <div className="space-y-6">
+          {/* Expand / collapse toggle */}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer ${
+              sidebarCollapsed ? 'justify-center px-0' : ''
+            }`}
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-expanded={!sidebarCollapsed}
+            title={sidebarCollapsed ? 'Expand' : 'Collapse'}
+          >
+            {sidebarCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
+            {!sidebarCollapsed && (
+              <>
+                <span className="md:hidden">Close</span>
+                <span className="hidden md:inline">Collapse</span>
+              </>
+            )}
+          </button>
+
           {/* Back Navigation to Prompt Vault */}
           <button
             onClick={onReturnToVault}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors"
+            className={`max-md:hidden w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors ${
+              sidebarCollapsed ? 'justify-center px-0' : ''
+            }`}
+            title="Prompt Vault"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>Prompt Vault</span>
+            {!sidebarCollapsed && <span>Prompt Vault</span>}
           </button>
 
           {/* Primary Asset Group */}
@@ -403,8 +460,10 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                   onClick={() => {
                     setActiveTab(item.id);
                     setSelectedAssetIds(new Set());
+                    if (isMobile()) setSidebarCollapsed(true);
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                  title={item.label}
+                  className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center px-0' : 'justify-between px-3'} py-2.5 rounded-xl text-xs font-medium transition-all ${
                     isActive
                       ? 'bg-white/10 text-white font-bold'
                       : 'text-neutral-400 hover:text-white hover:bg-white/5'
@@ -414,13 +473,13 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                     <span className={isActive ? 'text-[#d1fe17]' : 'text-neutral-400'}>
                       {item.icon}
                     </span>
-                    <span>{item.label}</span>
+                    {!sidebarCollapsed && <span>{item.label}</span>}
                   </div>
-                  <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                  {!sidebarCollapsed && <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
                     isActive ? 'bg-white/10 text-white font-bold' : 'text-neutral-500'
                   }`}>
                     {item.count > 999 ? '999+' : item.count}
-                  </span>
+                  </span>}
                 </button>
               );
             })}
@@ -428,9 +487,11 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
 
           {/* Tools Category */}
           <div className="space-y-2 pt-2 border-t border-white/5">
-            <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider px-3 block">
-              Tools
-            </span>
+            {!sidebarCollapsed && (
+              <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider px-3 block">
+                Tools
+              </span>
+            )}
             <nav className="space-y-0.5">
               {navItemsTools.map((item) => {
                 const isActive = activeTab === item.id;
@@ -440,8 +501,10 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                     onClick={() => {
                       setActiveTab(item.id);
                       setSelectedAssetIds(new Set());
+                      if (isMobile()) setSidebarCollapsed(true);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                    title={item.label}
+                    className={`w-full flex items-center ${sidebarCollapsed ? 'justify-center px-0' : 'justify-between px-3'} py-2.5 rounded-xl text-xs font-medium transition-all ${
                       isActive
                         ? 'bg-white/10 text-white font-bold'
                         : 'text-neutral-400 hover:text-white hover:bg-white/5'
@@ -451,13 +514,13 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                       <span className={isActive ? 'text-[#d1fe17]' : 'text-neutral-400'}>
                         {item.icon}
                       </span>
-                      <span>{item.label}</span>
+                      {!sidebarCollapsed && <span>{item.label}</span>}
                     </div>
-                    <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                    {!sidebarCollapsed && <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
                       isActive ? 'bg-white/10 text-white font-bold' : 'text-neutral-500'
                     }`}>
                       {item.count > 999 ? '999+' : item.count}
-                    </span>
+                    </span>}
                   </button>
                 );
               })}
@@ -469,10 +532,18 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       {/* ================= MAIN CONTENT WORKSPACE ================= */}
       <section className="flex-1 flex flex-col overflow-hidden bg-[#070709]">
         {/* Top Control Bar */}
-        <header className="h-16 px-8 border-b border-white/5 flex items-center justify-between shrink-0 bg-[#0a0a0d]/50 backdrop-blur-sm">
+        <header className="h-14 md:h-16 px-4 md:px-8 gap-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-[#0a0a0d]/50 backdrop-blur-sm">
           {/* Left Title / Sub-tabs */}
-          <div className="flex items-center gap-6">
-            <h1 className="text-xl font-black text-white capitalize">
+          <div className="flex items-center gap-3 md:gap-6 min-w-0 overflow-x-auto no-scrollbar">
+            {/* Mobile: open the folders sidebar as a drawer */}
+            <button
+              onClick={() => setSidebarCollapsed(false)}
+              className="md:hidden shrink-0 w-9 h-9 rounded-xl bg-white/[0.06] flex items-center justify-center text-neutral-200 active:opacity-60"
+              aria-label="Open folders"
+            >
+              <FolderOpen className="w-[18px] h-[18px]" />
+            </button>
+            <h1 className="text-[17px] md:text-xl font-bold md:font-black text-white capitalize whitespace-nowrap">
               {activeTab === 'enhanced' ? 'Upscaled' : activeTab}
             </h1>
 
@@ -506,7 +577,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
           {/* Right Action Cluster */}
           <div className="flex items-center gap-3">
             {/* Search Input in Assets */}
-            <div className="relative flex items-center bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 focus-within:border-white/30 transition-colors w-48 lg:w-64">
+            <div className="relative flex items-center bg-white/5 border border-white/10 rounded-xl px-3 py-1.5 focus-within:border-white/30 transition-colors w-32 sm:w-48 lg:w-64">
               <svg className="w-3.5 h-3.5 text-neutral-400 mr-2 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -611,7 +682,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-10">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-10">
           {/* ================= VIEW: PROJECTS ================= */}
           {activeTab === 'projects' && (
             <div>

@@ -1,11 +1,44 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Search, X, Lock, Clock, ArrowUpRight } from 'lucide-react';
+import { VaultItem } from '../types';
+import {
+  SEARCH_CATEGORIES,
+  SEARCH_STYLES,
+  SEARCH_COMING_SOON,
+  RECENT_SEARCHES_KEY,
+} from '../config/search';
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  onSelectResult?: (query: string) => void;
+  onSelectCategory: (category: string) => void;
+  onSelectItem: (item: VaultItem) => void;
+  vaultItems: VaultItem[];
+}
+
+type Tab = 'All' | 'Categories' | 'Styles' | 'Coming soon';
+const TABS: Tab[] = ['All', 'Categories', 'Styles', 'Coming soon'];
+
+function loadRecents(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecent(q: string) {
+  const clean = q.trim();
+  if (!clean) return;
+  try {
+    const next = [clean, ...loadRecents().filter((r) => r.toLowerCase() !== clean.toLowerCase())].slice(0, 6);
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+  } catch {
+    // storage unavailable
+  }
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
@@ -13,442 +46,224 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onClose,
   searchQuery,
   onSearchChange,
-  onSelectResult,
+  onSelectCategory,
+  onSelectItem,
+  vaultItems,
 }) => {
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [tab, setTab] = useState<Tab>('All');
+  const [recents, setRecents] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50);
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') onClose();
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
+    if (!isOpen) return;
+    setRecents(loadRecents());
+    setTimeout(() => inputRef.current?.focus(), 50);
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
+
+  const matches = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return vaultItems.filter((i) => (i.prompt || '').toLowerCase().includes(q));
+  }, [searchQuery, vaultItems]);
 
   if (!isOpen) return null;
 
-  const filters = [
-    { id: 'All', label: 'All', icon: null },
-    {
-      id: 'Models',
-      label: 'Models',
-      icon: (
-        <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-        </svg>
-      ),
-    },
-    {
-      id: 'Products',
-      label: 'Products',
-      icon: (
-        <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
-        </svg>
-      ),
-    },
-    {
-      id: 'Characters',
-      label: 'Characters',
-      icon: (
-        <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect width="16" height="20" x="4" y="2" rx="2" />
-          <line x1="8" x2="16" y1="6" y2="6" />
-          <line x1="8" x2="16" y1="10" y2="10" />
-          <line x1="8" x2="12" y1="14" y2="14" />
-        </svg>
-      ),
-    },
-    {
-      id: 'Community',
-      label: 'Community',
-      icon: (
-        <svg className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-      ),
-    },
-    {
-      id: 'Apps',
-      label: 'Apps',
-      iconRight: (
-        <svg className="w-3 h-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="7" y1="17" x2="17" y2="7" />
-          <polyline points="7 7 17 7 17 17" />
-        </svg>
-      ),
-    },
-    {
-      id: 'Originals',
-      label: 'Originals',
-      iconRight: (
-        <svg className="w-3 h-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="7" y1="17" x2="17" y2="7" />
-          <polyline points="7 7 17 7 17 17" />
-        </svg>
-      ),
-    },
-  ];
-
-  const handleItemClick = (label: string) => {
-    onSearchChange(label);
-    if (onSelectResult) onSelectResult(label);
+  const runSearch = (q: string) => {
+    saveRecent(q);
+    onSelectCategory('All');
+    onSearchChange(q);
     onClose();
   };
 
+  const pickCategory = (label: string) => {
+    onSearchChange('');
+    onSelectCategory(label);
+    onClose();
+  };
+
+  const sectionTitle = 'text-[11px] font-bold text-neutral-500 tracking-wider uppercase block mb-2';
+  const show = (t: Tab) => tab === 'All' || tab === t;
+  const hasQuery = searchQuery.trim().length > 0;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-150">
-      {/* Backdrop Click Dismiss */}
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center sm:p-4 bg-black/75 backdrop-blur-md">
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Main Search Dialog Container */}
-      <div className="relative w-full max-w-2xl bg-[#111116]/95 border border-white/15 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl z-10 space-y-6 overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Search Input Bar */}
-        <div className="relative flex items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3 focus-within:border-[#d1fe17] transition-colors">
-          <svg
-            className="w-5 h-5 text-neutral-400 mr-3 shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-
+      <div className="relative z-10 w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[85vh] bg-[#0b0b0f] sm:bg-[#111116] sm:border border-white/15 sm:rounded-3xl px-4 pb-4 pt-[calc(env(safe-area-inset-top)+8px)] sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden">
+        {/* Search input */}
+        <div className="flex items-center gap-3 shrink-0">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            runSearch(searchQuery);
+          }}
+          className="flex-1 flex items-center bg-white/[0.08] sm:bg-white/5 sm:border border-white/10 rounded-[10px] sm:rounded-2xl px-2.5 sm:px-4 h-9 sm:h-auto sm:py-3 sm:focus-within:border-[#d1fe17] transition-colors"
+        >
+          <Search className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400 mr-2 sm:mr-3 shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search"
-            className="w-full bg-transparent text-sm text-white placeholder-neutral-500 focus:outline-none"
+            placeholder="Search prompts"
+            className="w-full bg-transparent text-[17px] sm:text-sm text-white placeholder-neutral-500 focus:outline-none"
+            enterKeyHint="search"
           />
-
           <button
+            type="button"
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer shrink-0"
-            title="Close"
+            className="hidden sm:flex w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 items-center justify-center shrink-0 cursor-pointer"
+            aria-label="Close search"
           >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            <X className="w-4 h-4" />
           </button>
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              className="sm:hidden w-5 h-5 rounded-full bg-white/30 text-black flex items-center justify-center shrink-0"
+              aria-label="Clear"
+            >
+              <X className="w-3 h-3" strokeWidth={3} />
+            </button>
+          )}
+        </form>
+        <button
+          type="button"
+          onClick={onClose}
+          className="sm:hidden text-[17px] text-[#d1fe17] active:opacity-50 shrink-0"
+        >
+          Cancel
+        </button>
         </div>
 
-        {/* Filter / Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs">
-          {filters.map((f) => (
+        {/* Live results */}
+        {hasQuery && (
+          <div className="shrink-0">
+            <div className="flex items-center justify-between mb-2">
+              <span className={sectionTitle + ' !mb-0'}>
+                {matches.length} matching prompt{matches.length === 1 ? '' : 's'}
+              </span>
+              {matches.length > 0 && (
+                <button
+                  onClick={() => runSearch(searchQuery)}
+                  className="text-[11px] text-[#d1fe17] hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  View all <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+            <div className="flex gap-2 overflow-x-auto no-scrollbar">
+              {matches.slice(0, 12).map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    saveRecent(searchQuery);
+                    onClose();
+                    onSelectItem(item);
+                  }}
+                  className="w-20 h-28 shrink-0 rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#d1fe17]/60 cursor-pointer"
+                >
+                  <img src={item.imageUrl} alt="" loading="lazy" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs shrink-0">
+          {TABS.map((t) => (
             <button
-              key={f.id}
-              onClick={() => setActiveFilter(f.id)}
-              className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 group ${
-                activeFilter === f.id
-                  ? 'bg-white/15 text-white border border-white/20 shadow-sm'
-                  : 'bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-neutral-200 border border-transparent'
+              key={t}
+              onClick={() => setTab(t)}
+              className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap cursor-pointer border ${
+                tab === t
+                  ? 'bg-white/15 text-white border-white/20'
+                  : 'bg-white/5 hover:bg-white/10 text-neutral-400 border-transparent'
               }`}
             >
-              {'icon' in f && f.icon}
-              <span>{f.label}</span>
-              {'iconRight' in f && f.iconRight}
+              {t}
             </button>
           ))}
         </div>
 
-        <div className="space-y-6 overflow-y-auto pr-1">
-          {/* Recents Section */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-bold text-neutral-500 tracking-wider block">
-              Recents
-            </span>
-
-            <div className="space-y-1">
-              <div
-                onClick={() => handleItemClick('Nano Banana 2.1')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center font-bold text-xs text-white group-hover:bg-[#d1fe17] group-hover:text-black transition-colors">
-                  G
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Nano Banana 2.1
-                  </div>
-                  <div className="text-[10px] text-neutral-400">
-                    Google's next-gen flagship image model
-                  </div>
-                </div>
-              </div>
-
-              <div
-                onClick={() => handleItemClick('Canvas')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-[#d1fe17] transition-colors">
-                  <svg className="w-4 h-4 text-neutral-300 group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="6" cy="6" r="3" />
-                    <circle cx="18" cy="18" r="3" />
-                    <path d="M6 9v3a6 6 0 0 0 6 6h3" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Canvas
-                  </div>
-                  <div className="text-[10px] text-neutral-400">
-                    Full workflow on one canvas
-                  </div>
-                </div>
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-1">
+          {tab === 'All' && recents.length > 0 && (
+            <div>
+              <span className={sectionTitle}>Recent</span>
+              <div className="flex flex-wrap gap-2">
+                {recents.map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => runSearch(r)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-neutral-200 cursor-pointer"
+                  >
+                    <Clock className="w-3 h-3 text-neutral-500" />
+                    {r}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Popular Products Section */}
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-neutral-500 tracking-wider">
-                Popular products
-              </span>
-              <button
-                onClick={() => handleItemClick('Products')}
-                className="text-[11px] text-neutral-400 hover:text-white"
-              >
-                See all
-              </button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {/* Product 1: SUPERCOMPUTER */}
-              <div
-                onClick={() => handleItemClick('Supercomputer')}
-                className="rounded-2xl p-3.5 bg-gradient-to-br from-[#1d2710] to-[#12140d] border border-[#d1fe17]/20 hover:border-[#d1fe17]/60 transition-all cursor-pointer group flex flex-col justify-between h-24"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-neutral-300 bg-black/40 px-1.5 py-0.5 rounded">
-                    Agents
-                  </span>
-                  <span className="text-[9px] font-extrabold text-black bg-[#d1fe17] px-1.5 py-0.2 rounded font-mono">
-                    NEW
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-black text-white group-hover:text-[#d1fe17] transition-colors flex items-center gap-1">
-                    <span>SUPERCOMPUTER</span>
-                    <span className="text-[10px]">↗</span>
-                  </div>
-                  <div className="text-[9px] text-neutral-400 line-clamp-1">
-                    AI that acts, not just answers
-                  </div>
-                </div>
-              </div>
-
-              {/* Product 2: MCP & CLI */}
-              <div
-                onClick={() => handleItemClick('MCP & CLI')}
-                className="rounded-2xl p-3.5 bg-gradient-to-br from-[#251010] to-[#140e0e] border border-red-500/20 hover:border-red-500/60 transition-all cursor-pointer group flex flex-col justify-between h-24"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="w-4 h-4 flex items-center justify-center">
-                    <svg className="w-3.5 h-3.5 text-red-500 fill-current" viewBox="0 0 24 24">
-                      <polygon points="12 2 22 12 12 22 2 12" />
-                    </svg>
-                  </span>
-                  <span className="text-[9px] font-extrabold text-black bg-[#d1fe17] px-1.5 py-0.2 rounded font-mono">
-                    NEW
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-black text-white group-hover:text-red-400 transition-colors flex items-center gap-1">
-                    <span>MCP & CLI</span>
-                    <span className="text-[10px]">↗</span>
-                  </div>
-                  <div className="text-[9px] text-neutral-400 line-clamp-1">
-                    Turn OpenClaw into a creative engi...
-                  </div>
-                </div>
-              </div>
-
-              {/* Product 3: CINEMA STUDIO 4.0 */}
-              <div
-                onClick={() => handleItemClick('Cinema Studio')}
-                className="rounded-2xl p-3.5 bg-gradient-to-br from-[#0e212a] to-[#0a141a] border border-cyan-500/20 hover:border-cyan-500/60 transition-all cursor-pointer group flex flex-col justify-between h-24"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-bold text-neutral-300 bg-black/40 px-1.5 py-0.5 rounded">
-                    Props
-                  </span>
-                  <span className="text-[9px] font-extrabold text-black bg-[#d1fe17] px-1.5 py-0.2 rounded font-mono">
-                    NEW
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-black text-white group-hover:text-cyan-400 transition-colors flex items-center gap-1">
-                    <span>CINEMA STUDIO 4.0</span>
-                    <span className="text-[10px]">↗</span>
-                  </div>
-                  <div className="text-[9px] text-neutral-400 line-clamp-1">
-                    Complete AI production studio
-                  </div>
-                </div>
+          {show('Categories') && (
+            <div>
+              <span className={sectionTitle}>Categories</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                {SEARCH_CATEGORIES.map((c) => (
+                  <button
+                    key={c.label}
+                    onClick={() => pickCategory(c.label)}
+                    className="text-left p-2.5 rounded-xl hover:bg-white/5 group cursor-pointer"
+                  >
+                    <div className="text-[13px] font-semibold text-white group-hover:text-[#d1fe17]">{c.label}</div>
+                    <div className="text-[11px] text-neutral-400">{c.hint}</div>
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Trending Section */}
-          <div className="space-y-2">
-            <span className="text-[11px] font-bold text-neutral-500 tracking-wider block">
-              Trending
-            </span>
-
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-              {/* Item 1 */}
-              <div
-                onClick={() => handleItemClick('MCP & CLI')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 font-mono text-xs group-hover:bg-white/20">
-                  &lt;/&gt;
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                      MCP & CLI
-                    </span>
-                    <span className="text-[8px] font-extrabold text-black bg-[#d1fe17] px-1 rounded font-mono">
-                      NEW
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Automate your production</div>
-                </div>
-              </div>
-
-              {/* Item 2 */}
-              <div
-                onClick={() => handleItemClick('Seedance 2.0 4K')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 group-hover:bg-white/20 transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 10v4" />
-                    <path d="M7 6v12" />
-                    <path d="M11 3v18" />
-                    <path d="M15 8v8" />
-                    <path d="M19 11v2" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Seedance 2.0 4K
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Next-gen multi-modal video generation</div>
-                </div>
-              </div>
-
-              {/* Item 3 */}
-              <div
-                onClick={() => handleItemClick('AI Influencer')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 group-hover:bg-white/20 transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-white group-hover:text-fuchsia-400 transition-colors">
-                      AI Influencer
-                    </span>
-                    <span className="text-[8px] font-extrabold text-white bg-pink-600 px-1.5 rounded uppercase font-mono">
-                      TRENDING
-                    </span>
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Create and manage your AI influencer</div>
-                </div>
-              </div>
-
-              {/* Item 4 */}
-              <div
-                onClick={() => handleItemClick('Cinema Studio')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 group-hover:bg-white/20 transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M7 3v18" />
-                    <path d="M3 7.5h4" />
-                    <path d="M3 12h18" />
-                    <path d="M3 16.5h4" />
-                    <path d="M17 3v18" />
-                    <path d="M17 7.5h4" />
-                    <path d="M17 16.5h4" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Cinema Studio
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Versatile image styles by xAI</div>
-                </div>
-              </div>
-
-              {/* Item 5 */}
-              <div
-                onClick={() => handleItemClick('Marketing Studio')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 group-hover:bg-white/20 transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m15 4-2 2 4 4 2-2z" />
-                    <path d="m8 11-5 5 2 2 5-5z" />
-                    <path d="m9 7 2 2" />
-                    <path d="m2 22 3-3" />
-                    <path d="M19 13v2" />
-                    <path d="M19 21v2" />
-                    <path d="M22 17h-2" />
-                    <path d="M16 17h-2" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Marketing Studio
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Turn any product into a video ad</div>
-                </div>
-              </div>
-
-              {/* Item 6 */}
-              <div
-                onClick={() => handleItemClick('Canvas')}
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors cursor-pointer group"
-              >
-                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-neutral-400 group-hover:bg-white/20 transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="6" cy="6" r="3" />
-                    <circle cx="18" cy="18" r="3" />
-                    <path d="M6 9v3a6 6 0 0 0 6 6h3" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                    Canvas
-                  </div>
-                  <div className="text-[10px] text-neutral-400">Full workflow on one canvas</div>
-                </div>
+          {show('Styles') && (
+            <div>
+              <span className={sectionTitle}>Styles</span>
+              <div className="flex flex-wrap gap-2">
+                {SEARCH_STYLES.map((s) => (
+                  <button
+                    key={s.label}
+                    onClick={() => runSearch(s.query)}
+                    className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#d1fe17] hover:text-black text-xs font-medium text-neutral-200 cursor-pointer transition-colors"
+                  >
+                    {s.label}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
+          )}
+
+          {show('Coming soon') && (
+            <div>
+              <span className={sectionTitle}>Unlocking soon</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {SEARCH_COMING_SOON.map((c) => (
+                  <div
+                    key={c.label}
+                    className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-2.5 opacity-80"
+                  >
+                    <Lock className="w-4 h-4 text-[#d1fe17] mt-0.5 shrink-0" />
+                    <div>
+                      <div className="text-[13px] font-semibold text-white">{c.label}</div>
+                      <div className="text-[11px] text-neutral-400">{c.hint}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

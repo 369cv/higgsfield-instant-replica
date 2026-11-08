@@ -1,410 +1,129 @@
 import React, { useState, useEffect } from 'react';
-import {
-  X,
-  Copy,
-  Check,
-  Video,
-  UserPlus,
-  Download,
-  Heart,
-  Share2,
-  MoreHorizontal,
-  ChevronDown,
-  ChevronUp,
-  Upload,
-  Maximize2,
-  FileText,
-  Info
-} from 'lucide-react';
+import { X, Copy, Check, Heart } from 'lucide-react';
 import { VaultItem } from '../types';
 
 interface InspectorModalProps {
   item: VaultItem | null;
   onClose: () => void;
-  onRecreate: (item: VaultItem) => void;
-  onTurnToVideo: (item: VaultItem) => void;
   isFavorited?: boolean;
   onToggleFavorite?: (id: string) => void;
 }
 
+/**
+ * Prompt-only inspector: the generated image plus its copy-ready prompt.
+ * No reference/original image, no details table, no edit or comments tabs.
+ */
 export const InspectorModal: React.FC<InspectorModalProps> = ({
   item,
   onClose,
-  onRecreate,
-  onTurnToVideo,
   isFavorited = false,
-  onToggleFavorite
+  onToggleFavorite,
 }) => {
-  const [activeTab, setActiveTab] = useState<'info' | 'edit' | 'comments'>('info');
   const [copied, setCopied] = useState(false);
-  const [expandedPrompt, setExpandedPrompt] = useState(false);
-  const [inspectingRef, setInspectingRef] = useState(false);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [editedPrompt, setEditedPrompt] = useState('');
 
   useEffect(() => {
-    if (item) {
-      setEditedPrompt(item.prompt || '');
-    }
+    setCopied(false);
   }, [item]);
 
-  // Close on Escape key
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isZoomed) {
-          setIsZoomed(false);
-        } else {
-          onClose();
-        }
-      }
+    if (!item) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, isZoomed]);
+  }, [item, onClose]);
 
   if (!item) return null;
 
-  const previewImage = item.imageUrl || item.fullImageUrl;
-  const fullImage = item.fullImageUrl || item.imageUrl;
-  const currentDisplayImage = inspectingRef ? (item.referenceImage || previewImage) : previewImage;
-  const cleanPrompt = (item.prompt || '').replace(/\nHEX VALUES:.*$/s, '').trim();
+  const image = item.imageUrl || item.fullImageUrl;
+  const prompt = (item.prompt || '').replace(/\nHEX VALUES:.*$/s, '').trim();
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(cleanPrompt);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(prompt);
+    } catch {
+      // Fallback for browsers without async clipboard permission
+      const ta = document.createElement('textarea');
+      ta.value = prompt;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
     setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
-
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = inspectingRef ? (item.referenceImage || fullImage) : fullImage;
-    link.download = `halalfans-${item.id}${inspectingRef ? '-reference' : ''}.png`;
-    link.target = '_blank';
-    link.click();
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col md:flex-row w-screen h-screen bg-[#070709] overflow-hidden select-none">
-      {/* Hero Image Stage: Top on Mobile, Left on Desktop */}
-      <div className="w-full md:flex-1 h-[42vh] md:h-full relative flex items-center justify-center overflow-hidden bg-black shrink-0">
-        {/* Soft atmospheric ambient glow matching image colors */}
+    <div
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-[#070709] overflow-hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Prompt"
+    >
+      {/* Image stage: top on mobile, left on desktop */}
+      <div className="relative w-full md:flex-1 h-[52dvh] md:h-full flex items-center justify-center bg-black shrink-0 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center blur-3xl opacity-20 scale-110 pointer-events-none"
-          style={{ backgroundImage: `url(${currentDisplayImage})` }}
+          style={{ backgroundImage: `url(${image})` }}
         />
-
-        {/* Crisp Center Stage Image - Zero text overlays */}
         <img
-          src={currentDisplayImage}
+          src={image}
           alt=""
           decoding="async"
-          onClick={() => setIsZoomed(!isZoomed)}
-          className="relative max-h-full max-w-full object-contain shadow-2xl transition-all duration-200 z-10 p-2 md:p-6 cursor-zoom-in"
+          className="relative z-10 max-h-full max-w-full object-contain pt-[calc(env(safe-area-inset-top)+8px)] pb-6 md:p-8"
         />
-
-        {/* Close Button on Mobile (Top Right of image) */}
         <button
           onClick={onClose}
-          className="md:hidden absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/70 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white"
-          title="Close"
+          className="absolute top-[calc(env(safe-area-inset-top)+10px)] right-3 md:top-5 md:left-5 md:right-auto z-20 w-9 h-9 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/90 hover:text-white active:opacity-60 cursor-pointer"
+          aria-label="Close"
         >
-          <X className="w-4 h-4" />
+          <X className="w-[18px] h-[18px]" />
         </button>
-
-        {/* Minimal Fullscreen / In-Platform Zoom at bottom right */}
-        <div className="absolute bottom-3 right-3 md:bottom-5 md:right-5 z-20">
-          <button
-            onClick={() => setIsZoomed(!isZoomed)}
-            className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/85 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer shadow-lg"
-            title={isZoomed ? "Exit full view" : "Inspect full size"}
-          >
-            <Maximize2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
-          </button>
-        </div>
       </div>
 
-      {/* In-Platform Fullscreen Lightbox Zoom View (Stays inside app, mobile friendly) */}
-      {isZoomed && (
+      {/* Prompt panel: bottom on mobile, right on desktop */}
+      <div className="relative z-10 -mt-5 md:mt-0 flex-1 md:flex-none md:w-[420px] min-h-0 flex flex-col bg-[#121217] md:bg-[#0d0e12] rounded-t-[22px] md:rounded-none border-t md:border-t-0 md:border-l border-white/[0.08] shadow-[0_-12px_40px_rgba(0,0,0,0.5)] md:shadow-none animate-sheet-up md:animate-none">
+        {/* iOS sheet grabber (mobile) */}
+        <div className="md:hidden pt-2 flex justify-center" aria-hidden="true">
+          <div className="w-9 h-[5px] rounded-full bg-white/25" />
+        </div>
+        <div className="px-5 pt-3 md:pt-5 pb-2 text-[13px] md:text-[11px] font-semibold md:tracking-[0.14em] md:uppercase text-neutral-400 md:text-[#717684]">
+          Prompt
+        </div>
+
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4">
+          <p className="text-[15px] md:text-[13.5px] leading-relaxed text-[#d8dbe2] whitespace-pre-wrap select-text">
+            {prompt}
+          </p>
+        </div>
+
         <div
-          onClick={() => setIsZoomed(false)}
-          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in duration-200"
+          className="p-4 border-t border-white/[0.06] flex items-center gap-2"
+          style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
         >
           <button
-            onClick={() => setIsZoomed(false)}
-            className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all"
-            title="Close zoom"
+            onClick={handleCopy}
+            className="flex-1 h-[50px] md:h-12 rounded-[14px] md:rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {copied ? 'Copied' : 'Copy prompt'}
           </button>
-          <img
-            src={currentDisplayImage}
-            alt=""
-            decoding="async"
-            className="max-h-full max-w-full object-contain shadow-2xl"
-          />
-        </div>
-      )}
-
-      {/* Sidebar Drawer: Bottom on Mobile, Right on Desktop */}
-      <div className="w-full md:w-[380px] lg:w-[400px] flex-1 md:h-full bg-[#0d0e12] border-t md:border-t-0 md:border-l border-[#1a1b22] flex flex-col justify-between z-20 overflow-hidden min-h-0">
-        {/* Top Header with User Info & Desktop Close */}
-        <div className="px-4 pt-3 pb-2.5 md:pt-4 md:pb-3 flex items-center justify-between border-b border-[#181920] shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full overflow-hidden bg-black ring-1 ring-white/10 flex-shrink-0">
-              <img
-                src="/icons/icon128.png"
-                alt="Halal Fans"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-semibold text-[13px] tracking-tight text-white leading-tight">
-                Halal Fans
-              </span>
-              <span className="text-[11px] text-[#717684] leading-tight">
-                Author
-              </span>
-            </div>
-          </div>
-
-          <button
-            onClick={onClose}
-            className="hidden md:flex w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 items-center justify-center text-[#717684] hover:text-white transition-colors cursor-pointer"
-            title="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* 3 Nav Tabs: Info, Edit, Comments */}
-        <div className="px-4 pt-3 pb-1 border-b border-[#181920] shrink-0">
-          <div className="grid grid-cols-3 gap-1 bg-[#14151b] p-1 rounded-xl text-xs font-medium">
+          {onToggleFavorite && (
             <button
-              onClick={() => setActiveTab('info')}
-              className={`py-1.5 rounded-lg text-center transition-all ${
-                activeTab === 'info'
-                  ? 'bg-[#22242e] text-white shadow-sm font-semibold'
-                  : 'text-[#717684] hover:text-white'
+              onClick={() => onToggleFavorite(item.id)}
+              className={`w-[50px] h-[50px] md:w-12 md:h-12 shrink-0 rounded-[14px] md:rounded-xl bg-white/[0.06] hover:bg-white/10 border border-white/10 flex items-center justify-center cursor-pointer ${
+                isFavorited ? 'text-red-500' : 'text-neutral-300'
               }`}
+              aria-label={isFavorited ? 'Remove from favourites' : 'Save to favourites'}
             >
-              Info
+              <Heart className={`w-5 h-5 ${isFavorited ? 'fill-red-500' : ''}`} />
             </button>
-            <button
-              onClick={() => setActiveTab('edit')}
-              className={`py-1.5 rounded-lg text-center transition-all ${
-                activeTab === 'edit'
-                  ? 'bg-[#22242e] text-white shadow-sm font-semibold'
-                  : 'text-[#717684] hover:text-white'
-              }`}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => setActiveTab('comments')}
-              className={`py-1.5 rounded-lg text-center transition-all ${
-                activeTab === 'comments'
-                  ? 'bg-[#22242e] text-white shadow-sm font-semibold'
-                  : 'text-[#717684] hover:text-white'
-              }`}
-            >
-              Comments
-            </button>
-          </div>
-        </div>
-
-        {/* Scrollable Body Content */}
-        <div className="p-4 space-y-4 overflow-y-auto flex-1">
-          {activeTab === 'info' && (
-            <>
-              {/* PROMPT Section */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#717684] uppercase">
-                  <span className="flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-[#717684]" />
-                    <span>PROMPT</span>
-                  </span>
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1 text-[11px] font-medium text-[#9ca3af] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded-md cursor-pointer"
-                  >
-                    {copied ? <Check className="w-3 h-3 text-[#d1fe17]" /> : <Copy className="w-3 h-3 text-white/70" />}
-                    <span>{copied ? 'Copied' : 'Copy'}</span>
-                  </button>
-                </div>
-
-                {/* Prompt Box with Reference Thumbnail */}
-                <div className="rounded-xl bg-[#14151b] border border-[#21232d] p-3 flex gap-3 items-start">
-                  {/* Reference Image Thumbnail with Upload Icon Overlay */}
-                  {item.referenceImage ? (
-                    <div
-                      onClick={() => setInspectingRef(!inspectingRef)}
-                      className={`relative w-14 h-14 rounded-lg overflow-hidden shrink-0 cursor-pointer border transition-all ${
-                        inspectingRef
-                          ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40'
-                          : 'border-white/15 hover:border-white/40'
-                      }`}
-                      title={inspectingRef ? "Show generated output" : "Click to view reference photo"}
-                    >
-                      <img
-                        src={item.referenceImage}
-                        alt=""
-                        decoding="async"
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-xs py-0.5 flex items-center justify-center">
-                        <Upload className="w-2.5 h-2.5 text-white/90" />
-                      </div>
-                    </div>
-                  ) : null}
-
-                  {/* Prompt Text with Expansion */}
-                  <div className="flex-1 text-[12px] leading-relaxed text-[#d1d5db] font-normal">
-                    <p className={expandedPrompt ? '' : 'line-clamp-4'}>
-                      {cleanPrompt}
-                    </p>
-                    <button
-                      onClick={() => setExpandedPrompt(!expandedPrompt)}
-                      className="text-[#717684] hover:text-[#babdc5] text-[11px] font-medium mt-1.5 flex items-center gap-1 transition-colors cursor-pointer"
-                    >
-                      {expandedPrompt ? (
-                        <>Show less <ChevronUp className="w-3 h-3" /></>
-                      ) : (
-                        <>See all <ChevronDown className="w-3 h-3" /></>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* DETAILS Section */}
-              <div className="space-y-2 pt-1">
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] flex items-center gap-1.5">
-                  <Info className="w-3.5 h-3.5 text-[#717684]" />
-                  <span>DETAILS</span>
-                </div>
-
-                <div className="space-y-1.5 text-[12px]">
-                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                    <span className="text-[#717684]">Model</span>
-                    <span className="text-white font-medium">{(item.model || 'Soul 2.0').replace(/higgsfield\s*/gi, '')}</span>
-                  </div>
-
-                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                    <span className="text-[#717684]">Moodboard</span>
-                    <span className="text-white font-medium flex items-center gap-1">
-                      {item.moodboard || 'General'}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                    <span className="text-[#717684]">Quality</span>
-                    <span className="text-white font-medium">{item.quality || '2k'}</span>
-                  </div>
-
-                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                    <span className="text-[#717684]">Size</span>
-                    <span className="text-white font-mono">{item.size || '1536x2048'}</span>
-                  </div>
-
-                  <div className="flex justify-between py-2">
-                    <span className="text-[#717684]">Created</span>
-                    <span className="text-[#9ca3af]">{item.createdAt}</span>
-                  </div>
-                </div>
-              </div>
-            </>
           )}
-
-          {activeTab === 'edit' && (
-            <div className="space-y-3">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684]">
-                Edit Prompt
-              </div>
-              <textarea
-                value={editedPrompt}
-                onChange={(e) => setEditedPrompt(e.target.value)}
-                rows={6}
-                className="w-full bg-[#14151b] border border-[#21232d] rounded-xl p-3 text-[12px] text-white leading-relaxed focus:outline-none focus:border-[#d1fe17]/60"
-                placeholder="Edit prompt..."
-              />
-            </div>
-          )}
-
-          {activeTab === 'comments' && (
-            <div className="space-y-3 py-6 text-center text-neutral-500">
-              <p className="text-xs">No comments yet.</p>
-            </div>
-          )}
-        </div>
-
-        {/* Sticky Bottom Actions - Exact Layout */}
-        <div className="p-4 bg-[#0d0e12] border-t border-[#1a1b22] space-y-2.5 shrink-0">
-          {/* Row 1: Turn to video */}
-          <button
-            onClick={() => onTurnToVideo(item)}
-            className="w-full py-2.5 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-[12px] flex items-center justify-center gap-2 transition-transform active:scale-[0.98] shadow-md shadow-[#d1fe17]/20 cursor-pointer"
-          >
-            <Video className="w-4 h-4 fill-black" />
-            <span>Turn to video</span>
-          </button>
-
-          {/* Row 2: Recreate & Reference side-by-side */}
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => onRecreate(item)}
-              className="py-2 px-3 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#e2e4ea] text-[12px] font-semibold flex items-center justify-center gap-1.5 border border-[#262833] transition-colors cursor-pointer"
-            >
-              <Copy className="w-3.5 h-3.5 text-white/80" />
-              <span>Recreate</span>
-            </button>
-
-            <button
-              onClick={() => onRecreate(item)}
-              className="py-2 px-3 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#e2e4ea] text-[12px] font-semibold flex items-center justify-center gap-1.5 border border-[#262833] transition-colors cursor-pointer"
-            >
-              <UserPlus className="w-3.5 h-3.5 text-white/90" />
-              <span>Reference</span>
-            </button>
-          </div>
-
-          {/* Row 3: Download Pill + Heart + Share + More */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleDownload}
-              className="flex-1 py-2 px-3 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#babdc5] hover:text-white border border-[#262833] text-[12px] font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-              title="Download image"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download</span>
-            </button>
-
-            <button
-              onClick={() => onToggleFavorite && onToggleFavorite(item.id)}
-              className={`p-2 rounded-xl bg-[#16171d] hover:bg-[#20222a] border border-[#262833] transition-colors cursor-pointer ${
-                isFavorited ? 'text-red-500' : 'text-[#babdc5] hover:text-white'
-              }`}
-              title={isFavorited ? "Remove from favorites" : "Favorite"}
-            >
-              <Heart className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : ''}`} />
-            </button>
-
-            <button
-              className="p-2 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#babdc5] hover:text-white border border-[#262833] transition-colors cursor-pointer"
-              title="Share"
-            >
-              <Share2 className="w-4 h-4" />
-            </button>
-
-            <button
-              className="p-2 rounded-xl bg-[#16171d] hover:bg-[#20222a] text-[#babdc5] hover:text-white border border-[#262833] transition-colors cursor-pointer"
-              title="More"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </div>
     </div>
