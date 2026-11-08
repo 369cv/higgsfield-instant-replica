@@ -106,7 +106,7 @@ export const HiggsfieldService = {
     }
     return {
       prompt: '',
-      model: 'Higgsfield Soul 2.0',
+      model: 'Soul Engine 2.0',
       aspectRatio: '3:4'
     };
   },
@@ -143,7 +143,7 @@ export const HiggsfieldService = {
       prompt: payload.prompt,
       referenceImage: payload.referenceImage || '',
       imageUrl: payload.referenceImage || '',
-      model: 'Higgsfield Soul 2.0',
+      model: 'Soul Engine 2.0',
       jobType: 'text2image_soul_v2',
       moodboard: 'General',
       quality: '1080p',

@@ -289,7 +289,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
                 <div className="space-y-1.5 text-[12px]">
                   <div className="flex justify-between py-2 border-b border-[#1b1c24]">
                     <span className="text-[#717684]">Model</span>
-                    <span className="text-white font-medium">{item.model || 'Higgsfield Soul 2.0'}</span>
+                    <span className="text-white font-medium">{(item.model || 'Soul 2.0').replace(/higgsfield\s*/gi, '')}</span>
                   </div>
 
                   <div className="flex justify-between py-2 border-b border-[#1b1c24]">

@@ -89,8 +89,8 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#d1fe17] animate-pulse" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-white">
-              {mode === 'create' && 'Higgsfield Prompt Studio'}
-              {mode === 'motion' && 'Kling & Seedance Camera Motion'}
+              {mode === 'create' && 'Prompt Studio'}
+              {mode === 'motion' && 'Cinematic Camera Motion'}
               {mode === 'persona' && 'Persona Identity & Soul Lock'}
               {mode === 'filter' && 'Prompt Vault Taxonomy'}
               {mode === 'search' && 'Semantic Prompt Explorer'}
@@ -149,7 +149,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { id: 'soul-2.0', name: 'Higgsfield Soul 2.0', sub: 'Facial Identity Lock' },
+                    { id: 'soul-2.0', name: 'Soul Engine 2.0', sub: 'Facial Identity Lock' },
                     { id: 'kling-1.5', name: 'Kling 1.5 HD', sub: 'High Motion Detail' },
                     { id: 'seedance', name: 'Seedance Omni', sub: 'Subject Replacement' },
                     { id: 'flux-cinema', name: 'FLUX Cinema', sub: 'Photorealistic RAW' }
@@ -242,7 +242,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               <div className="p-4 rounded-2xl bg-[#16161a] border border-white/5 space-y-3">
                 <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Camera className="w-3.5 h-3.5 text-fuchsia-400" />
-                  <span>Higgsfield Camera Movement</span>
+                  <span>Cinematic Camera Movement</span>
                 </label>
 
                 {/* 6-Way Directional Grid */}
@@ -410,7 +410,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               {isSubmitting ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>Dispatching to Higgsfield Soul...</span>
+                  <span>Dispatching to Soul Engine...</span>
                 </>
               ) : (
                 <>

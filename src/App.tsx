@@ -3,6 +3,7 @@ import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
 import { MoodBoardScreen } from './components/MoodBoardScreen';
 import { CreateHubScreen } from './components/CreateHubScreen';
+import { AssetsScreen } from './components/AssetsScreen';
 import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
@@ -263,27 +264,21 @@ export const App: React.FC = () => {
         </main>
       )}
 
+      {/* Full Assets Studio Screen */}
       {activeTab === 'assets' && (
-        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center">
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2H4z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">Assets Hub</h2>
-          <p className="text-xs text-neutral-400 max-w-md mx-auto">
-            Fashion factory wardrobe, face swap library, and exported bundles.
-          </p>
-          <button
-            onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
-          >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-            <span>Return to Prompt Vault</span>
-          </button>
+        <main className="flex-1 w-full">
+          <AssetsScreen
+            vaultItems={vault}
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+            onSelectItem={(item) => setSelectedItem(item)}
+            onReturnToVault={() => setActiveTab('vault')}
+            onNavigateToStudio={(studio) => {
+              if (studio === 'create') setActiveTab('create');
+              else if (studio === 'video') setActiveTab('video');
+              else if (studio === 'influencer') setActiveTab('influencer');
+            }}
+          />
         </main>
       )}
 

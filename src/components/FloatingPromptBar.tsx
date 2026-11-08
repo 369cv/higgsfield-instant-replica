@@ -53,7 +53,7 @@ export const FloatingPromptBar: React.FC<FloatingPromptBarProps> = ({
           {/* Model Pill */}
           <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#1f212a] text-[#dee0e3] text-[11px] font-medium border border-[#2e313d] cursor-pointer hover:bg-[#282b37]">
             <Sparkles className="w-3 h-3 text-[#d1fe17]" />
-            <span>Higgsfield Soul</span>
+            <span>Soul Engine</span>
             <ChevronRight className="w-3 h-3 text-[#717684]" />
           </div>
 
