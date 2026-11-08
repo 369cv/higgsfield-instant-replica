@@ -145,19 +145,17 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         </button>
       </nav>
 
-      {/* Right: Profile Avatar Only */}
+      {/* Right: Profile Avatar Display (Unlinked for now) */}
       <div className="flex items-center">
-        <button
-          onClick={() => onSelectTab('influencer')}
-          className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 cursor-pointer shadow-md hover:scale-105 transition-transform"
-          title="Profile Persona"
+        <div
+          className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none"
         >
           <img
             src="/images/influencer-avatar.png"
             alt="Profile Avatar"
             className="w-full h-full rounded-full object-cover"
           />
-        </button>
+        </div>
       </div>
     </header>
   );
