@@ -8,6 +8,8 @@ import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
 import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
+import { InfluencerScreen } from './components/InfluencerScreen';
+import { PromptsNicheSubheader } from './components/PromptsNicheSubheader';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 
@@ -97,23 +99,23 @@ export const App: React.FC = () => {
     // 2. Taxonomy Category
     if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'All Drops') {
       const cat = selectedCategory.toLowerCase();
+      if (cat.includes('burj') || cat.includes('poolside')) {
+        return item.prompt.toLowerCase().includes('burj') || item.prompt.toLowerCase().includes('pool') || item.prompt.toLowerCase().includes('palm');
+      }
+      if (cat.includes('editorial') || cat.includes('silk') || cat.includes('abaya')) {
+        return item.prompt.toLowerCase().includes('silk') || item.prompt.toLowerCase().includes('abaya') || item.prompt.toLowerCase().includes('luxury') || item.prompt.toLowerCase().includes('satin') || item.prompt.toLowerCase().includes('couture');
+      }
+      if (cat.includes('gym') || cat.includes('fitness')) {
+        return item.prompt.toLowerCase().includes('gym') || item.prompt.toLowerCase().includes('fitness') || item.prompt.toLowerCase().includes('athletic') || item.prompt.toLowerCase().includes('mirror selfie');
+      }
+      if (cat.includes('nightlife') || cat.includes('35mm') || cat.includes('flash') || cat.includes('streetwear')) {
+        return item.prompt.toLowerCase().includes('night') || item.prompt.toLowerCase().includes('flash') || item.prompt.toLowerCase().includes('35mm') || item.prompt.toLowerCase().includes('streetwear');
+      }
+      if (cat.includes('beach') || cat.includes('yacht') || cat.includes('resort')) {
+        return item.prompt.toLowerCase().includes('beach') || item.prompt.toLowerCase().includes('yacht') || item.prompt.toLowerCase().includes('resort') || item.prompt.toLowerCase().includes('ocean');
+      }
       if (cat.includes('modest') || cat.includes('hijab')) {
         return item.prompt.toLowerCase().includes('abaya') || item.prompt.toLowerCase().includes('hijab') || item.prompt.toLowerCase().includes('modest');
-      }
-      if (cat.includes('nightlife') || cat.includes('flash')) {
-        return item.prompt.toLowerCase().includes('night') || item.prompt.toLowerCase().includes('flash') || item.prompt.toLowerCase().includes('burj');
-      }
-      if (cat.includes('luxury') || cat.includes('editorial')) {
-        return item.prompt.toLowerCase().includes('luxury') || item.prompt.toLowerCase().includes('silk') || item.prompt.toLowerCase().includes('satin') || item.prompt.toLowerCase().includes('couture');
-      }
-      if (cat.includes('resort') || cat.includes('swim')) {
-        return item.prompt.toLowerCase().includes('pool') || item.prompt.toLowerCase().includes('resort') || item.prompt.toLowerCase().includes('cabana');
-      }
-      if (cat.includes('gym') || cat.includes('activewear')) {
-        return item.prompt.toLowerCase().includes('gym') || item.prompt.toLowerCase().includes('fitness') || item.prompt.toLowerCase().includes('halter');
-      }
-      if (cat.includes('podcast') || cat.includes('studio')) {
-        return item.prompt.toLowerCase().includes('podcast') || item.prompt.toLowerCase().includes('studio') || item.prompt.toLowerCase().includes('microphone');
       }
     }
 
@@ -165,7 +167,14 @@ export const App: React.FC = () => {
 
       {/* Main View Router */}
       {(activeTab === 'vault' || activeTab === 'explore') && (
-        <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
+        <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12 flex flex-col">
+          {/* Niche Subheader Navigation - Sits cleanly below header with 0 overlap */}
+          <PromptsNicheSubheader
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            totalCount={vault.length || 1604}
+          />
+
           {/* Active Generation Queue - Only when actively generating */}
           {isGenerating && (
             <div className="mb-2 px-6 pt-4">
@@ -214,29 +223,17 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {/* Placeholders for upcoming user flows */}
+      {/* AI Influencer Vault & Creation Studio Screen */}
       {activeTab === 'influencer' && (
-        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-3xl bg-fuchsia-500/10 text-fuchsia-400 mx-auto flex items-center justify-center">
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">AI Influencer Studio</h2>
-          <p className="text-xs text-neutral-400 max-w-md mx-auto">
-            Persona identity training and consistency seed locking. Next user flow in queue after Mood Boards.
-          </p>
-          <button
-            onClick={() => setActiveTab('vault')}
-            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"
-          >
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-            <span>Return to Prompt Vault</span>
-          </button>
+        <main className="flex-1 w-full flex flex-col">
+          <InfluencerScreen
+            onSelectInfluencerDrops={(dropIds, influencerName) => {
+              setSelectedCategory('All Drops');
+              setSearchQuery(influencerName);
+              setActiveTab('vault');
+            }}
+            onOpenPromptVault={() => setActiveTab('vault')}
+          />
         </main>
       )}
 

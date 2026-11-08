@@ -48,3 +48,20 @@ export interface ViewSettings {
   splitByDate: boolean;
   cardSize: number; // 1 to 4
 }
+
+export interface StoredInfluencer {
+  id: string;
+  name: string;
+  referenceImage: string;
+  sampleImageUrl: string;
+  category: string;
+  ethnicity: string;
+  hair: string;
+  age?: number;
+  dropsCount: number;
+  associatedDropIds?: string[];
+  signaturePrompt: string;
+  fullPrompt?: string;
+  createdAt: string;
+  isVaultPreset: boolean;
+}
