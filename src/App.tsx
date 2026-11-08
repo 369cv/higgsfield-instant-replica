@@ -120,20 +120,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Top Header with Aligned Sidebar Drawer Triggers */}
-      <Header
-        activeTab={activeTab}
-        favoritesCount={favorites.size}
-        onHomeClick={() => {
-          setActiveTab('home');
-          setSelectedCategory('All');
-        }}
-        onFavoritesClick={() => setActiveTab(prev => prev === 'favorites' ? 'home' : 'favorites')}
-        onOpenSidebar={handleOpenSidebar}
-      />
+      {/* Header Navigation completely removed for clean canvas brainstorming */}
 
       {/* Main Grid View */}
-      <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-20 md:pb-12">
+      <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
         {(isGenerating || isLoading) && (
           <div className="mb-0">
             <GeneratingQueue
