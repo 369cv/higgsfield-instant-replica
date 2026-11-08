@@ -138,23 +138,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Streamlined Higgsfield Suite Header (Concept 1) */}
-      <HiggsfieldSuiteHeader
-        activeTab={activeTab}
-        onTabChange={(tab) => {
-          setActiveTab(tab);
-          if (tab === 'soul') handleOpenSidebar('persona');
-          else if (tab === 'motion') handleOpenSidebar('motion');
-          else if (tab === 'genjutsu') handleOpenSidebar('create');
-          else if (tab === 'influencer') handleOpenSidebar('persona');
-        }}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        onCreateClick={() => handleOpenSidebar('create')}
-        onPersonaClick={() => handleOpenSidebar('persona')}
-      />
+      {/* Header completely deleted - pure zero-header canvas */}
 
       {/* Main Grid View */}
       <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
