@@ -303,10 +303,14 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {/* Explore Tab - Minimal Clean Empty Slate */}
+      {/* Explore Tab - Curated Live Channels & Exploration Feed */}
       {activeTab === 'explore' && (
         <main className="flex-1 w-full flex flex-col">
-          <ExploreScreen onReturnToVault={() => setActiveTab('vault')} />
+          <ExploreScreen
+            vaultItems={vault}
+            onSelectItem={(item) => setSelectedItem(item)}
+            onReturnToVault={() => setActiveTab('vault')}
+          />
         </main>
       )}
 
