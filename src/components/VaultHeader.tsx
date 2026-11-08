@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets';
 
@@ -15,10 +15,19 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   searchQuery,
   onSearchChange,
 }) => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
   return (
     <header className="sticky top-0 z-40 h-16 px-6 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all">
-      {/* Left: Platform Logo Only & Minimal Search */}
-      <div className="flex items-center gap-5">
+      {/* Left: Platform Logo Only (No Search Bar) */}
+      <div className="flex items-center">
         <button
           onClick={() => onSelectTab('vault')}
           className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:border-[#d1fe17] hover:scale-105 transition-all group cursor-pointer"
@@ -37,24 +46,6 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
             <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5c-2.4 0-3.8-1.4-3.8-3.3 0-1.8 1.4-3.2 3.2-3.2 2 0 3.3 1.2 3.3 2.8 0 1.5-1.1 2.5-2.5 2.5z" />
           </svg>
         </button>
-
-        <div className="relative w-64 md:w-72">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search..."
-            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] transition-all"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-3 top-2.5 text-xs text-neutral-400 hover:text-white"
-            >
-              ✕
-            </button>
-          )}
-        </div>
       </div>
 
       {/* Center: Iconic Navigation + Full-Page (+) Create Trigger */}
@@ -125,36 +116,83 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
             <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-[#d1fe17] shadow-[0_0_8px_#d1fe17]" />
           )}
         </button>
+      </nav>
 
-        {/* 5. Assets Hub Icon */}
+      {/* Right: Search, Assets & Profile Avatar Cluster */}
+      <div className="flex items-center gap-2">
+        {/* Search Icon Button */}
+        <div className="relative">
+          <button
+            onClick={() => setIsSearchOpen(!isSearchOpen)}
+            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+              isSearchOpen || searchQuery
+                ? 'bg-white/15 text-white'
+                : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
+            }`}
+            title="Search"
+          >
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+
+          {/* Expandable Search Input Popover */}
+          {isSearchOpen && (
+            <div className="absolute right-0 top-13 w-72 bg-[#121217] border border-white/15 rounded-2xl p-2.5 shadow-2xl z-50 flex items-center gap-2 backdrop-blur-xl animate-in fade-in duration-150">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder="Search drops, prompts..."
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => onSearchChange('')}
+                  className="text-xs text-neutral-400 hover:text-white px-1"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Assets Icon Button (Folder) */}
         <button
           onClick={() => onSelectTab('assets')}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all relative ${
+          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
             activeTab === 'assets'
-              ? 'bg-[#d1fe17]/15 border border-[#d1fe17]/30 text-[#d1fe17]'
-              : 'text-neutral-400 hover:text-white hover:bg-white/10'
+              ? 'bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30'
+              : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
           }`}
           title="Assets"
         >
-          <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          {/* Solid Folder Icon */}
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2H4z" />
           </svg>
-          {activeTab === 'assets' && (
-            <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-[#d1fe17] shadow-[0_0_8px_#d1fe17]" />
-          )}
         </button>
-      </nav>
 
-      {/* Right: Profile Avatar Display (Unlinked for now) */}
-      <div className="flex items-center">
-        <div
-          className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none"
-        >
-          <img
-            src="/images/influencer-avatar.png"
-            alt="Profile Avatar"
-            className="w-full h-full rounded-full object-cover"
-          />
+        {/* Profile Avatar Display (Unlinked) */}
+        <div className="ml-1">
+          <div className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none">
+            <img
+              src="/images/influencer-avatar.png"
+              alt="Profile Avatar"
+              className="w-full h-full rounded-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </header>
