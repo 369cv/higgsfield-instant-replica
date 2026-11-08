@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { HiggsfieldSuiteHeader } from './components/HiggsfieldSuiteHeader';
+import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
+import { MoodBoardScreen } from './components/MoodBoardScreen';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
 import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
@@ -10,7 +11,7 @@ import { VaultItem } from './types';
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('vault');
+  const [activeTab, setActiveTab] = useState<NavTab>('vault');
   const [isGenerating, setIsGenerating] = useState(false);
   const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +20,7 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Drops');
 
-  // Higgsfield Sidebar Drawer State
+  // Sidebar Drawer State
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('create');
 
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
     });
   };
 
-  // Load and continuously sync live tracked generations from Higgsfield Soul
+  // Load and continuously sync live tracked generations
   useEffect(() => {
     let isMounted = true;
 
@@ -124,7 +125,7 @@ export const App: React.FC = () => {
     setIsGenerating(true);
     setTimeout(() => {
       setIsGenerating(false);
-      alert(`Queued on Higgsfield ${model} at ${ratio} ratio: "${prompt.slice(0, 50)}..."`);
+      alert(`Queued generation on ${model} (${ratio}): "${prompt.slice(0, 50)}..."`);
     }, 2000);
   };
 
@@ -132,37 +133,115 @@ export const App: React.FC = () => {
     setIsGenerating(true);
     setTimeout(() => {
       setIsGenerating(false);
-      alert(`Kling 1.5 camera motion queued with trajectory: ${motionType}.`);
+      alert(`Camera motion queued with trajectory: ${motionType}.`);
     }, 2500);
   };
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Header completely deleted - pure zero-header canvas */}
+      {/* Pure-Icon Header Navigation with Guided Tooltips & Home Return */}
+      <VaultHeader
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        totalCount={vault.length || 1604}
+      />
 
-      {/* Main Grid View */}
-      <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
-        {(isGenerating || isLoading) && (
-          <div className="mb-0">
-            <GeneratingQueue
-              isGenerating={true}
-              progressText={isLoading ? "Loading Soul Vault" : "Generating Soul"}
-              activeCount={inProgressCount > 0 ? inProgressCount : 4}
-            />
+      {/* Main View Router */}
+      {activeTab === 'vault' && (
+        <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
+          {(isGenerating || isLoading) && (
+            <div className="mb-0">
+              <GeneratingQueue
+                isGenerating={true}
+                progressText={isLoading ? "Loading Prompt Vault" : "Generating Persona Drop"}
+                activeCount={inProgressCount > 0 ? inProgressCount : 4}
+              />
+            </div>
+          )}
+
+          {/* 1,604 Drops Masonry Grid */}
+          <CardGrid
+            items={displayedItems}
+            layout="masonry"
+            cardSize={3}
+            splitByDate={false}
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+            onSelectItem={(item) => setSelectedItem(item)}
+          />
+        </main>
+      )}
+
+      {/* User Flow 1: Mood Board Screen */}
+      {activeTab === 'moodboard' && (
+        <main className="flex-1 w-full">
+          <MoodBoardScreen
+            vaultItems={vault}
+            onReturnToVault={() => setActiveTab('vault')}
+            onSelectItem={(item) => setSelectedItem(item)}
+            onAnimateReel={(board) => {
+              handleOpenSidebar('motion');
+            }}
+          />
+        </main>
+      )}
+
+      {/* Placeholders for upcoming user flows */}
+      {activeTab === 'influencer' && (
+        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
+          <div className="w-16 h-16 rounded-3xl bg-fuchsia-500/10 text-fuchsia-400 mx-auto flex items-center justify-center text-2xl font-bold">
+            👤
           </div>
-        )}
+          <h2 className="text-2xl font-bold text-white">AI Influencer Studio</h2>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto">
+            Persona identity training and consistency seed locking. Next user flow in queue after Mood Boards.
+          </p>
+          <button
+            onClick={() => setActiveTab('vault')}
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+          >
+            ← Return to Prompt Vault
+          </button>
+        </main>
+      )}
 
-        {/* Gallery Feed */}
-        <CardGrid
-          items={displayedItems}
-          layout="masonry"
-          cardSize={3}
-          splitByDate={false}
-          favorites={favorites}
-          onToggleFavorite={toggleFavorite}
-          onSelectItem={(item) => setSelectedItem(item)}
-        />
-      </main>
+      {activeTab === 'video' && (
+        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
+          <div className="w-16 h-16 rounded-3xl bg-cyan-500/10 text-cyan-400 mx-auto flex items-center justify-center text-2xl font-bold">
+            🎬
+          </div>
+          <h2 className="text-2xl font-bold text-white">Video Studio</h2>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto">
+            Cinematic motion director & camera rigs. Next user flow in queue.
+          </p>
+          <button
+            onClick={() => setActiveTab('vault')}
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+          >
+            ← Return to Prompt Vault
+          </button>
+        </main>
+      )}
+
+      {activeTab === 'assets' && (
+        <main className="flex-1 w-full max-w-5xl mx-auto p-12 text-center space-y-4">
+          <div className="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center text-2xl font-bold">
+            📁
+          </div>
+          <h2 className="text-2xl font-bold text-white">Assets Hub</h2>
+          <p className="text-xs text-neutral-400 max-w-md mx-auto">
+            Fashion factory wardrobe, face swap library, and exported bundles.
+          </p>
+          <button
+            onClick={() => setActiveTab('vault')}
+            className="px-4 py-2 bg-white/10 hover:bg-white/15 text-white font-semibold text-xs rounded-xl"
+          >
+            ← Return to Prompt Vault
+          </button>
+        </main>
+      )}
 
       {/* Inspector Modal */}
       <InspectorModal
@@ -179,7 +258,7 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Aligned Higgsfield Studio Sidebar Drawer */}
+      {/* Studio Sidebar Drawer */}
       <HiggsfieldSidebar
         isOpen={isSidebarOpen}
         mode={sidebarMode}

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pure-Icon Navigation & Clean Screen Redesigns</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #070709; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .nav-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .nav-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .nav-icon-btn.active {
+      background: rgba(209, 254, 23, 0.12);
+      color: #d1fe17;
+      border: 1px solid rgba(209, 254, 23, 0.3);
+    }
+    .nav-icon-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      width: 4px;
+      height: 4px;
+      border-radius: 9999px;
+      background: #d1fe17;
+    }
+  </style>
+</head>
+<body class="p-8 space-y-16 bg-black">
+
+  <!-- ================= HEADER NAVIGATION BAR ONLY (PURE ICONS) ================= -->
+  <div id="header-bar-preview" class="w-[1440px] bg-[#09090c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+    <div class="px-6 py-3 border-b border-white/10 flex items-center justify-between text-xs text-neutral-400">
+      <span class="font-bold text-white uppercase tracking-wider">Component 1: Pure-Icon Header Navigation (No Text Labels)</span>
+      <span>Ultra-compact · Glassmorphic · Desktop & Mobile</span>
+    </div>
+
+    <header class="h-16 px-6 bg-[#0a0a0d] flex items-center justify-between">
+      <!-- Left: Logo & Search -->
+      <div class="flex items-center gap-6">
+        <a href="#vault" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-[#d1fe17] text-black font-black flex items-center justify-center text-sm shadow-lg shadow-[#d1fe17]/20">
+            H
+          </div>
+          <span class="font-black text-sm tracking-tight text-white">HIGGSFIELD</span>
+        </a>
+
+        <div class="relative w-80">
+          <input
+            type="text"
+            placeholder="Search prompts, styles, tags..."
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
+          />
+        </div>
+      </div>
+
+      <!-- Center: Pure Iconic Navigation Icons (No Written Text) -->
+      <nav class="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10">
+        <!-- 1. Vault / Grid Icon (Active) -->
+        <button class="nav-icon-btn active" title="Vault Drops">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </button>
+
+        <!-- 2. Mood Board Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white" title="Mood Boards">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </button>
+
+        <!-- 3. AI Influencer Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white" title="AI Influencers">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+
+        <!-- 4. Video Studio Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white" title="Video Studio">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </button>
+
+        <!-- 5. Assets Hub Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white" title="Assets & Outfits">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
+        </button>
+      </nav>
+
+      <!-- Right: User Avatar Profile -->
+      <div class="flex items-center gap-3">
+        <div class="px-3 py-1 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-neutral-300 flex items-center gap-1.5">
+          <span class="text-cyan-400">💎</span>
+          <span>1,420</span>
+        </div>
+        <div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 cursor-pointer">
+          <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+        </div>
+      </div>
+    </header>
+  </div>
+
+
+  <!-- ================= SCREEN 2: MOOD BOARD SCREEN (CLICKING MOODBOARD ICON) ================= -->
+  <div id="screen-moodboard" class="w-[1440px] bg-[#09090c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+    <!-- Active Header Bar with Moodboard selected -->
+    <header class="h-16 px-6 bg-[#0a0a0d] border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="w-8 h-8 rounded-xl bg-[#d1fe17] text-black font-black flex items-center justify-center text-sm">H</div>
+        <span class="font-black text-sm tracking-tight text-white">HIGGSFIELD</span>
+      </div>
+
+      <nav class="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10">
+        <!-- Vault Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        </button>
+        <!-- Moodboard Icon (ACTIVE) -->
+        <button class="nav-icon-btn active">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        </button>
+        <!-- Influencer Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </button>
+        <!-- Video Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+        </button>
+        <!-- Assets Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+        </button>
+      </nav>
+
+      <div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500">
+        <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+      </div>
+    </header>
+
+    <!-- Screen Content: Moodboards Overview & Curation -->
+    <div class="p-8 space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-bold text-white">Mood Boards</h1>
+          <p class="text-xs text-neutral-400">Organize, curate, and batch-animate inspiration drops.</p>
+        </div>
+
+        <button class="px-4 py-2 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/20 flex items-center gap-2">
+          <span>+</span>
+          <span>New Mood Board</span>
+        </button>
+      </div>
+
+      <!-- Moodboards Grid -->
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Moodboard Card 1 -->
+        <div class="bg-[#111116] border border-white/10 rounded-2xl p-4 space-y-4 hover:border-white/20 transition-all cursor-pointer group">
+          <div class="grid grid-cols-2 gap-2 aspect-[4/3] rounded-xl overflow-hidden bg-black/40">
+            <img src="http://localhost:5173/cutoff-girl-black-coat-car.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/005a76c8-500b-4770-b74c-47bc63aa9a4a.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/00742f9b-6dae-4cf0-bb4b-32694b29bb86.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/0076a02b-a7eb-4efd-b94f-4d9a6c9eb448.webp" class="w-full h-full object-cover" />
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-white group-hover:text-[#d1fe17] transition-colors">Dubai Nightlife & Satin</h3>
+              <span class="text-xs text-neutral-400">14 Drops · Updated today</span>
+            </div>
+            <span class="text-xs font-semibold text-neutral-400 bg-white/5 px-2.5 py-1 rounded-lg">Edit →</span>
+          </div>
+        </div>
+
+        <!-- Moodboard Card 2 -->
+        <div class="bg-[#111116] border border-white/10 rounded-2xl p-4 space-y-4 hover:border-white/20 transition-all cursor-pointer group">
+          <div class="grid grid-cols-2 gap-2 aspect-[4/3] rounded-xl overflow-hidden bg-black/40">
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/00885e3d-74d4-42f0-942f-87034c2ec332.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/008f1fdb-f709-4bf9-85e6-71fc4c2079ad.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/00969d76-5777-4952-ba14-a9572ff4fe4b.webp" class="w-full h-full object-cover" />
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/0092f6b3-b472-464a-ad0f-7daefcead905.webp" class="w-full h-full object-cover" />
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-white group-hover:text-[#d1fe17] transition-colors">Modest Fall & Trench Coats</h3>
+              <span class="text-xs text-neutral-400">9 Drops · Updated yesterday</span>
+            </div>
+            <span class="text-xs font-semibold text-neutral-400 bg-white/5 px-2.5 py-1 rounded-lg">Edit →</span>
+          </div>
+        </div>
+
+        <!-- Moodboard Card 3: Create New Tile -->
+        <div class="border-2 border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center text-center space-y-3 hover:border-[#d1fe17]/40 cursor-pointer transition-all aspect-[4/3]">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-neutral-400 text-xl font-bold">
+            +
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Create New Board</h3>
+            <p class="text-xs text-neutral-500">Pick from 1,604 drops</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= SCREEN 3: AI INFLUENCER SCREEN (CLICKING INFLUENCER ICON) ================= -->
+  <div id="screen-influencer" class="w-[1440px] bg-[#09090c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+    <!-- Active Header Bar with Influencer selected -->
+    <header class="h-16 px-6 bg-[#0a0a0d] border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="w-8 h-8 rounded-xl bg-[#d1fe17] text-black font-black flex items-center justify-center text-sm">H</div>
+        <span class="font-black text-sm tracking-tight text-white">HIGGSFIELD</span>
+      </div>
+
+      <nav class="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10">
+        <!-- Vault Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        </button>
+        <!-- Moodboard Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        </button>
+        <!-- Influencer Icon (ACTIVE) -->
+        <button class="nav-icon-btn active">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </button>
+        <!-- Video Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+        </button>
+        <!-- Assets Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+        </button>
+      </nav>
+
+      <div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500">
+        <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+      </div>
+    </header>
+
+    <!-- Screen Content: AI Influencer Studio -->
+    <div class="p-8 space-y-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-bold text-white">AI Influencers</h1>
+          <p class="text-xs text-neutral-400">Manage persona identity seeds and multi-angle facial locks.</p>
+        </div>
+
+        <button class="px-4 py-2 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/20 flex items-center gap-2">
+          <span>+</span>
+          <span>New AI Influencer</span>
+        </button>
+      </div>
+
+      <!-- Active Influencer Detail Card -->
+      <div class="bg-[#111116] border border-white/10 rounded-2xl p-6 grid grid-cols-12 gap-8 items-center">
+        <div class="col-span-3 flex flex-col items-center text-center space-y-3">
+          <div class="w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-rose-500 via-red-500 to-amber-400 overflow-hidden shadow-xl">
+            <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-white">Baha Savage</h2>
+            <span class="text-xs text-neutral-400">@savage_mode · Active Anchor</span>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
+            98.4% Consistency Lock
+          </span>
+        </div>
+
+        <div class="col-span-9 space-y-4 border-l border-white/10 pl-8">
+          <div class="grid grid-cols-3 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+              <span class="text-neutral-400 block mb-1">Identity Seed</span>
+              <span class="font-mono text-white font-bold">0053510b-801a...</span>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+              <span class="text-neutral-400 block mb-1">Engine</span>
+              <span class="text-[#d1fe17] font-bold">Higgsfield Soul v2.0</span>
+            </div>
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+              <span class="text-neutral-400 block mb-1">Total Vault Drops</span>
+              <span class="text-white font-bold">1,604 Generations</span>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-xs text-neutral-400 block mb-2 font-medium">Recent Poses & Angles:</span>
+            <div class="grid grid-cols-5 gap-3">
+              <div class="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-800"><img src="http://localhost:5173/cutoff-girl-black-coat-car.webp" class="w-full h-full object-cover" /></div>
+              <div class="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-800"><img src="https://storage.googleapis.com/antigravity-media/higgsfield/005a76c8-500b-4770-b74c-47bc63aa9a4a.webp" class="w-full h-full object-cover" /></div>
+              <div class="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-800"><img src="https://storage.googleapis.com/antigravity-media/higgsfield/00742f9b-6dae-4cf0-bb4b-32694b29bb86.webp" class="w-full h-full object-cover" /></div>
+              <div class="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-800"><img src="https://storage.googleapis.com/antigravity-media/higgsfield/0076a02b-a7eb-4efd-b94f-4d9a6c9eb448.webp" class="w-full h-full object-cover" /></div>
+              <div class="aspect-[3/4] rounded-xl overflow-hidden bg-neutral-800 flex items-center justify-center border border-dashed border-white/20 text-neutral-400 text-xs font-bold hover:border-[#d1fe17] cursor-pointer">
+                + Angle
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= SCREEN 4: VIDEO STUDIO SCREEN (CLICKING VIDEO ICON) ================= -->
+  <div id="screen-video" class="w-[1440px] bg-[#09090c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+    <!-- Active Header Bar with Video selected -->
+    <header class="h-16 px-6 bg-[#0a0a0d] border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="w-8 h-8 rounded-xl bg-[#d1fe17] text-black font-black flex items-center justify-center text-sm">H</div>
+        <span class="font-black text-sm tracking-tight text-white">HIGGSFIELD</span>
+      </div>
+
+      <nav class="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10">
+        <!-- Vault Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        </button>
+        <!-- Moodboard Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+        </button>
+        <!-- Influencer Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        </button>
+        <!-- Video Icon (ACTIVE) -->
+        <button class="nav-icon-btn active">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+        </button>
+        <!-- Assets Icon -->
+        <button class="nav-icon-btn text-neutral-400 hover:text-white">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+        </button>
+      </nav>
+
+      <div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500">
+        <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+      </div>
+    </header>
+
+    <!-- Screen Content: Video Studio Creator -->
+    <div class="p-8 grid grid-cols-12 gap-8">
+      <!-- Left Config (5 cols) -->
+      <div class="col-span-5 bg-[#111116] border border-white/10 rounded-2xl p-6 space-y-5">
+        <div>
+          <h2 class="text-base font-bold text-white">Create Video</h2>
+          <p class="text-xs text-neutral-400">Animate keyframes with Kling 4.0 & Seedance 2.5</p>
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-neutral-400 block mb-1.5">Motion Prompt</label>
+          <textarea rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white resize-none">Slow cinematic dolly forward, warm streetlights reflecting off car window, natural wind blowing hair, 4k 60fps</textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-semibold text-neutral-400 block mb-1.5">Camera Motion</label>
+            <select class="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white">
+              <option>Dolly Forward</option>
+              <option>Horizontal Pan Left</option>
+              <option>Vertical Tilt Up</option>
+              <option>Orbit 360</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-neutral-400 block mb-1.5">Model Engine</label>
+            <select class="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-xs text-white">
+              <option>Kling 4.0 High Quality</option>
+              <option>Seedance 2.5 Fast</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="w-full py-3 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25">
+          Generate Video (5s)
+        </button>
+      </div>
+
+      <!-- Right Keyframe Preview (7 cols) -->
+      <div class="col-span-7 bg-[#111116] border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+        <span class="text-xs font-semibold text-neutral-400 block mb-2">Input Keyframe Reference</span>
+        <div class="aspect-[16/9] rounded-xl overflow-hidden bg-black relative flex items-center justify-center border border-white/10">
+          <img src="http://localhost:5173/cutoff-girl-black-coat-car.webp" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <div class="w-14 h-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xl">
+              ▶
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between text-xs text-neutral-400 pt-3">
+          <span>Resolution: 1080x1920 (9:16)</span>
+          <span>Duration: 5.0s</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

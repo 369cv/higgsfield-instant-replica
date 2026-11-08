@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Flows: Mood Board & AI Influencer Creation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #070709; color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  </style>
+</head>
+<body class="p-0 m-0 space-y-16 bg-black">
+
+  <!-- ================= USER FLOW 1: CREATING A MOOD BOARD ================= -->
+  <div id="flow-1" class="w-[1440px] h-[900px] bg-[#070709] relative flex flex-col overflow-hidden">
+    <!-- Top Bar -->
+    <div class="px-8 py-3.5 bg-[#0f0f13] border-b border-white/10 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#d1fe17] bg-[#d1fe17]/10 px-2.5 py-1 rounded-md">USER FLOW 1</span>
+        <h1 class="text-base font-bold text-white">Create New Mood Board · Select Inspiration Drops</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-neutral-400">4 drops selected</span>
+        <button class="px-4 py-2 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25">
+          Save Mood Board →
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-1 flex overflow-hidden">
+      <!-- Left Config Sidebar (380px) -->
+      <div class="w-[380px] bg-[#0d0d10] border-r border-white/10 p-6 flex flex-col justify-between">
+        <div class="space-y-5">
+          <div>
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-1.5">Mood Board Title</label>
+            <input
+              type="text"
+              value="Dubai Nightlife & Satin Abayas"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-medium focus:outline-none focus:border-[#d1fe17]"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-1.5">Description & Aesthetic Notes</label>
+            <textarea
+              rows="3"
+              class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-neutral-300 resize-none focus:outline-none focus:border-[#d1fe17]"
+            >High flash photography, silk and satin modest dresses against Burj Al Arab and evening cabanas.</textarea>
+          </div>
+
+          <div>
+            <label class="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-1.5">Aesthetic Tags</label>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="text-xs bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30 px-2.5 py-1 rounded-lg font-semibold">#ModestLuxury ✕</span>
+              <span class="text-xs bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30 px-2.5 py-1 rounded-lg font-semibold">#NightlifeFlash ✕</span>
+              <span class="text-xs bg-white/5 text-neutral-300 border border-white/10 px-2.5 py-1 rounded-lg">+ Add Tag</span>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-xl bg-white/5 border border-white/5 space-y-2">
+            <span class="text-xs font-bold text-neutral-300 block">Board Sharing</span>
+            <div class="flex items-center justify-between text-xs text-neutral-400">
+              <span>Public Prompt Pack</span>
+              <span class="text-emerald-400 font-bold">Enabled</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="w-full py-3 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25">
+          ✨ Create Mood Board (4 Drops)
+        </button>
+      </div>
+
+      <!-- Right Drops Selector Grid -->
+      <div class="flex-1 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-4 text-xs text-neutral-400">
+          <span>Click any drop to add or remove from this board</span>
+          <span class="text-white font-semibold">Showing 1,604 drops</span>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4">
+          <!-- Card 1 (Selected) -->
+          <div class="relative rounded-2xl overflow-hidden aspect-[3/4] border-2 border-[#d1fe17] shadow-xl shadow-[#d1fe17]/15">
+            <img src="http://localhost:5173/cutoff-girl-black-coat-car.webp" class="w-full h-full object-cover" />
+            <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#d1fe17] text-black flex items-center justify-center font-black text-xs">✓</div>
+            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">Car Selfie Cutoff</div>
+          </div>
+
+          <!-- Card 2 (Selected) -->
+          <div class="relative rounded-2xl overflow-hidden aspect-[3/4] border-2 border-[#d1fe17] shadow-xl shadow-[#d1fe17]/15">
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/005a76c8-500b-4770-b74c-47bc63aa9a4a.webp" class="w-full h-full object-cover" />
+            <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#d1fe17] text-black flex items-center justify-center font-black text-xs">✓</div>
+            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">Dubai Nightlife Flash</div>
+          </div>
+
+          <!-- Card 3 (Selected) -->
+          <div class="relative rounded-2xl overflow-hidden aspect-[3/4] border-2 border-[#d1fe17] shadow-xl shadow-[#d1fe17]/15">
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/00742f9b-6dae-4cf0-bb4b-32694b29bb86.webp" class="w-full h-full object-cover" />
+            <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#d1fe17] text-black flex items-center justify-center font-black text-xs">✓</div>
+            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">Editorial Luxury Satin</div>
+          </div>
+
+          <!-- Card 4 (Selected) -->
+          <div class="relative rounded-2xl overflow-hidden aspect-[3/4] border-2 border-[#d1fe17] shadow-xl shadow-[#d1fe17]/15">
+            <img src="https://storage.googleapis.com/antigravity-media/higgsfield/0076a02b-a7eb-4efd-b94f-4d9a6c9eb448.webp" class="w-full h-full object-cover" />
+            <div class="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#d1fe17] text-black flex items-center justify-center font-black text-xs">✓</div>
+            <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">Gym Activewear</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= USER FLOW 2: EDITING A MOOD BOARD ================= -->
+  <div id="flow-2" class="w-[1440px] h-[900px] bg-[#070709] relative flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-3.5 bg-[#0f0f13] border-b border-white/10 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-md">USER FLOW 2</span>
+        <div>
+          <h1 class="text-base font-bold text-white flex items-center gap-2">
+            <span>Dubai Nightlife & Satin Abayas</span>
+            <span class="text-xs text-neutral-400 font-normal">· 14 Drops</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="px-3.5 py-1.5 bg-white/10 hover:bg-white/15 text-white font-medium text-xs rounded-xl flex items-center gap-2">
+          <span>+ Add Drops</span>
+        </button>
+        <button class="px-3.5 py-1.5 bg-white/10 hover:bg-white/15 text-white font-medium text-xs rounded-xl flex items-center gap-2">
+          <span>📋 Export Prompts (.JSON)</span>
+        </button>
+        <button class="px-3.5 py-1.5 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl flex items-center gap-2 shadow-lg shadow-[#d1fe17]/20">
+          <span>🎬 Animate Reel (Kling)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Moodboard Layout Controls -->
+    <div class="px-8 py-2.5 bg-[#121215] border-b border-white/5 flex items-center justify-between text-xs text-neutral-400">
+      <div class="flex items-center gap-3">
+        <span>Order by: <strong class="text-white">Custom Drag</strong></span>
+        <span>•</span>
+        <span>Card Size: <strong class="text-white">Large</strong></span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="text-neutral-400 hover:text-white">Select All</button>
+        <button class="text-red-400 hover:text-red-300">Delete Board</button>
+      </div>
+    </div>
+
+    <!-- Board Grid View -->
+    <div class="flex-1 p-8 grid grid-cols-4 gap-6 overflow-hidden">
+      <div class="rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[3/4] relative group">
+        <img src="http://localhost:5173/cutoff-girl-black-coat-car.webp" class="w-full h-full object-cover" />
+        <div class="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/70 text-[10px] text-[#d1fe17] font-bold">COVER</div>
+        <button class="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500/80 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+        <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">1. Car Selfie Cutoff</div>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[3/4] relative group">
+        <img src="https://storage.googleapis.com/antigravity-media/higgsfield/005a76c8-500b-4770-b74c-47bc63aa9a4a.webp" class="w-full h-full object-cover" />
+        <button class="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500/80 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+        <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">2. Nightlife Flash Dubai</div>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[3/4] relative group">
+        <img src="https://storage.googleapis.com/antigravity-media/higgsfield/00742f9b-6dae-4cf0-bb4b-32694b29bb86.webp" class="w-full h-full object-cover" />
+        <button class="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500/80 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+        <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">3. Editorial Luxury Gown</div>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden bg-neutral-900 border border-white/10 aspect-[3/4] relative group">
+        <img src="https://storage.googleapis.com/antigravity-media/higgsfield/0076a02b-a7eb-4efd-b94f-4d9a6c9eb448.webp" class="w-full h-full object-cover" />
+        <button class="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500/80 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+        <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/90 to-transparent text-[11px] font-bold text-white">4. Halter Gym Activewear</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= USER FLOW 3: CREATING AN AI INFLUENCER ================= -->
+  <div id="flow-3" class="w-[1440px] h-[900px] bg-[#070709] relative flex flex-col overflow-hidden">
+    <!-- Header -->
+    <div class="px-8 py-3.5 bg-[#0f0f13] border-b border-white/10 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <span class="text-xs font-bold uppercase tracking-wider text-fuchsia-400 bg-fuchsia-500/10 px-2.5 py-1 rounded-md">USER FLOW 3</span>
+        <h1 class="text-base font-bold text-white">Create Virtual AI Influencer Persona (Higgsfield Soul Engine)</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-neutral-400">Step 2 of 3: Identity Verification</span>
+        <button class="px-5 py-2 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25">
+          Train & Lock Persona →
+        </button>
+      </div>
+    </div>
+
+    <!-- Stepper Pipeline -->
+    <div class="px-8 py-2 bg-[#121215] border-b border-white/5 flex items-center justify-center gap-8 text-xs font-bold">
+      <div class="flex items-center gap-2 text-emerald-400">
+        <span class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px]">✓</span>
+        <span>1. Identity Reference Upload</span>
+      </div>
+      <span class="text-neutral-600">———</span>
+      <div class="flex items-center gap-2 text-[#d1fe17]">
+        <span class="w-5 h-5 rounded-full bg-[#d1fe17] text-black flex items-center justify-center text-[10px]">2</span>
+        <span>2. Soul Character Parameters</span>
+      </div>
+      <span class="text-neutral-600">———</span>
+      <div class="flex items-center gap-2 text-neutral-500">
+        <span class="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center text-[10px]">3</span>
+        <span>3. Verification Test Matrix</span>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="flex-1 p-8 grid grid-cols-12 gap-8 overflow-hidden">
+      <!-- Left Anchor Portrait & Seed (5 cols) -->
+      <div class="col-span-5 bg-[#0f0f13] border border-white/10 rounded-2xl p-6 flex flex-col justify-between">
+        <div class="space-y-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block">Anchor Reference Photo</span>
+          <div class="w-48 h-48 mx-auto rounded-full p-1 bg-gradient-to-tr from-rose-500 via-red-500 to-orange-400 overflow-hidden shadow-2xl">
+            <img src="http://localhost:5173/images/influencer-avatar.png" class="w-full h-full rounded-full object-cover" />
+          </div>
+
+          <div class="p-4 rounded-xl bg-black/50 border border-white/5 space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Face Consistency Score:</span>
+              <span class="text-emerald-400 font-bold">98.4% (Optimal)</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Locked Identity Seed:</span>
+              <span class="text-white font-mono font-bold">0053510b-801a...</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-neutral-400">Inference Engine:</span>
+              <span class="text-[#d1fe17] font-bold">Higgsfield Soul v2.0</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="w-full py-2.5 bg-white/5 hover:bg-white/10 text-white font-semibold text-xs rounded-xl border border-white/10">
+          Upload New Angles (+3 Recommended)
+        </button>
+      </div>
+
+      <!-- Right Persona Config & Recipe (7 cols) -->
+      <div class="col-span-7 bg-[#0f0f13] border border-white/10 rounded-2xl p-6 space-y-5 overflow-y-auto">
+        <span class="text-xs font-bold uppercase tracking-wider text-neutral-400 block">Persona Attributes & Core Recipe</span>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-[11px] font-bold text-neutral-400 uppercase block mb-1">Display Name</label>
+            <input type="text" value="Baha Savage" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white" />
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-neutral-400 uppercase block mb-1">Social Handle</label>
+            <input type="text" value="@savage_mode" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white" />
+          </div>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-bold text-neutral-400 uppercase block mb-1">Persona Bio & Lore</label>
+          <input type="text" value="When it's your turn, don't feel bad. Go full savage mode. Luxury modest icon." class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white" />
+        </div>
+
+        <div>
+          <label class="text-[11px] font-bold text-neutral-400 uppercase block mb-1">Permanent Identity Prompt Anchor</label>
+          <textarea rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-neutral-200 resize-none">gorgeous 24-year-old middle eastern model, high cheekbones, dark almond eyes, glossy lips, flowing jet black wavy hair, wearing tailored luxury modest fashion</textarea>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-bold text-neutral-400 uppercase block mb-1">Default Camera & Lighting</label>
+          <div class="grid grid-cols-3 gap-2 text-xs font-medium text-center">
+            <div class="p-2 rounded-xl bg-[#d1fe17]/10 border border-[#d1fe17] text-white">Hard Flash Night</div>
+            <div class="p-2 rounded-xl bg-white/5 border border-white/10 text-neutral-300">Studio Softbox</div>
+            <div class="p-2 rounded-xl bg-white/5 border border-white/10 text-neutral-300">Golden Hour</div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button class="px-6 py-3 bg-[#d1fe17] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25">
+            Lock Influencer Persona & Generate First Batch
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
