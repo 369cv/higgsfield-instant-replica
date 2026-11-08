@@ -176,8 +176,8 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
   };
 
   const handleStartCreate = () => {
-    setBoardName('Crunchy Cookies');
-    setUploadedImages(vaultItems.slice(0, 5).map((i) => i.imageUrl || i.fullImageUrl || ''));
+    setBoardName('Burj Luxury & Evening Collection');
+    setUploadedImages(vaultItems.slice(0, 24).map((i) => i.imageUrl || i.fullImageUrl || '').filter(Boolean));
     setViewState('create');
   };
 
@@ -459,7 +459,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
                   type="text"
                   value={boardName}
                   onChange={(e) => setBoardName(e.target.value)}
-                  placeholder="e.g. Cookies Collection"
+                  placeholder="e.g. Luxury Nightlife Collection"
                   className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
                 />
               </div>
