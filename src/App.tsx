@@ -137,15 +137,28 @@ export const App: React.FC = () => {
     }, 2500);
   };
 
+  const handleCreateAction = (action: 'influencer' | 'moodboard' | 'project') => {
+    if (action === 'moodboard') {
+      setActiveTab('moodboard');
+    } else if (action === 'influencer') {
+      setActiveTab('influencer');
+    } else if (action === 'project') {
+      setActiveTab('vault');
+      setSearchQuery('');
+      setSelectedCategory('All Drops');
+      handleOpenSidebar('create');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Pure-Icon Header Navigation with Guided Tooltips & Home Return */}
+      {/* Pure-Icon Header Navigation with Guided Tooltips & Centered (+) Hub */}
       <VaultHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        totalCount={vault.length || 1604}
+        onCreateAction={handleCreateAction}
       />
 
       {/* Main View Router */}
