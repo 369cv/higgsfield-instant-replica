@@ -398,7 +398,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
   ];
 
   return (
-    <div className="relative flex h-app-content w-full bg-[#070709] text-white overflow-hidden select-none">
+    <div className="relative flex h-app-content w-full bg-canvas text-white overflow-hidden select-none">
       {/* Mobile backdrop when the sidebar is expanded over content */}
       {!sidebarCollapsed && (
         <div
@@ -409,7 +409,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       )}
       {/* ================= LEFT SIDEBAR ================= */}
       <aside
-        className={`shrink-0 bg-[#0c0c10] border-r border-white/5 flex flex-col justify-between overflow-y-auto overflow-x-hidden transition-[width] duration-200 ${
+        className={`shrink-0 bg-base border-r border-white/5 flex flex-col justify-between overflow-y-auto overflow-x-hidden transition-[width] duration-200 ${
           sidebarCollapsed
             ? 'w-16 p-2 max-md:hidden'
             : 'w-60 p-3.5 max-md:absolute max-md:inset-y-0 max-md:left-0 max-md:z-30 max-md:shadow-2xl'
@@ -470,7 +470,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className={isActive ? 'text-[#d1fe17]' : 'text-neutral-400'}>
+                    <span className={isActive ? 'text-accent-ink' : 'text-neutral-400'}>
                       {item.icon}
                     </span>
                     {!sidebarCollapsed && <span>{item.label}</span>}
@@ -511,7 +511,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className={isActive ? 'text-[#d1fe17]' : 'text-neutral-400'}>
+                      <span className={isActive ? 'text-accent-ink' : 'text-neutral-400'}>
                         {item.icon}
                       </span>
                       {!sidebarCollapsed && <span>{item.label}</span>}
@@ -530,9 +530,9 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       </aside>
 
       {/* ================= MAIN CONTENT WORKSPACE ================= */}
-      <section className="flex-1 flex flex-col overflow-hidden bg-[#070709]">
+      <section className="flex-1 flex flex-col overflow-hidden bg-canvas">
         {/* Top Control Bar */}
-        <header className="h-14 md:h-16 px-4 md:px-8 gap-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-[#0a0a0d]/50 backdrop-blur-sm">
+        <header className="h-14 md:h-16 px-4 md:px-8 gap-3 border-b border-white/5 flex items-center justify-between shrink-0 bg-base/50 backdrop-blur-sm">
           {/* Left Title / Sub-tabs */}
           <div className="flex items-center gap-3 md:gap-6 min-w-0 overflow-x-auto no-scrollbar">
             {/* Mobile: open the folders sidebar as a drawer */}
@@ -718,7 +718,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                     .map((proj) => (
                       <div
                         key={proj.id}
-                        className="rounded-2xl bg-[#0f0f14] border border-white/10 hover:border-white/20 transition-all p-4 flex flex-col justify-between space-y-4 group cursor-pointer"
+                        className="rounded-2xl bg-base border border-white/10 hover:border-white/20 transition-all p-4 flex flex-col justify-between space-y-4 group cursor-pointer"
                       >
                         <div className="aspect-video rounded-xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden">
                           {proj.coverUrl ? (
@@ -734,7 +734,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                         </div>
                         <div className="space-y-1">
                           <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-bold text-white group-hover:text-[#d1fe17] transition-colors">
+                            <h4 className="text-sm font-bold text-white group-hover:text-accent-ink transition-colors">
                               {proj.title}
                             </h4>
                             <span className="text-[10px] text-neutral-500 font-mono">
@@ -1000,7 +1000,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                           <div
                             key={item.id}
                             onClick={() => onSelectItem(item)}
-                            className={`group relative rounded-2xl overflow-hidden aspect-[3/4] bg-[#0c0c10] border transition-all cursor-pointer ${
+                            className={`group relative rounded-2xl overflow-hidden aspect-[3/4] bg-base border transition-all cursor-pointer ${
                               isSelected
                                 ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/20 shadow-lg'
                                 : 'border-white/10 hover:border-white/25 hover:shadow-xl'
@@ -1106,7 +1106,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
       {/* ================= MODAL: CREATE PROJECT ================= */}
       {isCreatingProject && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#111116] border border-white/15 rounded-3xl p-6 shadow-2xl space-y-6">
+          <div className="w-full max-w-md bg-surface border border-white/15 rounded-3xl p-6 shadow-2xl space-y-6">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <h3 className="text-base font-bold text-white">Create New Project</h3>
               <button

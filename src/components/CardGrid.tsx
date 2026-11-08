@@ -79,6 +79,8 @@ export const CardGrid: React.FC<CardGridProps> = ({
 
   const getColClass = () => {
     switch (cardSize) {
+      case 0: // compact density
+        return 'grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6';
       case 1:
         return 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5';
       case 2:
@@ -114,10 +116,10 @@ const GridImageCard: React.FC<GridImageCardProps> = ({
   return (
     <div
       onClick={() => onSelectItem(item)}
-      className="group relative cursor-pointer overflow-hidden bg-[#0c0c10] select-none will-change-transform"
+      className="theme-dark group relative cursor-pointer overflow-hidden bg-base select-none will-change-transform"
     >
       {/* Seamless Media Container with Smooth Shimmer Skeleton */}
-      <div className={`relative w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'} bg-[#121318]`}>
+      <div className={`relative w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'} bg-surface`}>
         {/* Subtle Skeleton Placeholder while loading */}
         {!isLoaded && (
           <div className="absolute inset-0 bg-white/[0.02] animate-pulse pointer-events-none" />
@@ -195,7 +197,7 @@ const GridImageCard: React.FC<GridImageCardProps> = ({
       <div className="space-y-4 pb-12">
         {Object.entries(groups).map(([date, groupItems]) => (
           <div key={date}>
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] mb-2 px-2">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted mb-2 px-2">
               {date}
             </div>
             {/* Fine line separation between images */}

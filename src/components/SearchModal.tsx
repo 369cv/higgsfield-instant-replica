@@ -92,7 +92,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center sm:p-4 bg-black/75 backdrop-blur-md">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative z-10 w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[85vh] bg-[#0b0b0f] sm:bg-[#111116] sm:border border-white/15 sm:rounded-3xl px-4 pb-4 pt-[calc(env(safe-area-inset-top)+8px)] sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden">
+      <div className="relative z-10 w-full sm:max-w-2xl h-[100dvh] sm:h-auto sm:max-h-[85vh] bg-base sm:bg-surface sm:border border-white/15 sm:rounded-3xl px-4 pb-4 pt-[calc(env(safe-area-inset-top)+8px)] sm:p-6 shadow-2xl flex flex-col gap-4 overflow-hidden">
         {/* Search input */}
         <div className="flex items-center gap-3 shrink-0">
         <form
@@ -134,7 +134,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="sm:hidden text-[17px] text-[#d1fe17] active:opacity-50 shrink-0"
+          className="sm:hidden text-[17px] text-accent-ink active:opacity-50 shrink-0"
         >
           Cancel
         </button>
@@ -150,7 +150,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               {matches.length > 0 && (
                 <button
                   onClick={() => runSearch(searchQuery)}
-                  className="text-[11px] text-[#d1fe17] hover:underline flex items-center gap-1 cursor-pointer"
+                  className="text-[11px] text-accent-ink hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   View all <ArrowUpRight className="w-3 h-3" />
                 </button>
@@ -220,7 +220,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onClick={() => pickCategory(c.label)}
                     className="text-left p-2.5 rounded-xl hover:bg-white/5 group cursor-pointer"
                   >
-                    <div className="text-[13px] font-semibold text-white group-hover:text-[#d1fe17]">{c.label}</div>
+                    <div className="text-[13px] font-semibold text-white group-hover:text-accent-ink">{c.label}</div>
                     <div className="text-[11px] text-neutral-400">{c.hint}</div>
                   </button>
                 ))}
@@ -254,7 +254,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     key={c.label}
                     className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-2.5 opacity-80"
                   >
-                    <Lock className="w-4 h-4 text-[#d1fe17] mt-0.5 shrink-0" />
+                    <Lock className="w-4 h-4 text-accent-ink mt-0.5 shrink-0" />
                     <div>
                       <div className="text-[13px] font-semibold text-white">{c.label}</div>
                       <div className="text-[11px] text-neutral-400">{c.hint}</div>

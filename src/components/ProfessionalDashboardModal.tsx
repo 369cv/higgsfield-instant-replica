@@ -14,7 +14,7 @@ export const ProfessionalDashboardModal: React.FC<ProfessionalDashboardModalProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl bg-[#121212] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-4xl bg-surface border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header matching screenshot media_1794093981351_5532c639.png */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -55,7 +55,7 @@ export const ProfessionalDashboardModal: React.FC<ProfessionalDashboardModalProp
                 </h3>
 
                 {/* Views Card */}
-                <div className="p-5 rounded-2xl bg-[#1c1c1e] border border-white/5 space-y-3">
+                <div className="p-5 rounded-2xl bg-surface border border-white/5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-neutral-400 text-sm font-medium">
                       <span>Views</span>
@@ -87,7 +87,7 @@ export const ProfessionalDashboardModal: React.FC<ProfessionalDashboardModalProp
               </div>
 
               {/* Interactions Card */}
-              <div className="p-5 rounded-2xl bg-[#1c1c1e] border border-white/5 space-y-3">
+              <div className="p-5 rounded-2xl bg-surface border border-white/5 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-neutral-400 text-sm font-medium">
                     <span>Interactions</span>
@@ -121,7 +121,7 @@ export const ProfessionalDashboardModal: React.FC<ProfessionalDashboardModalProp
             {/* Right Column: Breakdown Charts */}
             <div className="space-y-6">
               {/* By Content Type */}
-              <div className="p-5 rounded-2xl bg-[#1c1c1e] border border-white/5 space-y-4">
+              <div className="p-5 rounded-2xl bg-surface border border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-semibold text-white">By content type</h4>
                   <div className="flex items-center gap-1 bg-black/40 p-0.5 rounded-lg border border-white/10 text-xs">
@@ -184,7 +184,7 @@ export const ProfessionalDashboardModal: React.FC<ProfessionalDashboardModalProp
               </div>
 
               {/* By Content Interactions */}
-              <div className="p-5 rounded-2xl bg-[#1c1c1e] border border-white/5 space-y-4">
+              <div className="p-5 rounded-2xl bg-surface border border-white/5 space-y-4">
                 <h4 className="text-sm font-semibold text-white">By content interactions</h4>
 
                 <div className="space-y-3 pt-2">

@@ -38,7 +38,7 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
         {Array.from({ length: activeCount }).map((_, idx) => (
           <div
             key={idx}
-            className="relative aspect-[3/4] w-full rounded-2xl bg-[#0c0c10] border border-white/10 overflow-hidden flex flex-col justify-between p-4 group select-none shadow-xl transition-all"
+            className="relative aspect-[3/4] w-full rounded-2xl bg-base border border-white/10 overflow-hidden flex flex-col justify-between p-4 group select-none shadow-xl transition-all"
           >
             {/* Ambient Shimmer Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] via-transparent to-black/60 pointer-events-none" />
@@ -65,7 +65,7 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
                 <div className="absolute inset-1 rounded-full border border-dashed border-[#d1fe17]/40 animate-spin" style={{ animationDuration: '8s' }} />
 
                 {/* Inner Glow Core with Starburst Vector */}
-                <div className="w-8 h-8 rounded-full bg-[#d1fe17]/10 flex items-center justify-center text-[#d1fe17]">
+                <div className="w-8 h-8 rounded-full bg-[#d1fe17]/10 flex items-center justify-center text-accent-ink">
                   <svg className="w-4 h-4 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
                   </svg>

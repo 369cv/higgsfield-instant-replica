@@ -1,5 +1,8 @@
 import React from 'react';
-import { Lock, User } from 'lucide-react';
+import { Lock } from 'lucide-react';
+import { BrandMark } from './BrandMark';
+import { Avatar } from './HiggsfieldProfileModal';
+import { useSettings } from '../services/settings';
 
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets' | 'explore';
 
@@ -19,6 +22,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   onOpenSearch,
   onOpenProfile,
 }) => {
+  const settings = useSettings();
   const navItems: { id: NavTab; label: string; icon: React.ReactNode }[] = [
     {
       id: 'vault',
@@ -124,7 +128,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   ];
 
   return (
-    <header className="hidden md:flex sticky top-0 z-40 h-16 px-3 sm:px-6 gap-2 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 items-center justify-between transition-all select-none">
+    <header className="hidden md:flex sticky top-0 z-40 h-16 px-3 sm:px-6 gap-2 bg-base/95 backdrop-blur-xl border-b border-white/10 items-center justify-between transition-all select-none">
       {/* Left: Minimal Brand Logo Icon Only */}
       <div className="flex items-center shrink-0">
         <button
@@ -132,21 +136,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           className="group cursor-pointer focus:outline-none"
           title="Return to Vault"
         >
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#d1fe17] to-[#88a804] flex items-center justify-center text-black font-extrabold text-xs shadow-[0_0_15px_rgba(209,254,23,0.25)] group-hover:scale-105 transition-transform active:scale-95">
-            <svg
-              className="w-4.5 h-4.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2.5"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              />
-            </svg>
-          </div>
+          <BrandMark size={36} className="group-hover:scale-105 transition-transform active:scale-95" />
         </button>
       </div>
 
@@ -212,7 +202,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           onClick={() => onSelectTab('assets')}
           className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
             activeTab === 'assets'
-              ? 'bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30'
+              ? 'bg-[#d1fe17]/15 text-accent-ink border border-[#d1fe17]/30'
               : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
           }`}
           title="Assets"
@@ -229,9 +219,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           title="Profile"
           aria-label="Profile"
         >
-          <div className="w-9 h-9 rounded-full bg-white/[0.08] border border-white/15 flex items-center justify-center text-neutral-300">
-            <User className="w-4 h-4" />
-          </div>
+          <Avatar name={settings.displayName} hue={settings.avatarHue} size={36} />
         </button>
       </div>
     </header>

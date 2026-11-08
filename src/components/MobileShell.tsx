@@ -13,10 +13,10 @@ import {
   Clapperboard,
   Compass,
   ChevronRight,
-  Zap,
 } from 'lucide-react';
 import { NavTab, LOCKED_TABS } from './VaultHeader';
 import { BRAND } from '../config/brand';
+import { BrandMark } from './BrandMark';
 
 /** Which bottom tab / drawer row is highlighted. 'saved' is the vault filtered to favourites. */
 export type MobileView = NavTab | 'saved' | 'profile';
@@ -42,7 +42,7 @@ interface MobileNavBarProps {
 
 export const MobileNavBar: React.FC<MobileNavBarProps> = ({ title, onOpenMenu, onOpenSearch }) => (
   <header
-    className="md:hidden sticky top-0 z-40 bg-[#070709]/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/[0.08]"
+    className="md:hidden sticky top-0 z-40 bg-canvas/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/[0.08]"
     style={{ paddingTop: 'env(safe-area-inset-top)' }}
   >
     <div className="h-11 px-1.5 grid grid-cols-[44px_1fr_44px] items-center">
@@ -81,7 +81,7 @@ export const MobileTabBar: React.FC<MobileTabBarProps> = ({ active, onSelect }) 
   ];
   return (
     <nav
-      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0b0b0f]/85 backdrop-blur-xl backdrop-saturate-150 border-t border-white/[0.08]"
+      className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-base/85 backdrop-blur-xl backdrop-saturate-150 border-t border-white/[0.08]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
       aria-label="Tabs"
     >
@@ -93,7 +93,7 @@ export const MobileTabBar: React.FC<MobileTabBarProps> = ({ active, onSelect }) 
               key={id}
               onClick={() => onSelect(id)}
               className={`flex flex-col items-center justify-center gap-0.5 active:opacity-60 ${
-                isActive ? 'text-[#d1fe17]' : 'text-neutral-500'
+                isActive ? 'text-accent-ink' : 'text-neutral-500'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -153,7 +153,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 pl-3.5 pr-3 h-11 text-left active:bg-white/10 ${
-        isActive ? 'text-[#d1fe17]' : muted ? 'text-neutral-400' : 'text-white'
+        isActive ? 'text-accent-ink' : muted ? 'text-neutral-400' : 'text-white'
       }`}
     >
       <span
@@ -169,7 +169,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
     </button>
   );
 
-  const group = 'rounded-xl bg-[#16161c] overflow-hidden divide-y divide-white/[0.06]';
+  const group = 'rounded-xl bg-surface overflow-hidden divide-y divide-white/[0.06]';
   const groupLabel = 'px-4 pb-1.5 pt-5 text-[12px] uppercase tracking-wide text-neutral-500';
 
   return (
@@ -186,16 +186,14 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
-        className={`absolute inset-y-0 left-0 w-[84%] max-w-[330px] bg-[#0d0d11] border-r border-white/[0.08] flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+        className={`absolute inset-y-0 left-0 w-[84%] max-w-[330px] bg-base border-r border-white/[0.08] flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
       >
         <div className="h-14 px-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-[10px] bg-gradient-to-br from-[#d1fe17] to-[#88a804] flex items-center justify-center text-black">
-              <Zap className="w-4 h-4" strokeWidth={2.5} />
-            </div>
+            <BrandMark size={34} />
             <div className="leading-tight">
               <div className="text-[15px] font-semibold">{BRAND.name}</div>
               <div className="text-[11px] text-neutral-500">{BRAND.tagline}</div>

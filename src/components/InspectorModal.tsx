@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Copy, Check, Heart } from 'lucide-react';
 import { VaultItem } from '../types';
+import { recordCopy } from '../services/settings';
 
 interface InspectorModalProps {
   item: VaultItem | null;
@@ -55,18 +56,19 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
       ta.remove();
     }
     setCopied(true);
+    recordCopy();
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-[#070709] overflow-hidden"
+      className="fixed inset-0 z-50 flex flex-col md:flex-row bg-canvas overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Prompt"
     >
       {/* Image stage: top on mobile, left on desktop */}
-      <div className="relative w-full md:flex-1 h-[52dvh] md:h-full flex items-center justify-center bg-black shrink-0 overflow-hidden">
+      <div className="theme-dark relative w-full md:flex-1 h-[52dvh] md:h-full flex items-center justify-center bg-black shrink-0 overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center blur-3xl opacity-20 scale-110 pointer-events-none"
           style={{ backgroundImage: `url(${image})` }}
@@ -87,17 +89,17 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
       </div>
 
       {/* Prompt panel: bottom on mobile, right on desktop */}
-      <div className="relative z-10 -mt-5 md:mt-0 flex-1 md:flex-none md:w-[420px] min-h-0 flex flex-col bg-[#121217] md:bg-[#0d0e12] rounded-t-[22px] md:rounded-none border-t md:border-t-0 md:border-l border-white/[0.08] shadow-[0_-12px_40px_rgba(0,0,0,0.5)] md:shadow-none animate-sheet-up md:animate-none">
+      <div className="relative z-10 -mt-5 md:mt-0 flex-1 md:flex-none md:w-[420px] min-h-0 flex flex-col bg-surface md:bg-base rounded-t-[22px] md:rounded-none border-t md:border-t-0 md:border-l border-white/[0.08] shadow-[0_-12px_40px_rgba(0,0,0,0.5)] md:shadow-none animate-sheet-up md:animate-none">
         {/* iOS sheet grabber (mobile) */}
         <div className="md:hidden pt-2 flex justify-center" aria-hidden="true">
           <div className="w-9 h-[5px] rounded-full bg-white/25" />
         </div>
-        <div className="px-5 pt-3 md:pt-5 pb-2 text-[13px] md:text-[11px] font-semibold md:tracking-[0.14em] md:uppercase text-neutral-400 md:text-[#717684]">
+        <div className="px-5 pt-3 md:pt-5 pb-2 text-[13px] md:text-[11px] font-semibold md:tracking-[0.14em] md:uppercase text-neutral-400 md:text-muted">
           Prompt
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-4">
-          <p className="text-[15px] md:text-[13.5px] leading-relaxed text-[#d8dbe2] whitespace-pre-wrap select-text">
+          <p className="text-[15px] md:text-[13.5px] leading-relaxed text-soft whitespace-pre-wrap select-text">
             {prompt}
           </p>
         </div>

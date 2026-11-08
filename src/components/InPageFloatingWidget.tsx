@@ -43,11 +43,11 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-lg rounded-2xl bg-[#121318] border border-[#282b37] shadow-2xl p-5 overflow-hidden">
+      <div className="relative w-full max-w-lg rounded-2xl bg-surface border border-line shadow-2xl p-5 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#23252e]">
+        <div className="flex items-center justify-between pb-3 border-b border-line">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#14151b] border border-[#282b37] flex items-center justify-center p-1">
+            <div className="w-7 h-7 rounded-lg bg-surface border border-line flex items-center justify-center p-1">
               <img src="/icons/icon32.png" alt="" className="w-full h-full object-contain" />
             </div>
             <span className="font-semibold text-sm tracking-tight text-white">Recreate with Soul</span>
@@ -55,7 +55,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
 
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#717684] hover:text-white transition-colors"
+            className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted hover:text-white transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -64,10 +64,10 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           {/* Style Reference (Official Higgsfield component) */}
           <div className="space-y-1.5">
-            <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
+            <div className="text-xs font-semibold text-muted uppercase tracking-wider">
               Style Reference
             </div>
-            <div className="flex gap-3 bg-[#181920] p-3 rounded-xl border border-[#23252e]">
+            <div className="flex gap-3 bg-surface p-3 rounded-xl border border-line">
               {referenceImage && (
                 <img
                   src={referenceImage}
@@ -80,7 +80,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Enter prompt description or leave as style reference..."
                 rows={2}
-                className="w-full bg-transparent text-xs text-[#dee0e3] resize-none focus:outline-none placeholder-[#5e636e]"
+                className="w-full bg-transparent text-xs text-soft resize-none focus:outline-none placeholder-muted"
               />
             </div>
           </div>
@@ -88,7 +88,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
           {/* Character / Soul Selector (if available) */}
           {souls.length > 0 && (
             <div className="space-y-1.5">
-              <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
+              <div className="text-xs font-semibold text-muted uppercase tracking-wider">
                 Character
               </div>
               <div className="grid grid-cols-3 gap-2">
@@ -100,7 +100,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
                     className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${
                       selectedSoulId === soul.id
                         ? 'bg-[#d1fe17]/10 border-[#d1fe17] text-white'
-                        : 'bg-[#181920] border-[#23252e] text-[#8e93a4] hover:border-[#3a3e4e]'
+                        : 'bg-surface border-line text-muted hover:border-line'
                     }`}
                   >
                     <img
@@ -117,7 +117,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
 
           {/* Aspect Ratio Selector */}
           <div className="space-y-1.5">
-            <div className="text-xs font-semibold text-[#717684] uppercase tracking-wider">
+            <div className="text-xs font-semibold text-muted uppercase tracking-wider">
               Aspect ratio
             </div>
             <div className="grid grid-cols-4 gap-2">
@@ -129,7 +129,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
                   className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                     aspectRatio === ratio
                       ? 'bg-white/15 border-white text-white'
-                      : 'bg-[#181920] border-[#23252e] text-[#717684] hover:text-white'
+                      : 'bg-surface border-line text-muted hover:text-white'
                   }`}
                 >
                   {ratio}

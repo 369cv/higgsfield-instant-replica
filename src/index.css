@@ -2,22 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-lime: #d1fe17;
-  --color-black-1: #0b0c0e;
-  --color-black-2: #121318;
-  --color-gray-border: #23252e;
-  --color-text-secondary: #717684;
+/* ---------- Theme tokens (RGB triplets, used via tailwind.config.js) ---------- */
+:root,
+[data-theme='dark'],
+.theme-dark {
+  color-scheme: dark;
+  --fg: 255 255 255;
+  --canvas: 7 7 9;
+  --base: 12 12 16;
+  --surface: 22 22 28;
+  --line: 40 42 53;
+  --muted: 113 118 132;
+  --soft: 186 189 197;
+  --accent-ink: 209 254 23;
+  --n-50: 250 250 250;
+  --n-100: 245 245 245;
+  --n-200: 229 229 229;
+  --n-300: 212 212 212;
+  --n-400: 163 163 163;
+  --n-500: 115 115 115;
+  --n-600: 82 82 82;
+  --n-700: 64 64 64;
+  --n-800: 38 38 38;
+  --n-900: 23 23 23;
+  --n-950: 10 10 10;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --fg: 17 17 22;
+  --canvas: 255 255 255;
+  --base: 242 242 247;
+  --surface: 255 255 255;
+  --line: 216 216 222;
+  --muted: 110 110 118;
+  --soft: 72 72 80;
+  --accent-ink: 82 104 0;
+  /* neutral scale inverted so secondary text keeps its contrast */
+  --n-50: 10 10 10;
+  --n-100: 23 23 23;
+  --n-200: 38 38 38;
+  --n-300: 64 64 64;
+  --n-400: 82 82 82;
+  --n-500: 104 104 110;
+  --n-600: 140 140 146;
+  --n-700: 190 190 196;
+  --n-800: 222 222 228;
+  --n-900: 238 238 242;
+  --n-950: 246 246 248;
+}
+
+/* Photos and overlays on photos stay dark in every theme. */
+.theme-dark {
+  color: rgb(var(--fg));
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #0b0c0e;
-  color: #ffffff;
+  background-color: rgb(var(--canvas));
+  color: rgb(var(--fg));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
   user-select: none;
+}
+
+/* Reduce motion (system setting or in-app preference) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+[data-reduce-motion='true'] *, [data-reduce-motion='true'] *::before, [data-reduce-motion='true'] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
 }
 
 /* Custom scrollbar matching Higgsfield */
@@ -27,16 +83,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0c0e;
+  background: rgb(var(--canvas));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23252e;
+  background: rgb(var(--line));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3e4e;
+  background: rgb(var(--muted));
 }
 
 /* Smooth badge pulse */

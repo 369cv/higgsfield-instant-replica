@@ -57,7 +57,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
       <div className="flex flex-col items-center justify-center text-center pb-8 border-b border-white/10">
         <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-neutral-400 mb-3 shadow-lg">
           <svg
-            className="w-6 h-6 text-[#d1fe17]"
+            className="w-6 h-6 text-accent-ink"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -121,7 +121,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
                       <div
                         key={item.id}
                         onClick={() => onSelectItem && onSelectItem(item)}
-                        className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(209,254,23,0.2)]"
+                        className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#d1fe17]/60 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(209,254,23,0.2)]"
                       >
                         <img
                           src={item.imageUrl || item.fullImageUrl || ''}

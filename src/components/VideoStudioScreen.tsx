@@ -93,12 +93,12 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
   };
 
   return (
-    <div className="flex-1 w-full bg-[#08080a] text-white flex flex-col md:flex-row h-[calc(100vh-4rem)] overflow-hidden select-none">
+    <div className="flex-1 w-full bg-canvas text-white flex flex-col md:flex-row h-[calc(100vh-4rem)] overflow-hidden select-none">
       
       {/* =================================================================== */}
       {/* LEFT CONTROL SIDEBAR                                                */}
       {/* =================================================================== */}
-      <aside className="w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-[#0c0c10] flex flex-col shrink-0 h-full overflow-y-auto no-scrollbar p-4 space-y-4">
+      <aside className="w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-base flex flex-col shrink-0 h-full overflow-y-auto no-scrollbar p-4 space-y-4">
         
         {/* Top Tab Strip: Create Video | Edit Video | Motion Control */}
         <div className="flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/5 text-xs shrink-0">
@@ -129,19 +129,19 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
         </div>
 
         {/* Selected Preset Style Card */}
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-[#18181f] border border-white/10 p-3 flex flex-col justify-between group shadow-md shrink-0">
+        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden bg-surface border border-white/10 p-3 flex flex-col justify-between group shadow-md shrink-0">
           <img src={selectedPreset.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover opacity-60" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
 
           <div className="relative z-10 flex items-center justify-between">
-            <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10 font-bold">
+            <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-black/60 backdrop-blur-md text-accent-ink border border-white/10 font-bold">
               {selectedPreset.model}
             </span>
             <button
               onClick={() => setShowPresetPicker(!showPresetPicker)}
               className="px-2.5 py-1 rounded-lg bg-black/60 hover:bg-black/90 text-white text-[10px] font-semibold flex items-center gap-1 border border-white/10 transition-colors cursor-pointer"
             >
-              <svg className="w-3 h-3 text-[#d1fe17]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-3 h-3 text-accent-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
               </svg>
               <span>Change</span>
@@ -223,7 +223,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder="Describe your scene in detail. Use @ to reference assets"
-            className="w-full bg-[#121217] border border-white/10 rounded-xl p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] resize-none"
+            className="w-full bg-surface border border-white/10 rounded-xl p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] resize-none"
           />
           <div className="flex items-center gap-1.5 text-[10px]">
             <button className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white border border-white/5">
@@ -232,7 +232,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             <button
               onClick={() => setAudioEnabled(!audioEnabled)}
               className={`px-2 py-0.5 rounded-md border text-neutral-400 ${
-                audioEnabled ? 'bg-[#d1fe17]/10 text-[#d1fe17] border-[#d1fe17]/20 font-bold' : 'border-white/5'
+                audioEnabled ? 'bg-[#d1fe17]/10 text-accent-ink border-[#d1fe17]/20 font-bold' : 'border-white/5'
               }`}
             >
               Audio {audioEnabled ? 'On' : 'Off'}
@@ -303,7 +303,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
       {/* =================================================================== */}
       {/* MAIN VIEW AREA (Presets / Hero / Video Player)                      */}
       {/* =================================================================== */}
-      <main className="flex-1 flex flex-col p-6 overflow-y-auto no-scrollbar relative bg-gradient-to-b from-[#0a0a0d] to-[#060608]">
+      <main className="flex-1 flex flex-col p-6 overflow-y-auto no-scrollbar relative bg-gradient-to-b from-base to-canvas">
         
         {/* Preset Picker Modal/Overlay when toggled */}
         {showPresetPicker ? (
@@ -347,7 +347,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                     setSelectedPreset(p);
                     setShowPresetPicker(false);
                   }}
-                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#18181f] border border-white/10 hover:border-[#d1fe17] cursor-pointer transition-all flex flex-col justify-end p-3 shadow-lg"
+                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#d1fe17] cursor-pointer transition-all flex flex-col justify-end p-3 shadow-lg"
                 >
                   <img src={p.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -378,7 +378,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
 
               {/* Specs Overlay */}
               <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#d1fe17] text-[10px] font-mono font-bold border border-white/10">
+                <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-accent-ink text-[10px] font-mono font-bold border border-white/10">
                   {selectedPreset.model}
                 </span>
                 <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-white text-[10px] font-mono border border-white/10">
@@ -412,7 +412,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             {/* 3 Step Demonstration Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Step 1: Add Image */}
-              <div className="p-5 rounded-3xl bg-[#121217] border border-white/10 flex flex-col justify-between space-y-4">
+              <div className="p-5 rounded-3xl bg-surface border border-white/10 flex flex-col justify-between space-y-4">
                 <div className="aspect-[4/3] rounded-2xl bg-white/5 border border-dashed border-white/15 flex flex-col items-center justify-center p-4 text-center">
                   <svg className="w-8 h-8 text-neutral-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                     <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -431,7 +431,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
               </div>
 
               {/* Step 2: Choose Preset */}
-              <div className="p-5 rounded-3xl bg-[#121217] border border-white/10 flex flex-col justify-between space-y-4">
+              <div className="p-5 rounded-3xl bg-surface border border-white/10 flex flex-col justify-between space-y-4">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black/60 relative">
                   <img
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp"
@@ -449,7 +449,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
               </div>
 
               {/* Step 3: Get Video */}
-              <div className="p-5 rounded-3xl bg-[#121217] border border-white/10 flex flex-col justify-between space-y-4">
+              <div className="p-5 rounded-3xl bg-surface border border-white/10 flex flex-col justify-between space-y-4">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-black relative">
                   <img
                     src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp"

@@ -104,7 +104,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
   };
 
   return (
-    <div className="flex-1 w-full bg-[#08080a] text-white flex flex-col min-h-[calc(100vh-4rem)] select-none">
+    <div className="flex-1 w-full bg-canvas text-white flex flex-col min-h-[calc(100vh-4rem)] select-none">
       
       {/* =================================================================== */}
       {/* 1. HUB VIEW: HERO + MY MOODBOARDS / CURATED TABS                    */}
@@ -116,28 +116,28 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
           <div className="flex flex-col items-center justify-center text-center pt-4 pb-12">
             {/* 4 Fanout Collage Cards - Fusing 4 completely distinct aesthetics */}
             <div className="flex items-center justify-center -space-x-4 mb-8">
-              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
+              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-surface border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
                   src={curatedData.heroCards[0]}
                   alt="Burj Luxury Nightlife"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-6 translate-y-1 hover:rotate-0 transition-transform">
+              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-surface border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
                   src={curatedData.heroCards[1]}
                   alt="Gym & Athletic Glow"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-6 translate-y-1 hover:rotate-0 transition-transform">
+              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-surface border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
                   src={curatedData.heroCards[2]}
                   alt="Luxury Yacht & Beach Resort"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
+              <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-surface border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
                   src={curatedData.heroCards[3]}
                   alt="Tokyo Neon Streetwear"
@@ -173,7 +173,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
               <div
                 key={board.id}
                 onClick={() => setSelectedBoard(board)}
-                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
               >
                 <img
                   src={board.sampleImages[0] || (vaultItems.length > 0 ? vaultItems[0].imageUrl : '')}
@@ -194,7 +194,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
               <div
                 key={board.id}
                 onClick={() => setSelectedBoard(board)}
-                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
               >
                 <img
                   src={board.sampleImages[0]}
@@ -239,7 +239,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
                 onClick={() => setShowAgreementModal(true)}
                 className="flex flex-col items-center justify-center p-8 rounded-2xl border-2 border-dashed border-white/15 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#d1fe17]/50 transition-all cursor-pointer group"
               >
-                <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-[#d1fe17]/20 text-neutral-400 group-hover:text-[#d1fe17] flex items-center justify-center mb-2 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-white/5 group-hover:bg-[#d1fe17]/20 text-neutral-400 group-hover:text-accent-ink flex items-center justify-center mb-2 transition-all">
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <line x1="12" y1="5" x2="12" y2="19" />
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -347,7 +347,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
           </section>
 
           {/* Right Sidebar: Name + Radial Metric Gauges + Create CTA */}
-          <aside className="w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 bg-[#0c0c10] p-6 flex flex-col justify-between shrink-0 h-full overflow-y-auto no-scrollbar">
+          <aside className="w-full md:w-80 border-t md:border-t-0 md:border-l border-white/10 bg-base p-6 flex flex-col justify-between shrink-0 h-full overflow-y-auto no-scrollbar">
             <div className="space-y-6">
               {/* Moodboard Name Input */}
               <div className="space-y-1.5">
@@ -426,7 +426,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
                       <path
-                        className="text-[#d1fe17]"
+                        className="text-accent-ink"
                         strokeDasharray="90, 100"
                         strokeWidth="3.5"
                         strokeLinecap="round"
@@ -468,7 +468,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
       {/* =================================================================== */}
       {selectedBoard && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-3xl rounded-3xl bg-[#121217] border border-white/15 p-6 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+          <div className="w-full max-w-3xl rounded-3xl bg-surface border border-white/15 p-6 shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-3">
@@ -556,7 +556,7 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
       {/* =================================================================== */}
       {showAgreementModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-3xl bg-[#121217] border border-white/15 p-6 shadow-2xl space-y-4">
+          <div className="w-full max-w-md rounded-3xl bg-surface border border-white/15 p-6 shadow-2xl space-y-4">
             <h3 className="text-base font-extrabold text-white uppercase tracking-wide">Media Upload Agreement</h3>
 
             <div className="space-y-3 text-xs text-neutral-300">
