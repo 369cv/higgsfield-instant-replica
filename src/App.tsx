@@ -166,11 +166,12 @@ export const App: React.FC = () => {
       {/* Main View Router */}
       {activeTab === 'vault' && (
         <main className="flex-1 w-full max-w-[1920px] mx-auto p-0 pb-12">
-          {(isGenerating || isLoading) && (
-            <div className="mb-0">
+          {/* Active Generation Queue - Only when actively generating */}
+          {isGenerating && (
+            <div className="mb-2 px-6 pt-4">
               <GeneratingQueue
                 isGenerating={true}
-                progressText={isLoading ? "Loading Prompt Vault" : "Generating Persona Drop"}
+                progressText="Synthesizing Drop"
                 activeCount={inProgressCount > 0 ? inProgressCount : 4}
               />
             </div>

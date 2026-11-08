@@ -91,65 +91,94 @@ export const CardGrid: React.FC<CardGridProps> = ({
     }
   };
 
-  const renderCard = (item: VaultItem, index: number) => {
-    const isSquare = layout === 'square';
-    const isFavorited = favorites.has(item.id);
-    const isAboveFold = index < 8;
+interface GridImageCardProps {
+  item: VaultItem;
+  layout: LayoutMode;
+  isAboveFold: boolean;
+  isFavorited: boolean;
+  onSelectItem: (item: VaultItem) => void;
+  onToggleFavorite: (id: string) => void;
+}
 
-    return (
-      <div
-        key={item.id}
-        onClick={() => onSelectItem(item)}
-        className="group relative cursor-pointer overflow-hidden bg-neutral-900 select-none will-change-transform"
-      >
-        {/* Seamless Media Container */}
-        <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'} bg-[#121318]`}>
-          <img
-            src={item.imageUrl || item.fullImageUrl}
-            alt=""
-            loading={isAboveFold ? 'eager' : 'lazy'}
-            decoding="async"
-            fetchPriority={index < 4 ? 'high' : 'auto'}
-            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
-            onError={(e) => {
-              const target = e.currentTarget as HTMLImageElement;
-              if (item.fullImageUrl && target.src !== item.fullImageUrl) {
-                target.src = item.fullImageUrl;
-              }
-            }}
-          />
-        </div>
+const GridImageCard: React.FC<GridImageCardProps> = ({
+  item,
+  layout,
+  isAboveFold,
+  isFavorited,
+  onSelectItem,
+  onToggleFavorite,
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const isSquare = layout === 'square';
 
-        {/* Vintage Dark Overlay on Hover - Smooth dark vignette, NO harsh borders */}
-        <div className={`absolute inset-0 transition-opacity duration-200 pointer-events-none p-2.5 flex justify-end items-start ${
-          isFavorited ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-        } bg-gradient-to-t from-black/60 via-transparent to-black/60`}>
-          {/* ONLY the Favorite Heart Icon in Top Right */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleFavorite(item.id);
-            }}
-            className={`w-7 h-7 rounded-md backdrop-blur-md flex items-center justify-center transition-all shadow-md pointer-events-auto ${
-              isFavorited
-                ? 'bg-black/80 text-red-500'
-                : 'bg-black/60 hover:bg-black/85 text-white/80 hover:text-white'
-            }`}
-            title={isFavorited ? 'Remove favorite' : 'Add to favorites'}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-red-500 text-red-500' : ''}`} />
-          </button>
-        </div>
+  return (
+    <div
+      onClick={() => onSelectItem(item)}
+      className="group relative cursor-pointer overflow-hidden bg-[#0c0c10] select-none will-change-transform"
+    >
+      {/* Seamless Media Container with Smooth Shimmer Skeleton */}
+      <div className={`relative w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'} bg-[#121318]`}>
+        {/* Subtle Skeleton Placeholder while loading */}
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-white/[0.02] animate-pulse pointer-events-none" />
+        )}
+
+        <img
+          src={item.imageUrl || item.fullImageUrl}
+          alt=""
+          loading={isAboveFold ? 'eager' : 'lazy'}
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.015] ${
+            isLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            if (item.fullImageUrl && target.src !== item.fullImageUrl) {
+              target.src = item.fullImageUrl;
+            }
+            setIsLoaded(true);
+          }}
+        />
       </div>
-    );
-  };
+
+      {/* Dark Vignette Overlay on Hover */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-200 pointer-events-none p-2.5 flex justify-end items-start ${
+          isFavorited ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        } bg-gradient-to-t from-black/60 via-transparent to-black/60`}
+      >
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(item.id);
+          }}
+          className={`w-7 h-7 rounded-md backdrop-blur-md flex items-center justify-center transition-all shadow-md pointer-events-auto ${
+            isFavorited
+              ? 'bg-black/80 text-red-500'
+              : 'bg-black/60 hover:bg-black/85 text-white/80 hover:text-white'
+          }`}
+          title={isFavorited ? 'Remove favorite' : 'Add to favorites'}
+        >
+          <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-red-500 text-red-500' : ''}`} />
+        </button>
+      </div>
+    </div>
+  );
+};
 
   const displayedItems = items.slice(0, visibleCount);
 
   if (items.length === 0) {
     return (
-      <div className="w-full py-8">
-        <GeneratingQueue isGenerating={true} progressText="Generating Soul" activeCount={4} />
+      <div className="w-full py-16 text-center space-y-3">
+        <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-neutral-400 mx-auto">
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+        <p className="text-xs text-neutral-400">No prompt drops found matching your criteria</p>
       </div>
     );
   }
@@ -171,7 +200,17 @@ export const CardGrid: React.FC<CardGridProps> = ({
             </div>
             {/* Fine line separation between images */}
             <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
-              {groupItems.map((item, idx) => renderCard(item, idx))}
+              {groupItems.map((item, idx) => (
+                <GridImageCard
+                  key={item.id}
+                  item={item}
+                  layout={layout}
+                  isAboveFold={idx < 8}
+                  isFavorited={favorites.has(item.id)}
+                  onSelectItem={onSelectItem}
+                  onToggleFavorite={onToggleFavorite}
+                />
+              ))}
             </div>
           </div>
         ))}
@@ -182,12 +221,12 @@ export const CardGrid: React.FC<CardGridProps> = ({
             ref={sentinelRef}
             className="w-full py-10 flex flex-col items-center justify-center gap-2.5 select-none"
           >
-            <div className="relative w-8 h-8 flex items-center justify-center">
-              <div className="absolute inset-0 rounded-full border-2 border-white/10" />
-              <div className="absolute inset-0 rounded-full border-2 border-[#d1fe17] border-t-transparent animate-spin" />
+            <div className="relative w-7 h-7 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border border-white/10" />
+              <div className="absolute inset-0 rounded-full border border-[#d1fe17] border-t-transparent animate-spin" />
             </div>
-            <span className="text-[11px] font-medium text-[#717684] tracking-wider uppercase">
-              Loading more Soul generations...
+            <span className="text-[10px] font-medium text-neutral-500 tracking-wider uppercase font-mono">
+              Loading more drops...
             </span>
           </div>
         )}
@@ -199,7 +238,17 @@ export const CardGrid: React.FC<CardGridProps> = ({
   return (
     <div className="w-full pb-12">
       <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
-        {displayedItems.map((item, idx) => renderCard(item, idx))}
+        {displayedItems.map((item, idx) => (
+          <GridImageCard
+            key={item.id}
+            item={item}
+            layout={layout}
+            isAboveFold={idx < 8}
+            isFavorited={favorites.has(item.id)}
+            onSelectItem={onSelectItem}
+            onToggleFavorite={onToggleFavorite}
+          />
+        ))}
       </div>
 
       {/* Infinite Scroll Sentinel */}
@@ -208,12 +257,12 @@ export const CardGrid: React.FC<CardGridProps> = ({
           ref={sentinelRef}
           className="w-full py-10 flex flex-col items-center justify-center gap-2.5 select-none"
         >
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border-2 border-white/10" />
-            <div className="absolute inset-0 rounded-full border-2 border-[#d1fe17] border-t-transparent animate-spin" />
+          <div className="relative w-7 h-7 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-full border border-white/10" />
+            <div className="absolute inset-0 rounded-full border border-[#d1fe17] border-t-transparent animate-spin" />
           </div>
-          <span className="text-[11px] font-medium text-[#717684] tracking-wider uppercase">
-            Loading more Soul generations...
+          <span className="text-[10px] font-medium text-neutral-500 tracking-wider uppercase font-mono">
+            Loading more drops...
           </span>
         </div>
       )}
