@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { VaultItem } from '../types';
+import curatedData from '../data/curatedMoodboards.json';
 
 export interface MoodBoardRecord {
   id: string;
@@ -61,113 +62,11 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
     }
   }, [myBoards]);
 
-  // Curated reference moodboards built from real prompt vault drops
-  const curatedBoards: MoodBoardRecord[] = [
-    {
-      id: 'curated-1',
-      title: 'Burj Luxury & Evening',
-      status: 'ready',
-      imagesCount: 276,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_c42263f6-eaf5-4d50-ac9c-9296754064bb_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_37588442-d291-49b6-a020-f3ee0edbf8b6_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-    {
-      id: 'curated-2',
-      title: 'Gym & Athletic Glow',
-      status: 'ready',
-      imagesCount: 108,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_3a157abc-1c93-43f4-b51c-0ebf90d0c925_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_e290e455-ed20-487e-9b88-3f3ef9dc0ac7_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_b979c3b2-4abe-4b76-b75c-a745b4f9c94c_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032744_2f69ccba-1f9d-4235-bf49-563e71156b8b_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032744_6bec0e98-36f9-4e8e-8d27-d763a616f067_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-    {
-      id: 'curated-3',
-      title: 'Editorial Silk & Abaya',
-      status: 'ready',
-      imagesCount: 200,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_2b705f3a-3c6e-4e99-822b-b91933c4a562_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_9de3bb3e-3999-4051-bc73-e89d2f54e539_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_7e31f19f-3412-4d0e-9b39-09e5cfdf8ea9_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032031_4cf98206-4879-4b96-931d-c2d49329431a_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031408_f1089536-3a8f-43ee-b523-6b9a1d85812d_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-    {
-      id: 'curated-4',
-      title: '35mm Night Flash',
-      status: 'ready',
-      imagesCount: 476,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-    {
-      id: 'curated-5',
-      title: 'Yacht & Beach Resort',
-      status: 'ready',
-      imagesCount: 128,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_b9851fa2-9e38-470f-823b-05a958efbe76_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_0fd7daf8-cd10-4e23-80fa-527cb2dcaf92_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_d12137ec-cf52-443a-baa7-01f709bf65b9_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032829_4fb5c768-c8f4-43d9-87cc-671248a60ca9_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_023102_875d4f30-88da-4cdf-976d-d1ceedb0f284_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-    {
-      id: 'curated-6',
-      title: 'Tokyo Neon Streetwear',
-      status: 'ready',
-      imagesCount: 64,
-      sampleImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_3be1039c-582d-46d6-9431-0f354ed12560_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_9ca8f7a7-00d4-4af2-979b-a7cd74a3ffa6_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_16000efb-29cc-4874-a521-d3fed3a0c75d_min.webp',
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032303_51fdbac1-c3f5-4d9a-bd73-ea96225cbd6e_min.webp',
-      ],
-      datasetImages: [
-        'https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_031408_f1089536-3a8f-43ee-b523-6b9a1d85812d_min.webp',
-      ],
-      createdAt: 'Curated Preset',
-      isCurated: true,
-    },
-  ];
+  // Curated reference moodboards built from real prompt vault drops (all unique across categories)
+  const curatedBoards: MoodBoardRecord[] = (curatedData.curatedBoards as unknown as MoodBoardRecord[]).map((b) => ({
+    ...b,
+    status: 'ready' as const,
+  }));
 
   // Quick seed from vault images for uploading
   const handleUploadFromAssets = () => {
@@ -215,34 +114,34 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
           
           {/* Top Hero Section */}
           <div className="flex flex-col items-center justify-center text-center pt-4 pb-12">
-            {/* 4 Fanout Collage Cards */}
+            {/* 4 Fanout Collage Cards - Fusing 4 completely distinct aesthetics */}
             <div className="flex items-center justify-center -space-x-4 mb-8">
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp"
-                  alt="Fanout 1"
-                  className="w-full h-full object-cover"
+                  src={curatedData.heroCards[0]}
+                  alt="Burj Luxury Nightlife"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform -rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp"
-                  alt="Fanout 2"
-                  className="w-full h-full object-cover"
+                  src={curatedData.heroCards[1]}
+                  alt="Gym & Athletic Glow"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-6 translate-y-1 hover:rotate-0 transition-transform">
                 <img
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_cdca0579-8fc8-4739-a572-c0a4d5c6ce2c_min.webp"
-                  alt="Fanout 3"
-                  className="w-full h-full object-cover"
+                  src={curatedData.heroCards[2]}
+                  alt="Luxury Yacht & Beach Resort"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
               <div className="w-24 sm:w-28 aspect-[3/4] rounded-2xl bg-[#1a1a22] border-2 border-white/20 overflow-hidden shadow-2xl transform rotate-12 -translate-y-2 hover:rotate-0 transition-transform">
                 <img
-                  src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_ff3a423f-4e74-47b5-8f0b-7f6ab800e5eb_min.webp"
-                  alt="Fanout 4"
-                  className="w-full h-full object-cover"
+                  src={curatedData.heroCards[3]}
+                  alt="Tokyo Neon Streetwear"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
             </div>
@@ -267,21 +166,19 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
             </button>
           </div>
 
-
-
-          {/* UNIFIED MINIMALIST MOODBOARD GRID MATCHING REFERENCE SCREENSHOT */}
+          {/* UNIFIED MINIMALIST MOODBOARD GRID (PROMPT VAULT 3:4 CARD BLOCKING, NO CUTOFF) */}
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-2 pb-16">
             {/* User created boards prepended */}
             {myBoards.map((board) => (
               <div
                 key={board.id}
                 onClick={() => setSelectedBoard(board)}
-                className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
               >
                 <img
                   src={board.sampleImages[0] || (vaultItems.length > 0 ? vaultItems[0].imageUrl : '')}
                   alt={board.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-3.5 left-4 right-4 pointer-events-none">
@@ -297,12 +194,12 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
               <div
                 key={board.id}
                 onClick={() => setSelectedBoard(board)}
-                className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+                className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
               >
                 <img
                   src={board.sampleImages[0]}
                   alt={board.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-3.5 left-4 right-4 pointer-events-none">

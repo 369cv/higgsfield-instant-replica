@@ -186,12 +186,12 @@ export interface TracedInfluencerProfile {
 }
 
 export function traceInfluencersFromVault(items: VaultItem[]): TracedInfluencerProfile[] {
-  // Always include primary verified influencer Gabriela Sanchez
+  // Always include primary verified influencer Baha Savage
   const map = new Map<string, TracedInfluencerProfile>();
 
-  map.set('@gabrielasanchezs', {
-    handle: '@gabrielasanchezs',
-    name: 'Gabriela Sanchez',
+  map.set('@bahasavage', {
+    handle: '@bahasavage',
+    name: 'Baha Savage',
     detectedDropsCount: items.length,
     detectedNiches: [
       'Luxury & Lifestyle',

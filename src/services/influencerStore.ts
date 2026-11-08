@@ -1,33 +1,36 @@
 import { StoredInfluencer, StudioHeadshot, VaultItem } from '../types';
 
-const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v3';
-const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id';
-const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot';
-const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots';
+const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v5';
+const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id_v5';
+const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot_v5';
+const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots_v5';
 
-export const GABRIELA_SANCHEZ: StoredInfluencer = {
-  id: 'gabriela-sanchez-official',
-  name: 'Gabriela Sanchez',
-  instagramHandle: '@gabrielasanchezs',
-  referenceImage: '/images/influencer-avatar.png',
-  sampleImageUrl: '/images/influencer-avatar.png',
-  headshotImage: '/images/studio/headshot-1-master.png',
-  category: 'Fashion & Editorial',
-  ethnicity: 'Latina',
-  hair: 'Long Brunette',
-  age: 23,
+export const BAHA_SAVAGE: StoredInfluencer = {
+  id: 'baha-savage-official',
+  name: 'Baha Savage',
+  instagramHandle: '@bahasavage',
+  referenceImage: '/images/baha/baha-headshot-openhair-gray.png',
+  sampleImageUrl: '/images/baha/baha-headshot-openhair-gray.png',
+  headshotImage: '/images/baha/baha-headshot-openhair-gray.png',
+  category: 'Quiet Luxury & Sovereign Strategy',
+  ethnicity: 'Mediterranean / Levantine',
+  hair: 'Long Dark Chocolate Brown',
+  age: 28,
   dropsCount: 1604,
   signaturePrompt:
-    'A high-fashion portrait of Gabriela Sanchez (@gabrielasanchezs) on a neutral studio gray background, softbox lighting, 85mm f/1.4 lens, natural skin texture, editorial elegance.',
-  createdAt: 'Official Influencer',
+    'A refined high-contrast studio portrait of Baha Savage (@bahasavage) on a neutral studio gray background, softbox lighting, 85mm prime lens, natural skin texture with visible fine pores, elegant quiet luxury poise.',
+  createdAt: 'Official Character',
   isVaultPreset: true,
 };
+
+// Backwards-compatibility alias
+export const GABRIELA_SANCHEZ = BAHA_SAVAGE;
 
 export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
   {
     id: 'hs-1',
-    title: 'Neutral Master Studio',
-    imageUrl: '/images/studio/headshot-1-master.png',
+    title: 'Neutral Studio Master (Open Hair)',
+    imageUrl: '/images/baha/baha-headshot-openhair-gray.png',
     lighting: 'Master Softbox',
     angle: 'Frontal Eye-Level',
     background: '18% Neutral Gray',
@@ -35,72 +38,36 @@ export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
   },
   {
     id: 'hs-2',
-    title: 'Softbox Diffused Glow',
-    imageUrl: '/images/studio/headshot-2-softbox.png',
-    lighting: 'Softbox Diffused',
-    angle: 'Slight Tilt',
-    background: 'Soft Studio Gray',
+    title: 'Executive Taupe Blazer (Editorial Updo)',
+    imageUrl: '/images/baha/baha-headshot-blazer-gray.png',
+    lighting: 'Keyed Octabox',
+    angle: 'Frontal Eye-Level',
+    background: 'Studio Neutral Gray',
     createdAt: 'Studio Pass',
   },
   {
     id: 'hs-3',
-    title: 'Rembrandt High-Contrast',
-    imageUrl: '/images/studio/headshot-3-rembrandt.png',
-    lighting: 'Rembrandt Dramatic',
-    angle: '3/4 Editorial Angle',
-    background: 'Deep Charcoal Gray',
+    title: 'Silk Shirt & High Ponytail',
+    imageUrl: '/images/baha/baha-headshot-ponytail-gray.png',
+    lighting: 'High-Key Beauty',
+    angle: 'Frontal Direct',
+    background: 'Matte Gray',
     createdAt: 'Studio Pass',
   },
   {
     id: 'hs-4',
-    title: 'Editorial Slate Tone',
-    imageUrl: '/images/studio/headshot-4-slate.png',
-    lighting: 'Cool Slate Fill',
-    angle: 'Direct Eye-Level',
-    background: 'Cool Slate Gray',
-    createdAt: 'Studio Pass',
-  },
-  {
-    id: 'hs-5',
-    title: 'High-Key Luminous',
-    imageUrl: '/images/studio/headshot-5-highkey.png',
-    lighting: 'High-Key Beauty',
-    angle: 'Frontal',
-    background: 'Light Gray',
-    createdAt: 'Studio Pass',
-  },
-  {
-    id: 'hs-6',
-    title: 'Beauty Close-Up Crop',
-    imageUrl: '/images/studio/headshot-6-closecrop.png',
-    lighting: 'Macro Ring Light',
-    angle: 'Tight Portrait',
-    background: 'Studio Gray',
-    createdAt: 'Studio Pass',
-  },
-  {
-    id: 'hs-7',
-    title: 'Cinematic 35mm Rim',
-    imageUrl: '/images/studio/headshot-7-cinematic.png',
-    lighting: 'Warm Rim Light',
-    angle: '3/4 Angle',
-    background: 'Neutral Gray',
-    createdAt: 'Studio Pass',
-  },
-  {
-    id: 'hs-8',
-    title: 'Monochrome Editorial',
-    imageUrl: '/images/studio/headshot-8-monochrome.png',
-    lighting: 'High-Contrast B&W',
-    angle: 'Frontal Direct',
-    background: 'Matte Gray',
+    title: 'Executive Advisory Broadcast',
+    imageUrl: '/images/baha/baha-editorial-portrait.jpg',
+    lighting: 'Warm Environmental Studio Fill',
+    angle: 'Relaxed 3/4 Perspective',
+    background: 'Modern Architectural Studio',
     createdAt: 'Studio Pass',
   },
 ];
 
 export const InfluencerStore = {
   /**
-   * Retrieves all managed influencers from localStorage, ensuring Gabriela Sanchez is primary.
+   * Retrieves all managed influencers from localStorage, ensuring Baha Savage is primary.
    */
   getAll(): StoredInfluencer[] {
     try {
@@ -108,13 +75,14 @@ export const InfluencerStore = {
       if (stored) {
         const parsed: StoredInfluencer[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Ensure Gabriela Sanchez is present with live active headshot
           const activeHeadshot = this.getActiveHeadshot();
-          const hasGabriela = parsed.some((inf) => inf.id === GABRIELA_SANCHEZ.id);
+          const hasBaha = parsed.some((inf) => inf.id === BAHA_SAVAGE.id);
           const list = parsed.map((inf) => {
-            if (inf.id === GABRIELA_SANCHEZ.id) {
+            if (inf.id === BAHA_SAVAGE.id) {
               return {
                 ...inf,
+                name: 'Baha Savage',
+                instagramHandle: '@bahasavage',
                 headshotImage: activeHeadshot,
                 referenceImage: activeHeadshot,
                 sampleImageUrl: activeHeadshot,
@@ -124,9 +92,9 @@ export const InfluencerStore = {
             return inf;
           });
 
-          if (!hasGabriela) {
+          if (!hasBaha) {
             list.unshift({
-              ...GABRIELA_SANCHEZ,
+              ...BAHA_SAVAGE,
               headshotImage: activeHeadshot,
               referenceImage: activeHeadshot,
               sampleImageUrl: activeHeadshot,
@@ -139,10 +107,10 @@ export const InfluencerStore = {
       console.error('Error reading managed influencers', e);
     }
 
-    // Default initialization
+    // Default initialization with Baha Savage
     const initialList = [
       {
-        ...GABRIELA_SANCHEZ,
+        ...BAHA_SAVAGE,
         headshotImage: this.getActiveHeadshot(),
         referenceImage: this.getActiveHeadshot(),
         sampleImageUrl: this.getActiveHeadshot(),
@@ -167,7 +135,7 @@ export const InfluencerStore = {
     } catch {
       // fallback
     }
-    return GABRIELA_SANCHEZ.id;
+    return BAHA_SAVAGE.id;
   },
 
   setActiveInfluencerId(id: string): void {
@@ -183,7 +151,7 @@ export const InfluencerStore = {
     const all = this.getAll();
     const activeId = this.getActiveInfluencerId();
     const found = all.find((inf) => inf.id === activeId);
-    return found || all[0] || GABRIELA_SANCHEZ;
+    return found || all[0] || BAHA_SAVAGE;
   },
 
   save(influencer: Partial<StoredInfluencer>): StoredInfluencer {
@@ -193,13 +161,13 @@ export const InfluencerStore = {
       id,
       name: influencer.name || 'New Influencer',
       instagramHandle: influencer.instagramHandle || `@${(influencer.name || 'influencer').toLowerCase().replace(/\s+/g, '')}`,
-      referenceImage: influencer.referenceImage || '/images/studio/headshot-1-master.png',
-      sampleImageUrl: influencer.sampleImageUrl || influencer.referenceImage || '/images/studio/headshot-1-master.png',
-      headshotImage: influencer.headshotImage || influencer.referenceImage || '/images/studio/headshot-1-master.png',
+      referenceImage: influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
+      sampleImageUrl: influencer.sampleImageUrl || influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
+      headshotImage: influencer.headshotImage || influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
       category: influencer.category || 'Fashion & Editorial',
-      ethnicity: influencer.ethnicity || 'Latina',
+      ethnicity: influencer.ethnicity || 'Mediterranean / Levantine',
       hair: influencer.hair || 'Long Brunette',
-      age: influencer.age || 22,
+      age: influencer.age || 28,
       dropsCount: influencer.dropsCount || 1,
       associatedDropIds: influencer.associatedDropIds || [],
       signaturePrompt:
@@ -221,85 +189,25 @@ export const InfluencerStore = {
   },
 
   delete(id: string): void {
-    if (id === GABRIELA_SANCHEZ.id) return; // Protected
+    if (id === BAHA_SAVAGE.id) return; // Protected
     const existing = this.getAll();
     const updated = existing.filter((item) => item.id !== id);
     this.saveAll(updated);
     if (this.getActiveInfluencerId() === id) {
-      this.setActiveInfluencerId(GABRIELA_SANCHEZ.id);
+      this.setActiveInfluencerId(BAHA_SAVAGE.id);
     }
   },
 
-  /**
-   * Auto-trace influencers from newly added prompts/items in Prompt Vault.
-   * If a prompt mentions a handle or specific identity, it automatically registers/updates their profile!
-   */
   autoTraceFromVault(items: VaultItem[]): { added: number; updated: number } {
     const all = this.getAll();
     let updatedCount = 0;
-    let addedCount = 0;
-
-    // Check if Gabriela's count needs updating
-    const gabriela = all.find((i) => i.id === GABRIELA_SANCHEZ.id);
-    if (gabriela && gabriela.dropsCount !== items.length && items.length > 0) {
-      gabriela.dropsCount = items.length;
+    const baha = all.find((i) => i.id === BAHA_SAVAGE.id);
+    if (baha && baha.dropsCount !== items.length && items.length > 0) {
+      baha.dropsCount = items.length;
       updatedCount++;
-    }
-
-    // Inspect prompts for other tagged influencers (e.g., @handles or named models)
-    const handleRegex = /@([a-zA-Z0-9_.]+)/g;
-    const detectedHandles = new Map<string, { count: number; sampleImage: string; samplePrompt: string }>();
-
-    items.forEach((item) => {
-      const p = item.prompt || '';
-      let match;
-      while ((match = handleRegex.exec(p)) !== null) {
-        const handle = `@${match[1]}`.toLowerCase();
-        if (handle !== '@gabrielasanchezs') {
-          const prev = detectedHandles.get(handle) || {
-            count: 0,
-            sampleImage: item.imageUrl,
-            samplePrompt: item.prompt,
-          };
-          prev.count += 1;
-          detectedHandles.set(handle, prev);
-        }
-      }
-    });
-
-    detectedHandles.forEach((info, handle) => {
-      const existing = all.find((i) => i.instagramHandle?.toLowerCase() === handle);
-      if (existing) {
-        existing.dropsCount = info.count;
-        updatedCount++;
-      } else {
-        const namePart = handle.replace('@', '');
-        const formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-        all.push({
-          id: `traced-${namePart}`,
-          name: formattedName,
-          instagramHandle: handle,
-          referenceImage: info.sampleImage,
-          sampleImageUrl: info.sampleImage,
-          headshotImage: info.sampleImage,
-          category: 'Fashion & Editorial',
-          ethnicity: 'International',
-          hair: 'Brunette',
-          age: 23,
-          dropsCount: info.count,
-          signaturePrompt: info.samplePrompt,
-          createdAt: 'Auto-Traced from Vault',
-          isVaultPreset: false,
-        });
-        addedCount++;
-      }
-    });
-
-    if (updatedCount > 0 || addedCount > 0) {
       this.saveAll(all);
     }
-
-    return { added: addedCount, updated: updatedCount };
+    return { added: 0, updated: updatedCount };
   },
 
   getActiveHeadshot(): string {
@@ -309,7 +217,7 @@ export const InfluencerStore = {
     } catch {
       // fallback
     }
-    return '/images/studio/headshot-1-master.png';
+    return '/images/baha/baha-headshot-openhair-gray.png';
   },
 
   setActiveHeadshot(imageUrl: string): void {
