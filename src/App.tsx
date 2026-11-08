@@ -3,6 +3,7 @@ import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
 import { MoodBoardScreen } from './components/MoodBoardScreen';
 import { CreateHubScreen } from './components/CreateHubScreen';
+import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
 import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
@@ -20,6 +21,7 @@ export const App: React.FC = () => {
   // Search & Taxonomy state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Drops');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Sidebar Drawer State
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -153,12 +155,11 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Pure-Icon Header Navigation with Guided Tooltips & Full-Page (+) Create Trigger */}
+      {/* Pure-Icon Header Navigation with Search & Assets next to Profile */}
       <VaultHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
 
       {/* Main View Router */}
@@ -265,6 +266,14 @@ export const App: React.FC = () => {
           </button>
         </main>
       )}
+
+      {/* Full-Screen Search Modal matching reference */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
       {/* Inspector Modal */}
       <InspectorModal

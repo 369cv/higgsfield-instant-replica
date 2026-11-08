@@ -1,29 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets';
 
 interface VaultHeaderProps {
   activeTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
-  searchQuery: string;
-  onSearchChange: (q: string) => void;
+  onOpenSearch: () => void;
 }
 
 export const VaultHeader: React.FC<VaultHeaderProps> = ({
   activeTab,
   onSelectTab,
-  searchQuery,
-  onSearchChange,
+  onOpenSearch,
 }) => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (isSearchOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isSearchOpen]);
-
   return (
     <header className="sticky top-0 z-40 h-16 px-6 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all">
       {/* Left: Platform Logo Only (No Search Bar) */}
@@ -121,64 +110,35 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
       {/* Right: Search, Assets & Profile Avatar Cluster */}
       <div className="flex items-center gap-2">
         {/* Search Icon Button */}
-        <div className="relative">
-          <button
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
-              isSearchOpen || searchQuery
-                ? 'bg-white/15 text-white'
-                : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
-            }`}
-            title="Search"
+        <button
+          onClick={onOpenSearch}
+          className="w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
+          title="Search"
+        >
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-          </button>
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
 
-          {/* Expandable Search Input Popover */}
-          {isSearchOpen && (
-            <div className="absolute right-0 top-13 w-72 bg-[#121217] border border-white/15 rounded-2xl p-2.5 shadow-2xl z-50 flex items-center gap-2 backdrop-blur-xl animate-in fade-in duration-150">
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search drops, prompts..."
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => onSearchChange('')}
-                  className="text-xs text-neutral-400 hover:text-white px-1"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Assets Icon Button (Folder) */}
+        {/* Assets Icon Button (Solid Folder) */}
         <button
           onClick={() => onSelectTab('assets')}
-          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all ${
+          className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
             activeTab === 'assets'
               ? 'bg-[#d1fe17]/15 text-[#d1fe17] border border-[#d1fe17]/30'
               : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
           }`}
           title="Assets"
         >
-          {/* Solid Folder Icon */}
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2H4z" />
           </svg>
