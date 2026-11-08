@@ -50,7 +50,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
     (filters.shotType !== 'All' ? 1 : 0);
 
   return (
-    <div className="w-full bg-[#0a0a0d] border-b border-white/10 shrink-0 select-none z-30 transition-all flex flex-col">
+    <div className="w-full bg-base border-b border-white/10 shrink-0 select-none z-30 transition-all flex flex-col">
       {/* Primary Subheader Bar */}
       <div className="px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
         {/* Scrollable Niche Pills */}
@@ -103,7 +103,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black text-[#d1fe17] text-[9px] font-black flex items-center justify-center border border-[#d1fe17]">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black text-accent-ink text-[9px] font-black flex items-center justify-center border border-[#d1fe17]">
                 {activeFiltersCount}
               </span>
             )}
@@ -121,12 +121,12 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
           />
 
           {/* Right Slide-over Sidebar Drawer */}
-          <div className="relative z-10 w-full sm:w-[420px] h-full bg-[#0d0d12] border-l border-white/10 p-5 sm:p-6 flex flex-col justify-between overflow-y-auto no-scrollbar shadow-2xl animate-slide-left">
+          <div className="relative z-10 w-full sm:w-[420px] h-full bg-base border-l border-white/10 p-5 sm:p-6 flex flex-col justify-between overflow-y-auto no-scrollbar shadow-2xl animate-slide-left">
             <div className="space-y-6">
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-[#d1fe17]/10 flex items-center justify-center text-[#d1fe17]">
+                  <div className="w-8 h-8 rounded-xl bg-[#d1fe17]/10 flex items-center justify-center text-accent-ink">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <line x1="4" y1="21" x2="4" y2="14" />
                       <line x1="4" y1="10" x2="4" y2="3" />
@@ -161,7 +161,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
               {/* Search Chat Input */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-white flex items-center gap-1.5">
-                  <svg className="w-3.5 h-3.5 text-[#d1fe17]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg className="w-3.5 h-3.5 text-accent-ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                   <span>Search Chat</span>

@@ -38,7 +38,7 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         {/* Card 1: AI Influencer */}
         <div
           onClick={() => onSelectAction('influencer')}
-          className="bg-[#111116] border border-white/10 hover:border-fuchsia-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/10 group"
+          className="bg-surface border border-white/10 hover:border-fuchsia-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-fuchsia-500/10 group"
         >
           <div className="space-y-6">
             {/* Visual Icon / Avatar Preview */}
@@ -83,7 +83,7 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         {/* Card 2: Mood Board */}
         <div
           onClick={() => onSelectAction('moodboard')}
-          className="bg-[#111116] border border-white/10 hover:border-amber-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/10 group"
+          className="bg-surface border border-white/10 hover:border-amber-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-amber-500/10 group"
         >
           <div className="space-y-6">
             {/* Visual Icon Preview */}
@@ -130,7 +130,7 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
         {/* Card 3: New Project */}
         <div
           onClick={() => onSelectAction('project')}
-          className="bg-[#111116] border border-white/10 hover:border-cyan-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10 group"
+          className="bg-surface border border-white/10 hover:border-cyan-500/50 rounded-3xl p-8 flex flex-col justify-between space-y-8 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/10 group"
         >
           <div className="space-y-6">
             {/* Visual Icon Preview */}
@@ -145,7 +145,7 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-md font-mono">
                   Generation Canvas
                 </span>
-                <span className="text-[10px] text-[#d1fe17] font-bold bg-[#d1fe17]/10 px-2 py-0.5 rounded-md font-mono">
+                <span className="text-[10px] text-accent-ink font-bold bg-[#d1fe17]/10 px-2 py-0.5 rounded-md font-mono">
                   Studio
                 </span>
               </div>

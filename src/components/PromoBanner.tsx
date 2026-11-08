@@ -11,7 +11,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onAction }) => {
   if (!visible) return null;
 
   return (
-    <div className="relative w-full rounded-2xl bg-[#0c0d11] border border-[#23252e] px-4 py-2.5 md:px-6 md:py-3 mb-6 flex items-center justify-between gap-4 overflow-hidden shadow-xl">
+    <div className="relative w-full rounded-2xl bg-base border border-line px-4 py-2.5 md:px-6 md:py-3 mb-6 flex items-center justify-between gap-4 overflow-hidden shadow-xl">
       {/* Subtle Lime Ambient Glow on Left */}
       <div className="absolute -left-12 top-0 w-36 h-full bg-[#d1fe17]/10 blur-2xl pointer-events-none" />
 
@@ -20,9 +20,9 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onAction }) => {
         <span className="text-white font-extrabold text-xs md:text-sm tracking-wide uppercase leading-tight">
           Build Your Next Hype Machine
         </span>
-        <div className="flex items-center gap-1.5 text-[#d1fe17] font-black text-xs md:text-sm tracking-wide uppercase">
+        <div className="flex items-center gap-1.5 text-accent-ink font-black text-xs md:text-sm tracking-wide uppercase">
           <span>WITH</span>
-          <Sparkles className="w-3.5 h-3.5 fill-[#d1fe17]" />
+          <Sparkles className="w-3.5 h-3.5 fill-accent-ink" />
           <span>FREE GENERATIONS</span>
         </div>
       </div>
@@ -46,7 +46,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onAction }) => {
         </button>
         <button
           onClick={() => setVisible(false)}
-          className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#717684] hover:text-white transition-colors"
+          className="w-7 h-7 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted hover:text-white transition-colors"
           title="Dismiss"
         >
           <X className="w-3.5 h-3.5" />

@@ -83,9 +83,9 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
       />
 
       {/* Aligned Sidebar Drawer (Right on Desktop, Bottom Sheet on Mobile) */}
-      <aside className="fixed inset-y-0 right-0 z-50 w-full sm:w-[440px] md:w-[480px] bg-[#0d0d0f] border-l border-white/10 shadow-2xl flex flex-col text-white animate-in slide-in-from-right duration-250">
+      <aside className="fixed inset-y-0 right-0 z-50 w-full sm:w-[440px] md:w-[480px] bg-base border-l border-white/10 shadow-2xl flex flex-col text-white animate-in slide-in-from-right duration-250">
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#121215]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-surface">
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#d1fe17] animate-pulse" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-white">
@@ -108,7 +108,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
         {/* Drawer Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* 1. PERSISTENT SOUL IDENTITY LOCK BAR */}
-          <div className="p-4 rounded-2xl bg-[#16161a] border border-white/5 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-surface border border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-rose-500 to-orange-400 flex-shrink-0">
                 <img
@@ -120,7 +120,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-sm text-white">Baha Savage</span>
-                  <span className="text-[10px] bg-[#d1fe17]/20 text-[#d1fe17] px-1.5 py-0.5 rounded font-semibold">
+                  <span className="text-[10px] bg-[#d1fe17]/20 text-accent-ink px-1.5 py-0.5 rounded font-semibold">
                     SOUL 2.0
                   </span>
                 </div>
@@ -144,7 +144,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               {/* Model Picker */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-[#d1fe17]" />
+                  <Layers className="w-3.5 h-3.5 text-accent-ink" />
                   <span>Inference Engine</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -207,7 +207,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                   </span>
                   <button
                     onClick={() => setPromptText('luxury satin abaya in Dubai night skyline, cinematic bokeh, street lamps, 8k')}
-                    className="text-[10px] text-[#d1fe17] hover:underline"
+                    className="text-[10px] text-accent-ink hover:underline"
                   >
                     Load Preset
                   </button>
@@ -239,7 +239,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
           {/* 3. MODE: MOTION & CAMERA CONTROLS (KLING & SEEDANCE) */}
           {mode === 'motion' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-2xl bg-[#16161a] border border-white/5 space-y-3">
+              <div className="p-4 rounded-2xl bg-surface border border-white/5 space-y-3">
                 <label className="text-xs font-semibold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Camera className="w-3.5 h-3.5 text-fuchsia-400" />
                   <span>Cinematic Camera Movement</span>
@@ -275,10 +275,10 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               </div>
 
               {/* Motion Intensity Slider */}
-              <div className="space-y-2 p-4 rounded-2xl bg-[#16161a] border border-white/5">
+              <div className="space-y-2 p-4 rounded-2xl bg-surface border border-white/5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-semibold text-neutral-300">Motion Amplitude</span>
-                  <span className="font-bold text-[#d1fe17]">{motionIntensity}%</span>
+                  <span className="font-bold text-accent-ink">{motionIntensity}%</span>
                 </div>
                 <input
                   type="range"
@@ -341,7 +341,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
           {/* 5. MODE: PERSONA STUDIO */}
           {mode === 'persona' && (
             <div className="space-y-5">
-              <div className="p-4 rounded-2xl bg-[#16161a] border border-white/5 space-y-3">
+              <div className="p-4 rounded-2xl bg-surface border border-white/5 space-y-3">
                 <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                   Persona Face Embedding Matrix
                 </h3>
@@ -382,7 +382,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
         </div>
 
         {/* Drawer Sticky Footer Action Button */}
-        <div className="p-4 border-t border-white/10 bg-[#121215]">
+        <div className="p-4 border-t border-white/10 bg-surface">
           {mode === 'motion' ? (
             <button
               onClick={handleMotionSubmit}

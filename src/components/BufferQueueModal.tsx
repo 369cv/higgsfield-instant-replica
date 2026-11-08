@@ -93,11 +93,11 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl bg-[#141416] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div className="w-full max-w-2xl bg-surface border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#d1fe17]/20 border border-[#d1fe17]/30 flex items-center justify-center text-[#d1fe17]">
+            <div className="w-8 h-8 rounded-lg bg-[#d1fe17]/20 border border-[#d1fe17]/30 flex items-center justify-center text-accent-ink">
               <Calendar className="w-4 h-4" />
             </div>
             <div>
@@ -154,7 +154,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                 queue.map((post) => (
                   <div
                     key={post.id}
-                    className="p-4 rounded-xl bg-[#1c1c1f] border border-white/5 flex gap-4 items-start hover:border-white/10 transition-colors"
+                    className="p-4 rounded-xl bg-surface border border-white/5 flex gap-4 items-start hover:border-white/10 transition-colors"
                   >
                     <div className="w-20 h-20 rounded-lg overflow-hidden bg-black flex-shrink-0 border border-white/10">
                       <img
@@ -173,7 +173,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                           <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                           <span className="font-semibold text-white">{post.handle}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-[#d1fe17] font-medium bg-[#d1fe17]/10 px-2 py-0.5 rounded">
+                        <div className="flex items-center gap-1.5 text-xs text-accent-ink font-medium bg-[#d1fe17]/10 px-2 py-0.5 rounded">
                           <Clock className="w-3 h-3" />
                           <span>{post.scheduledTime}</span>
                         </div>

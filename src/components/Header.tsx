@@ -47,13 +47,13 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       {/* Desktop & Tablet Top Header Bar */}
-      <header className="sticky top-0 z-40 w-full bg-[#070709]/95 backdrop-blur-xl border-b border-white/5 transition-all">
+      <header className="sticky top-0 z-40 w-full bg-canvas/95 backdrop-blur-xl border-b border-white/5 transition-all">
         <div className="w-full px-4 sm:px-8 py-2.5 flex items-center justify-between">
           <div className="w-full flex items-center justify-between sm:justify-around gap-2 max-w-[1920px] mx-auto">
             {/* 1. Halal Fans Brand Reset */}
             <button
               onClick={onHomeClick}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-white hover:text-[#d1fe17] hover:bg-white/5 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white hover:text-accent-ink hover:bg-white/5 transition-all cursor-pointer"
               title="Halal Fans Prompt Vault"
             >
               <HalalFansOutlineLogo className="w-5 h-5 text-white" />
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onHomeClick}
               className={`hidden md:flex w-10 h-10 rounded-xl items-center justify-center transition-all cursor-pointer ${
                 activeTab === 'home'
-                  ? 'text-[#d1fe17] bg-[#d1fe17]/10'
+                  ? 'text-accent-ink bg-[#d1fe17]/10'
                   : 'text-neutral-400 hover:text-white hover:bg-white/5'
               }`}
               title="Home Feed (1,604 drops)"
@@ -75,7 +75,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 3. Video / Motion (Kling / Seedance) */}
             <button
               onClick={() => onOpenSidebar('motion')}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#d1fe17] hover:bg-white/5 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-accent-ink hover:bg-white/5 transition-all cursor-pointer"
               title="Camera Motion & Video (Kling / Seedance)"
             >
               <Tv className="w-5 h-5" />
@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 11. Quick Remix */}
             <button
               onClick={() => onOpenSidebar('create')}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-[#d1fe17] bg-[#d1fe17]/10 hover:bg-[#d1fe17]/20 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-accent-ink bg-[#d1fe17]/10 hover:bg-[#d1fe17]/20 transition-all cursor-pointer"
               title="Quick Prompt Remix"
             >
               <Sparkles className="w-5 h-5" />
@@ -168,11 +168,11 @@ export const Header: React.FC<HeaderProps> = ({
       </header>
 
       {/* Mobile Bottom Dock (Aligned native mobile controls for screens < 768px) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070709]/95 backdrop-blur-2xl border-t border-white/10 px-6 py-2 flex items-center justify-between">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-canvas/95 backdrop-blur-2xl border-t border-white/10 px-6 py-2 flex items-center justify-between">
         <button
           onClick={onHomeClick}
           className={`p-2 rounded-xl flex items-center justify-center ${
-            activeTab === 'home' ? 'text-[#d1fe17]' : 'text-neutral-400'
+            activeTab === 'home' ? 'text-accent-ink' : 'text-neutral-400'
           }`}
           title="Home"
         >
@@ -181,7 +181,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={() => onOpenSidebar('motion')}
-          className="p-2 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#d1fe17]"
+          className="p-2 rounded-xl flex items-center justify-center text-neutral-400 hover:text-accent-ink"
           title="Motion & Video"
         >
           <Tv className="w-6 h-6" />

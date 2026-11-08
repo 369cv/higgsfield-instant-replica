@@ -2,4 +2,6 @@
 export const BRAND = {
   name: 'Halal Fans',
   tagline: 'Daily image prompts. Motion soon.',
+  /** Shown as "Send feedback" in Profile & Settings when set. */
+  supportEmail: '',
 };

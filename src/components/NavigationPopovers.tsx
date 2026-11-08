@@ -56,7 +56,7 @@ export const CreatePopover: React.FC<PopoverProps & {
   return (
     <div
       ref={popoverRef}
-      className="absolute top-14 left-1/2 -translate-x-1/2 w-64 bg-[#262626]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+      className="absolute top-14 left-1/2 -translate-x-1/2 w-64 bg-line/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
     >
       <div className="px-3 py-2 text-xs font-semibold text-neutral-400 uppercase tracking-wider">
         Create Content
@@ -155,7 +155,7 @@ export const MoreMenuPopover: React.FC<PopoverProps & {
   return (
     <div
       ref={popoverRef}
-      className="absolute top-14 right-8 sm:right-16 w-68 bg-[#262626]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+      className="absolute top-14 right-8 sm:right-16 w-68 bg-line/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
     >
       <div className="space-y-0.5">
         <button
@@ -195,10 +195,10 @@ export const MoreMenuPopover: React.FC<PopoverProps & {
           className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/10 text-sm font-medium transition-colors text-left"
         >
           <span className="flex items-center gap-3.5">
-            <Calendar className="w-5 h-5 text-[#d1fe17]" />
+            <Calendar className="w-5 h-5 text-accent-ink" />
             <span className="font-medium text-white">Scheduled content</span>
           </span>
-          <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-[#d1fe17]/20 text-[#d1fe17] rounded">Buffer</span>
+          <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-[#d1fe17]/20 text-accent-ink rounded">Buffer</span>
         </button>
 
         <button
@@ -283,7 +283,7 @@ export const EcosystemPopover: React.FC<PopoverProps & {
   return (
     <div
       ref={popoverRef}
-      className="absolute top-14 right-2 sm:right-6 w-60 bg-[#262626]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
+      className="absolute top-14 right-2 sm:right-6 w-60 bg-line/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-2 z-50 text-white animate-in fade-in zoom-in-95 duration-150"
     >
       <div className="px-3 py-2 text-xs font-semibold text-neutral-400 uppercase tracking-wider">
         Also from Meta / Ecosystem

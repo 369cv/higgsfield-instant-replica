@@ -22,7 +22,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
   onPersonaClick
 }) => {
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#070709]/95 backdrop-blur-xl border-b border-white/10 transition-all">
+    <header className="sticky top-0 z-40 w-full bg-canvas/95 backdrop-blur-xl border-b border-white/10 transition-all">
       {/* Top Suite Bar */}
       <div className="w-full px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-4 max-w-[1920px] mx-auto">
         {/* Left: Brand + Higgsfield Suite Links */}
@@ -32,7 +32,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
               HF
             </div>
             <span className="font-extrabold text-sm tracking-tight text-white">Halal Fans</span>
-            <span className="text-[10px] bg-[#d1fe17]/20 text-[#d1fe17] px-2 py-0.5 rounded-full font-bold">SOUL 2.0</span>
+            <span className="text-[10px] bg-[#d1fe17]/20 text-accent-ink px-2 py-0.5 rounded-full font-bold">SOUL 2.0</span>
           </div>
 
           <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold text-neutral-300">
@@ -157,7 +157,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
       </div>
 
       {/* Subheader: Aesthetic Taxonomy Pills */}
-      <div className="w-full bg-[#0a0a0d] border-t border-white/5 px-4 sm:px-8 py-2 flex items-center gap-2 overflow-x-auto text-xs scrollbar-none">
+      <div className="w-full bg-base border-t border-white/5 px-4 sm:px-8 py-2 flex items-center gap-2 overflow-x-auto text-xs scrollbar-none">
         <span className="text-neutral-500 font-semibold text-[11px] mr-2 flex-shrink-0">TAXONOMY:</span>
         {[
           { name: 'All Drops', count: 1604 },

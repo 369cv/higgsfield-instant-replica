@@ -10,6 +10,8 @@ import { PromptsNicheSubheader, ClassificationFilters } from './components/Promp
 import { HiggsfieldProfileModal } from './components/HiggsfieldProfileModal';
 import { MobileNavBar, MobileTabBar, MobileDrawer, MobileView, MOBILE_TITLES } from './components/MobileShell';
 import { Heart } from 'lucide-react';
+import { ToastHost } from './components/ui';
+import { useSettings } from './services/settings';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 import { getCanonicalNiche } from './utils/categorizationFramework';
@@ -20,6 +22,7 @@ const FILTERS_KEY = 'halalfans_filters_v7';
 
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
+  const settings = useSettings();
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
   
   // Persistent Navigation State (Leave off where user killed app)
@@ -272,7 +275,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
+    <div className="min-h-screen bg-canvas text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
       {/* Mobile (iOS-style): top nav bar with hamburger + search */}
       <MobileNavBar
         title={MOBILE_TITLES[mobileView] || 'Prompts'}
@@ -331,7 +334,7 @@ export const App: React.FC = () => {
           <CardGrid
             items={displayedItems}
             layout="masonry"
-            cardSize={3}
+            cardSize={settings.gridDensity === 'compact' ? 0 : 3}
             splitByDate={false}
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
@@ -414,7 +417,16 @@ export const App: React.FC = () => {
       <HiggsfieldProfileModal
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
+        savedCount={favorites.size}
+        onOpenSaved={() => handleMobileNavigate('saved')}
+        onClearSaved={() => {
+          setFavorites(new Set());
+          try {
+            localStorage.setItem('halalfans_favorites', '[]');
+          } catch {}
+        }}
       />
+      <ToastHost />
     </div>
   );
 };

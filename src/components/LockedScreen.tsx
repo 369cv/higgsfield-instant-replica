@@ -37,13 +37,13 @@ export const LockedScreen: React.FC<LockedScreenProps> = ({
               <div key={i} className="aspect-[3/4] bg-gradient-to-br from-white/10 to-white/[0.02]" />
             ))}
       </div>
-      <div className="absolute inset-0 bg-[#070709]/60" aria-hidden="true" />
+      <div className="absolute inset-0 bg-canvas/60" aria-hidden="true" />
 
       {/* Lock card */}
       <div className="relative z-10 flex items-center justify-center min-h-app-content p-6">
-        <div className="w-full max-w-sm text-center rounded-3xl bg-[#111116]/85 border border-white/10 backdrop-blur-xl p-8 shadow-2xl">
+        <div className="w-full max-w-sm text-center rounded-3xl bg-surface/85 border border-white/10 backdrop-blur-xl p-8 shadow-2xl">
           <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#d1fe17]/10 border border-[#d1fe17]/30 flex items-center justify-center">
-            <Lock className="w-6 h-6 text-[#d1fe17]" />
+            <Lock className="w-6 h-6 text-accent-ink" />
           </div>
           <div className="inline-block mb-3 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.14em] uppercase text-neutral-300">
             Unlocking soon
