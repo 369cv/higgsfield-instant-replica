@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
 import { MoodBoardScreen } from './components/MoodBoardScreen';
+import { CreateHubScreen } from './components/CreateHubScreen';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
 import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
@@ -152,13 +153,12 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Pure-Icon Header Navigation with Guided Tooltips & Centered (+) Hub */}
+      {/* Pure-Icon Header Navigation with Guided Tooltips & Full-Page (+) Create Trigger */}
       <VaultHeader
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
-        onCreateAction={handleCreateAction}
       />
 
       {/* Main View Router */}
@@ -197,6 +197,16 @@ export const App: React.FC = () => {
             onAnimateReel={(board) => {
               handleOpenSidebar('motion');
             }}
+          />
+        </main>
+      )}
+
+      {/* Full-Page Create New Screen */}
+      {activeTab === 'create' && (
+        <main className="flex-1 w-full">
+          <CreateHubScreen
+            onReturnHome={() => setActiveTab('vault')}
+            onSelectAction={handleCreateAction}
           />
         </main>
       )}

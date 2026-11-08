@@ -1,13 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
-export type NavTab = 'vault' | 'moodboard' | 'influencer' | 'video' | 'assets';
+export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets';
 
 interface VaultHeaderProps {
   activeTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  onCreateAction: (action: 'influencer' | 'moodboard' | 'project') => void;
 }
 
 export const VaultHeader: React.FC<VaultHeaderProps> = ({
@@ -15,22 +14,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
   onSelectTab,
   searchQuery,
   onSearchChange,
-  onCreateAction,
 }) => {
-  const [isPlusMenuOpen, setIsPlusMenuOpen] = useState(false);
-  const plusMenuRef = useRef<HTMLDivElement>(null);
-
-  // Close plus menu on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (plusMenuRef.current && !plusMenuRef.current.contains(event.target as Node)) {
-        setIsPlusMenuOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
     <header className="sticky top-0 z-40 h-16 px-6 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all">
       {/* Left: Platform Logo Only & Minimal Search */}
@@ -73,7 +57,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         </div>
       </div>
 
-      {/* Center: Iconic Navigation + Centered (+) Creation Button */}
+      {/* Center: Iconic Navigation + Full-Page (+) Create Trigger */}
       <nav className="flex items-center gap-1.5 bg-white/5 p-1 rounded-2xl border border-white/10 relative">
         {/* 1. Home / Drops Feed Icon */}
         <button
@@ -111,86 +95,18 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           )}
         </button>
 
-        {/* 3. The Plus Sign (+) Button & 3-Option Popover */}
-        <div className="relative" ref={plusMenuRef}>
-          <button
-            onClick={() => setIsPlusMenuOpen(!isPlusMenuOpen)}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-black transition-all ${
-              isPlusMenuOpen
-                ? 'bg-[#d1fe17] text-black shadow-lg shadow-[#d1fe17]/30 scale-105'
-                : 'bg-[#d1fe17] text-black shadow-md shadow-[#d1fe17]/20 hover:scale-105 active:scale-95'
-            }`}
-            title="Create New"
-          >
-            +
-          </button>
-
-          {/* 3-Option Dropdown */}
-          {isPlusMenuOpen && (
-            <div className="absolute top-13 left-1/2 -translate-x-1/2 w-64 bg-[#111116] border border-white/15 rounded-2xl shadow-2xl p-2 z-50 space-y-1 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-3 py-1.5 text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                Create New
-              </div>
-
-              {/* Option 1: AI Influencer */}
-              <button
-                onClick={() => {
-                  setIsPlusMenuOpen(false);
-                  onCreateAction('influencer');
-                }}
-                className="w-full p-2.5 rounded-xl hover:bg-white/10 flex items-center gap-3 text-left transition-colors group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-lg bg-fuchsia-500/15 text-fuchsia-400 flex items-center justify-center text-sm font-bold group-hover:scale-105 transition-transform">
-                  👤
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white block group-hover:text-[#d1fe17] transition-colors">
-                    AI Influencer
-                  </span>
-                  <span className="text-[10px] text-neutral-400 block">Train persona & face lock</span>
-                </div>
-              </button>
-
-              {/* Option 2: Mood Board */}
-              <button
-                onClick={() => {
-                  setIsPlusMenuOpen(false);
-                  onCreateAction('moodboard');
-                }}
-                className="w-full p-2.5 rounded-xl hover:bg-white/10 flex items-center gap-3 text-left transition-colors group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center text-sm font-bold group-hover:scale-105 transition-transform">
-                  📋
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white block group-hover:text-[#d1fe17] transition-colors">
-                    Mood Board
-                  </span>
-                  <span className="text-[10px] text-neutral-400 block">Curate themed prompt drops</span>
-                </div>
-              </button>
-
-              {/* Option 3: New Project */}
-              <button
-                onClick={() => {
-                  setIsPlusMenuOpen(false);
-                  onCreateAction('project');
-                }}
-                className="w-full p-2.5 rounded-xl hover:bg-white/10 flex items-center gap-3 text-left transition-colors group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-sm font-bold group-hover:scale-105 transition-transform">
-                  📁
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white block group-hover:text-[#d1fe17] transition-colors">
-                    New Project
-                  </span>
-                  <span className="text-[10px] text-neutral-400 block">Fresh generation canvas</span>
-                </div>
-              </button>
-            </div>
-          )}
-        </div>
+        {/* 3. The Plus Sign (+) Button -> Direct Full-Page Routing to Create New */}
+        <button
+          onClick={() => onSelectTab('create')}
+          className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-black transition-all cursor-pointer ${
+            activeTab === 'create'
+              ? 'bg-[#d1fe17] text-black shadow-lg shadow-[#d1fe17]/30 scale-105'
+              : 'bg-[#d1fe17] text-black shadow-md shadow-[#d1fe17]/20 hover:scale-105 active:scale-95'
+          }`}
+          title="Create New (Full Page)"
+        >
+          +
+        </button>
 
         {/* 4. Video Studio Icon */}
         <button
@@ -229,7 +145,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
         </button>
       </nav>
 
-      {/* Right: Profile Avatar Only (No Credits Counter) */}
+      {/* Right: Profile Avatar Only */}
       <div className="flex items-center">
         <button
           onClick={() => onSelectTab('influencer')}
