@@ -37,6 +37,15 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
   const handleClearCache = () => {
     if (confirm('Clear local application cache and restore initial presets?')) {
       const keysToRemove = [
+        'halalfans_active_tab_v7',
+        'halalfans_selected_category_v7',
+        'halalfans_filters_v7',
+        'halalfans_audience_mode_v7',
+        'halalfans_selected_archetype_v7',
+        'halalfans_active_headshot_v7',
+        'halalfans_custom_prompt_v7',
+        'halalfans_managed_influencers_v7',
+        'halalfans_active_influencer_id_v7',
         'halalfans_active_tab_v6',
         'halalfans_selected_category_v6',
         'halalfans_filters_v6',
@@ -44,6 +53,8 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
         'halalfans_selected_archetype_v6',
         'halalfans_active_headshot_v6',
         'halalfans_custom_prompt_v6',
+        'halalfans_managed_influencers_v6',
+        'halalfans_active_influencer_id_v6',
       ];
       keysToRemove.forEach((k) => localStorage.removeItem(k));
       alert('Application cache cleared. The page will now reload.');

@@ -1,9 +1,9 @@
 import { StoredInfluencer, StudioHeadshot, VaultItem } from '../types';
 
-const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v6';
-const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id_v6';
-const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot_v6';
-const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots_v6';
+const MANAGED_INFLUENCERS_KEY = 'halalfans_managed_influencers_v7';
+const ACTIVE_INFLUENCER_ID_KEY = 'halalfans_active_influencer_id_v7';
+const ACTIVE_HEADSHOT_KEY = 'halalfans_active_headshot_v7';
+const CUSTOM_HEADSHOTS_KEY = 'halalfans_custom_headshots_v7';
 
 export const BAHA_SAVAGE: StoredInfluencer = {
   id: 'baha-savage-official',
@@ -22,9 +22,6 @@ export const BAHA_SAVAGE: StoredInfluencer = {
   createdAt: 'Official Character',
   isVaultPreset: true,
 };
-
-// Backwards-compatibility alias
-export const GABRIELA_SANCHEZ = BAHA_SAVAGE;
 
 export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
   {
@@ -67,17 +64,47 @@ export const INITIAL_STUDIO_HEADSHOTS: StudioHeadshot[] = [
 
 export const InfluencerStore = {
   /**
-   * Retrieves all managed influencers from localStorage, ensuring Baha Savage is primary.
+   * Purges old legacy caches and retrieves active influencers.
    */
   getAll(): StoredInfluencer[] {
     try {
+      // Purge legacy storage keys from previous iterations
+      const legacyKeys = [
+        'halalfans_managed_influencers_v1',
+        'halalfans_managed_influencers_v2',
+        'halalfans_managed_influencers_v3',
+        'halalfans_managed_influencers_v4',
+        'halalfans_managed_influencers_v5',
+        'halalfans_managed_influencers_v6',
+        'halalfans_active_influencer_id_v6',
+        'halalfans_active_headshot_v6',
+        'managed_influencers',
+        'active_influencer_id',
+      ];
+      legacyKeys.forEach((k) => {
+        try {
+          localStorage.removeItem(k);
+        } catch {
+          // ignore
+        }
+      });
+
       const stored = localStorage.getItem(MANAGED_INFLUENCERS_KEY);
       if (stored) {
         const parsed: StoredInfluencer[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
           const activeHeadshot = this.getActiveHeadshot();
-          const hasBaha = parsed.some((inf) => inf.id === BAHA_SAVAGE.id);
-          const list = parsed.map((inf) => {
+          // Filter out any stale/fake personas
+          const cleanList = parsed.filter(
+            (inf) =>
+              inf.name !== 'Gabriela Sanchez' &&
+              inf.instagramHandle !== '@gabrielasanchezs' &&
+              inf.id !== 'inf-gabriela' &&
+              inf.id !== 'gabriela-sanchez'
+          );
+
+          const hasBaha = cleanList.some((inf) => inf.id === BAHA_SAVAGE.id);
+          const sanitized = cleanList.map((inf) => {
             if (inf.id === BAHA_SAVAGE.id) {
               return {
                 ...inf,
@@ -93,14 +120,15 @@ export const InfluencerStore = {
           });
 
           if (!hasBaha) {
-            list.unshift({
+            sanitized.unshift({
               ...BAHA_SAVAGE,
               headshotImage: activeHeadshot,
               referenceImage: activeHeadshot,
               sampleImageUrl: activeHeadshot,
             });
           }
-          return list;
+          this.saveAll(sanitized);
+          return sanitized;
         }
       }
     } catch (e) {
@@ -131,7 +159,7 @@ export const InfluencerStore = {
   getActiveInfluencerId(): string {
     try {
       const id = localStorage.getItem(ACTIVE_INFLUENCER_ID_KEY);
-      if (id) return id;
+      if (id && id !== 'inf-gabriela' && id !== 'gabriela-sanchez') return id;
     } catch {
       // fallback
     }
@@ -160,19 +188,27 @@ export const InfluencerStore = {
     const newRecord: StoredInfluencer = {
       id,
       name: influencer.name || 'New Influencer',
-      instagramHandle: influencer.instagramHandle || `@${(influencer.name || 'influencer').toLowerCase().replace(/\s+/g, '')}`,
-      referenceImage: influencer.referenceImage || '/images/archetypes/business-penthouse.png',
-      sampleImageUrl: influencer.sampleImageUrl || influencer.referenceImage || '/images/archetypes/business-penthouse.png',
-      headshotImage: influencer.headshotImage || influencer.referenceImage || '/images/archetypes/business-penthouse.png',
+      instagramHandle:
+        influencer.instagramHandle ||
+        `@${(influencer.name || 'influencer').toLowerCase().replace(/\s+/g, '')}`,
+      referenceImage: influencer.referenceImage || '/images/archetypes/business-founder.png',
+      sampleImageUrl:
+        influencer.sampleImageUrl ||
+        influencer.referenceImage ||
+        '/images/archetypes/business-founder.png',
+      headshotImage:
+        influencer.headshotImage ||
+        influencer.referenceImage ||
+        '/images/archetypes/business-founder.png',
       category: influencer.category || 'Fashion & Editorial',
       ethnicity: influencer.ethnicity || 'Mediterranean / Levantine',
-      hair: influencer.hair || 'Long Brunette',
+      hair: influencer.hair || 'Long Dark Chocolate Brown',
       age: influencer.age || 28,
       dropsCount: influencer.dropsCount || 1,
       associatedDropIds: influencer.associatedDropIds || [],
       signaturePrompt:
         influencer.signaturePrompt ||
-        `A high-fashion studio portrait of ${influencer.name || 'an influencer'} on neutral studio gray background...`,
+        `A high-fashion studio portrait of ${influencer.name || 'an influencer'} on neutral studio background...`,
       fullPrompt: influencer.fullPrompt || influencer.signaturePrompt,
       createdAt: new Date().toLocaleDateString('en-US', {
         month: 'short',
@@ -219,14 +255,15 @@ export const InfluencerStore = {
         !saved.includes('baha-headshot-blazer-gray.png') &&
         !saved.includes('baha-headshot-ponytail-gray.png') &&
         !saved.includes('baha-headshot') &&
-        !saved.includes('da580608')
+        !saved.includes('da580608') &&
+        !saved.includes('beige_suit_model')
       ) {
         return saved;
       }
     } catch {
       // fallback
     }
-    return '/images/archetypes/business-penthouse.png';
+    return '/images/archetypes/business-founder.png';
   },
 
   setActiveHeadshot(imageUrl: string): void {
@@ -239,23 +276,24 @@ export const InfluencerStore = {
   },
 
   getStudioHeadshots(): StudioHeadshot[] {
-    let custom: StudioHeadshot[] = [];
     try {
-      const stored = localStorage.getItem(CUSTOM_HEADSHOTS_KEY);
-      if (stored) {
-        custom = JSON.parse(stored);
+      const custom = localStorage.getItem(CUSTOM_HEADSHOTS_KEY);
+      if (custom) {
+        const parsed = JSON.parse(custom);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return [...parsed, ...INITIAL_STUDIO_HEADSHOTS];
+        }
       }
-    } catch {
-      // fallback
+    } catch (e) {
+      console.error('Failed to read custom headshots', e);
     }
-    return [...custom, ...INITIAL_STUDIO_HEADSHOTS];
+    return INITIAL_STUDIO_HEADSHOTS;
   },
 
   addStudioHeadshot(headshot: StudioHeadshot): void {
     try {
-      const existing = this.getStudioHeadshots().filter(
-        (h) => !INITIAL_STUDIO_HEADSHOTS.some((init) => init.id === h.id)
-      );
+      const custom = localStorage.getItem(CUSTOM_HEADSHOTS_KEY);
+      const existing: StudioHeadshot[] = custom ? JSON.parse(custom) : [];
       const updated = [headshot, ...existing];
       localStorage.setItem(CUSTOM_HEADSHOTS_KEY, JSON.stringify(updated));
       this.setActiveHeadshot(headshot.imageUrl);

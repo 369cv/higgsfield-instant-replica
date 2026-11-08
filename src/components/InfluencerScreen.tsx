@@ -14,7 +14,7 @@ interface CharacterTypeOption {
   image: string;
 }
 
-export type AudienceMode = 'business' | 'creator' | 'actor';
+export type AudienceMode = 'business' | 'creator' | 'actor' | 'twin';
 
 interface ArchetypeOption {
   id: string;
@@ -115,24 +115,57 @@ const AUDIENCE_ARCHETYPES: Record<AudienceMode, ArchetypeOption[]> = {
       defaultPrompt: 'Cinematic night shot stepping out of luxury black car, looking back over shoulder in volumetric black coat, direct flash 35mm noir',
     },
   ],
+  twin: [
+    {
+      id: 'twin-candid',
+      name: 'Golden Hour Duo',
+      subtitle: 'Striking Model Features Close-Up',
+      image: '/images/archetypes/twin-candid.png',
+      defaultPrompt: 'A tightly-cropped close-up selfie captures two young Middle Eastern women with striking, model-like features in natural golden hour light',
+    },
+    {
+      id: 'twin-editorial',
+      name: 'Editorial Twin Stroll',
+      subtitle: 'Synchronized Haute Couture',
+      image: '/images/archetypes/twin-editorial.png',
+      defaultPrompt: 'A straight-on full-length shot features two young Middle Eastern women in synchronized luxury evening ensembles strolling down an upscale avenue',
+    },
+    {
+      id: 'twin-nightlife',
+      name: 'Dubai Twin Nightlife',
+      subtitle: 'Poolside Terrace Glamour',
+      image: '/images/archetypes/twin-nightlife.png',
+      defaultPrompt: 'Glamorous nightlife shot of two twin influencers beside illuminated luxury pool, high-flash 35mm aesthetic',
+    },
+    {
+      id: 'twin-candid-cafe',
+      name: 'Cafe Conversation',
+      subtitle: 'Direct Flash & Daylight',
+      image: '/images/archetypes/twin-candid-cafe.png',
+      defaultPrompt: 'Candid lifestyle cafe moment between twin creators sharing iced matcha and espresso, natural diffused cafe ambiance',
+    },
+  ],
 };
 
 const AUDIENCE_WARDROBES: Record<AudienceMode, string[]> = {
   business: ['Tailored Taupe Blazer', 'Executive Silk Blouse', 'Double-Breasted Pant Suit', 'Minimalist Charcoal Shift'],
   creator: ['Feather Halter Mini Dress', 'Flowing Silk Satin Abaya', 'Draped Silk Trench Coat', 'Seamless Gym Two-Piece', 'Poolside Halter Bikini'],
   actor: ['18% Gray Studio Crewneck', 'Vintage Black Leather Jacket', 'Period High-Collar Gown', 'Minimalist Black Camisole'],
+  twin: ['Matching Silk Sets', 'Synchronized Evening Tailoring', 'Minimalist Neutral Loungewear', 'Coordinated Trench Coats'],
 };
 
 const AUDIENCE_LIGHTING: Record<AudienceMode, string[]> = {
   business: ['Hasselblad 85mm Prime', 'Commercial Studio Softbox', 'Executive Key Light', 'Daylight Clean Boardroom'],
   creator: ['35mm Direct Night Flash', 'Kodak Portra 400 Film Grain', 'iPhone Raw Mirror Selfie', 'Golden Hour Sun-Drenched 50mm'],
   actor: ['Cooke Anamorphic 50mm', '18% Studio Gray Cyc Key Light', 'Cinematic Chiaroscuro Rim', 'Rembrandt Portrait Shadow'],
+  twin: ['Natural Golden Hour Glow', '35mm Direct Night Flash', 'Diffused Cafe Ambiance', 'Soft Sunset Rim'],
 };
 
 const AUDIENCE_ENVIRONMENTS: Record<AudienceMode, string[]> = {
   business: ['Skyline Penthouse Glass Balcony', 'High-Key Architecture Boardroom', 'Minimalist White Executive Studio'],
   creator: ['Burj Al Arab & Cabana Poolside', 'Milan Cobblestone Street Night', 'Terracotta Infinity Sun Terrace', 'Luxury Sunset Yacht Deck'],
   actor: ['Industry Casting Soundstage', 'Neutral 18% Gray Cyc Wall', 'Cinematic Theatrical Black Box'],
+  twin: ['Sun-Drenched Infinity Terrace', 'Upscale Avenue Stroll', 'Illuminated Luxury Poolside', 'Minimalist Glass Cafe'],
 };
 
 interface AccessoryOption {
@@ -293,7 +326,13 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
     setSelectedEnvironment(AUDIENCE_ENVIRONMENTS[mode][0]);
     showToast(
       `Trigger profile: ${
-        mode === 'business' ? 'Business Owner' : mode === 'creator' ? 'AI Creator' : 'Actor & Talent'
+        mode === 'business'
+          ? 'Business Owner'
+          : mode === 'creator'
+          ? 'AI Creator'
+          : mode === 'actor'
+          ? 'Actor & Talent'
+          : 'Digital Twin'
       }`
     );
   };
@@ -305,7 +344,14 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
     // Trigger Mode Badge
     tags.push({
       id: 'audience',
-      label: audienceMode === 'business' ? 'Business' : audienceMode === 'creator' ? 'Creator' : 'Actor/Twin',
+      label:
+        audienceMode === 'business'
+          ? 'Business'
+          : audienceMode === 'creator'
+          ? 'Creator'
+          : audienceMode === 'actor'
+          ? 'Actor'
+          : 'Twin',
       onRemove: () => handleSwitchAudienceMode('creator'),
     });
 
@@ -871,12 +917,12 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
               </button>
             </div>
 
-            {/* Target Audience Trigger Switcher (Business / AI Creator / Actor) */}
+            {/* Target Audience Trigger Switcher (Business / AI Creator / Actor / Twin) */}
             <div className="p-3 border-b border-white/10 bg-white/[0.01] shrink-0">
-              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-black/50 border border-white/10">
+              <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-black/50 border border-white/10">
                 <button
                   onClick={() => handleSwitchAudienceMode('business')}
-                  className={`py-2 px-1.5 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                  className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                     audienceMode === 'business'
                       ? 'bg-[#d1fe17] text-black shadow-md'
                       : 'text-neutral-400 hover:text-white hover:bg-white/5'
@@ -886,12 +932,12 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                     <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
                     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                   </svg>
-                  <span>Business</span>
+                  <span className="truncate">Business</span>
                 </button>
 
                 <button
                   onClick={() => handleSwitchAudienceMode('creator')}
-                  className={`py-2 px-1.5 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                  className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                     audienceMode === 'creator'
                       ? 'bg-[#d1fe17] text-black shadow-md'
                       : 'text-neutral-400 hover:text-white hover:bg-white/5'
@@ -900,12 +946,12 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                     <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
                   </svg>
-                  <span>AI Creator</span>
+                  <span className="truncate">Creator</span>
                 </button>
 
                 <button
                   onClick={() => handleSwitchAudienceMode('actor')}
-                  className={`py-2 px-1.5 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                  className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                     audienceMode === 'actor'
                       ? 'bg-[#d1fe17] text-black shadow-md'
                       : 'text-neutral-400 hover:text-white hover:bg-white/5'
@@ -921,7 +967,24 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                     <line x1="17" y1="17" x2="22" y2="17" />
                     <line x1="17" y1="7" x2="22" y2="7" />
                   </svg>
-                  <span>Actor / Twin</span>
+                  <span className="truncate">Actor</span>
+                </button>
+
+                <button
+                  onClick={() => handleSwitchAudienceMode('twin')}
+                  className={`py-2 px-1 rounded-xl text-[10px] font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                    audienceMode === 'twin'
+                      ? 'bg-[#d1fe17] text-black shadow-md'
+                      : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                  <span className="truncate">Twin</span>
                 </button>
               </div>
             </div>

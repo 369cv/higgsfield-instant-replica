@@ -17,9 +17,9 @@ import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 import { getCanonicalNiche } from './utils/categorizationFramework';
 
-const ACTIVE_TAB_KEY = 'halalfans_active_tab_v6';
-const SELECTED_CATEGORY_KEY = 'halalfans_selected_category_v6';
-const FILTERS_KEY = 'halalfans_filters_v6';
+const ACTIVE_TAB_KEY = 'halalfans_active_tab_v7';
+const SELECTED_CATEGORY_KEY = 'halalfans_selected_category_v7';
+const FILTERS_KEY = 'halalfans_filters_v7';
 
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
