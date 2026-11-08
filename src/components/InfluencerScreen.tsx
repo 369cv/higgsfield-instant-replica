@@ -29,9 +29,9 @@ const AUDIENCE_ARCHETYPES: Record<AudienceMode, ArchetypeOption[]> = {
     {
       id: 'biz-founder',
       name: 'Executive Founder',
-      subtitle: 'Boardroom & Strategy',
+      subtitle: 'Executive Lounge & Strategy',
       image: '/images/archetypes/business-founder.png',
-      defaultPrompt: 'Baha Savage as executive founder in an oversized light gray tailored suit blazer, resting on polished black marble countertop, modern luxury interior, 85mm prime lens',
+      defaultPrompt: 'High-end executive founder in sleek belted ensemble with gold-accented handbag, warm ambient wood-paneled executive lounge, crisp editorial lighting',
     },
     {
       id: 'biz-penthouse',
@@ -248,6 +248,35 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
   const [showPolicyModal, setShowPolicyModal] = useState<boolean>(false);
   const [hasAcceptedPolicy, setHasAcceptedPolicy] = useState<boolean>(false);
   const [policyCheckbox, setPolicyCheckbox] = useState<boolean>(false);
+
+  // Studio Interactive Dock states (Higgsfield Web Character Details & Creative Tools)
+  const [activeDockTool, setActiveDockTool] = useState<'overview' | 'color' | 'upscale' | 'enhancer' | 'relight' | 'inpaint' | 'angles'>('overview');
+  const [colorGradePreset, setColorGradePreset] = useState<'none' | 'cinematic' | 'teal_orange' | 'kodachrome' | 'noir' | 'golden_hour'>('none');
+  const [colorExposure, setColorExposure] = useState<number>(100);
+  const [colorContrast, setColorContrast] = useState<number>(100);
+  const [colorWarmth, setColorWarmth] = useState<number>(0);
+  const [colorSaturation, setColorSaturation] = useState<number>(100);
+  const [relightDirection, setRelightDirection] = useState<'front' | 'top' | 'key_left' | 'rim_right' | 'backlight'>('front');
+  const [angleYaw, setAngleYaw] = useState<number>(0);
+  const [anglePitch, setAnglePitch] = useState<number>(0);
+  const [angleZoom, setAngleZoom] = useState<number>(100);
+  const [upscaleFactor, setUpscaleFactor] = useState<'2K' | '4K' | '8K'>('4K');
+  const [enhancerLevel, setEnhancerLevel] = useState<number>(85);
+
+  const modalImageFilter = useMemo(() => {
+    let f = `contrast(${colorContrast}%) saturate(${colorSaturation}%) brightness(${colorExposure}%)`;
+    if (colorGradePreset === 'cinematic') f += ' sepia(15%) hue-rotate(-5deg)';
+    else if (colorGradePreset === 'teal_orange') f += ' hue-rotate(15deg) contrast(110%)';
+    else if (colorGradePreset === 'kodachrome') f += ' saturate(130%) contrast(105%)';
+    else if (colorGradePreset === 'noir') f += ' grayscale(100%) contrast(120%)';
+    else if (colorGradePreset === 'golden_hour') f += ' sepia(35%) brightness(105%)';
+    if (colorWarmth > 0) f += ` sepia(${colorWarmth}%)`;
+    return f;
+  }, [colorContrast, colorSaturation, colorExposure, colorGradePreset, colorWarmth]);
+
+  const modalImageTransform = useMemo(() => {
+    return `perspective(1000px) rotateY(${angleYaw}deg) rotateX(${-anglePitch}deg) scale(${angleZoom / 100})`;
+  }, [angleYaw, anglePitch, angleZoom]);
 
   const handleSwitchAudienceMode = (mode: AudienceMode) => {
     setAudienceMode(mode);
@@ -900,6 +929,72 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
             {/* Accordion Controls Container */}
             <div className="flex-1 overflow-y-auto no-scrollbar divide-y divide-white/5">
               
+              {/* 0. Official Higgsfield Character Type (13 Types from Creating an AI influencer 1.png) */}
+              <div className="p-4 space-y-3">
+                <button
+                  onClick={() => setExpandedSection(expandedSection === 'characterType' ? '' : 'characterType')}
+                  className="w-full flex items-center justify-between text-xs font-semibold text-neutral-200 hover:text-white transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <svg className="w-3.5 h-3.5 text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span>Character Type</span>
+                    <span className="text-[10px] text-neutral-500 font-mono">• 1</span>
+                  </div>
+                  <svg
+                    className={`w-3.5 h-3.5 text-neutral-400 transition-transform ${
+                      expandedSection === 'characterType' ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+
+                {expandedSection === 'characterType' && (
+                  <div className="grid grid-cols-3 gap-2 pt-1 animate-fade-in">
+                    {CHARACTER_TYPES.map((char) => {
+                      const isSelected = selectedCharacterType === char.id;
+                      return (
+                        <div
+                          key={char.id}
+                          onClick={() => {
+                            setSelectedCharacterType(char.id);
+                            showToast(`Character type: ${char.name}`);
+                          }}
+                          className={`group relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer transition-all bg-[#121217] flex flex-col justify-end p-2 select-none ${
+                            isSelected
+                              ? 'border-2 border-[#d1fe17] bg-[#16161e] shadow-lg ring-1 ring-[#d1fe17]/50'
+                              : 'border border-white/10 hover:border-white/30'
+                          }`}
+                        >
+                          <img
+                            src={char.image}
+                            alt={char.name}
+                            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+                          <span className="relative z-10 text-[11px] font-bold text-white tracking-tight truncate">
+                            {char.name}
+                          </span>
+                          {isSelected && (
+                            <div className="absolute top-1.5 right-1.5 z-10 w-4 h-4 rounded-full bg-[#d1fe17] text-black flex items-center justify-center shadow">
+                              <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5">
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
               {/* 1. Persona Archetype (Aligned with Vault & Selected Audience) */}
               <div className="p-4 space-y-3">
                 <button
@@ -1608,53 +1703,303 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
             
             {/* Left/Center Big Portrait Stage */}
             <div className="flex-1 bg-black/60 flex flex-col items-center justify-between p-6 relative overflow-hidden">
-              <div className="relative flex-1 w-full max-w-md my-auto aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center">
+              <div className="relative flex-1 w-full max-w-md my-auto aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex items-center justify-center bg-black/40">
                 <img
-                  src={activeHeadshotUrl || '/images/archetypes/business-founder.png'}
+                  src={activeHeadshotUrl || '/images/archetypes/business-penthouse.png'}
                   alt={activeInfluencer.name}
-                  className="w-full h-full object-cover object-top"
+                  style={{
+                    filter: modalImageFilter,
+                    transform: modalImageTransform,
+                    transition: 'transform 0.15s ease-out, filter 0.2s ease',
+                  }}
+                  className="w-full h-full object-cover object-top select-none will-change-transform"
                 />
+
+                {/* Floating Active Tool Badge */}
+                {activeDockTool !== 'overview' && (
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[#d1fe17] text-[10px] font-bold uppercase tracking-wider shadow flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#d1fe17] animate-pulse" />
+                    <span>{activeDockTool} active</span>
+                  </div>
+                )}
               </div>
 
+              {/* Interactive Studio Tool Drawer (When tool selected) */}
+              {activeDockTool === 'color' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 space-y-2.5 animate-fade-in shrink-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <span>Color Grading Presets</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-[#d1fe17] text-black font-extrabold uppercase">Live</span>
+                    </span>
+                    <button
+                      onClick={() => {
+                        setColorGradePreset('none');
+                        setColorExposure(100);
+                        setColorContrast(100);
+                        setColorWarmth(0);
+                        setColorSaturation(100);
+                        showToast('Reset color grade');
+                      }}
+                      className="text-[10px] text-neutral-400 hover:text-white transition-colors"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      { id: 'none', label: 'Original' },
+                      { id: 'cinematic', label: '35mm Film' },
+                      { id: 'teal_orange', label: 'Teal & Orange' },
+                      { id: 'kodachrome', label: 'Kodachrome' },
+                      { id: 'noir', label: 'B&W Noir' },
+                      { id: 'golden_hour', label: 'Golden Hour' },
+                    ].map((p) => (
+                      <button
+                        key={p.id}
+                        onClick={() => setColorGradePreset(p.id as any)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
+                          colorGradePreset === p.id
+                            ? 'bg-[#d1fe17] text-black font-bold shadow'
+                            : 'bg-white/5 text-neutral-300 hover:text-white border border-white/10'
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[10px] text-neutral-300">
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Warmth</span><span>{colorWarmth}%</span></div>
+                      <input type="range" min="0" max="60" value={colorWarmth} onChange={(e) => setColorWarmth(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Contrast</span><span>{colorContrast}%</span></div>
+                      <input type="range" min="80" max="140" value={colorContrast} onChange={(e) => setColorContrast(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Saturation</span><span>{colorSaturation}%</span></div>
+                      <input type="range" min="50" max="150" value={colorSaturation} onChange={(e) => setColorSaturation(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Exposure</span><span>{colorExposure}%</span></div>
+                      <input type="range" min="70" max="130" value={colorExposure} onChange={(e) => setColorExposure(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeDockTool === 'relight' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 space-y-2 animate-fade-in shrink-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">3D Studio Relighting Direction</span>
+                    <span className="text-[10px] text-neutral-400">Position key & rim lights</span>
+                  </div>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {[
+                      { id: 'front', label: 'Front Fill' },
+                      { id: 'top', label: 'Top Overhead' },
+                      { id: 'key_left', label: 'Left Key' },
+                      { id: 'rim_right', label: 'Right Rim' },
+                      { id: 'backlight', label: 'Back Halo' },
+                    ].map((light) => (
+                      <button
+                        key={light.id}
+                        onClick={() => {
+                          setRelightDirection(light.id as any);
+                          showToast(`Relit with ${light.label}`);
+                        }}
+                        className={`p-2 rounded-xl text-[11px] font-semibold text-center transition-all ${
+                          relightDirection === light.id
+                            ? 'bg-[#d1fe17] text-black shadow-lg'
+                            : 'bg-white/5 text-neutral-300 hover:text-white border border-white/10'
+                        }`}
+                      >
+                        {light.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeDockTool === 'angles' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 space-y-2 animate-fade-in shrink-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">3D Camera Turnaround & Pitch</span>
+                    <button
+                      onClick={() => {
+                        setAngleYaw(0);
+                        setAnglePitch(0);
+                        setAngleZoom(100);
+                        showToast('Reset camera angle');
+                      }}
+                      className="text-[10px] text-neutral-400 hover:text-white"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-[10px] text-neutral-300">
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Yaw (Pan)</span><span>{angleYaw}°</span></div>
+                      <input type="range" min="-30" max="30" value={angleYaw} onChange={(e) => setAngleYaw(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Pitch (Tilt)</span><span>{anglePitch}°</span></div>
+                      <input type="range" min="-20" max="20" value={anglePitch} onChange={(e) => setAnglePitch(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                    <div>
+                      <div className="flex justify-between mb-0.5"><span>Zoom</span><span>{angleZoom}%</span></div>
+                      <input type="range" min="90" max="130" value={angleZoom} onChange={(e) => setAngleZoom(Number(e.target.value))} className="w-full accent-[#d1fe17] h-1" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeDockTool === 'upscale' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 flex items-center justify-between animate-fade-in shrink-0">
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Resolution Upscaling</h4>
+                    <p className="text-[10px] text-neutral-400">Preserves microscopic pores, skin translucency and fiber details</p>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {(['2K', '4K', '8K'] as const).map((fac) => (
+                      <button
+                        key={fac}
+                        onClick={() => {
+                          setUpscaleFactor(fac);
+                          showToast(`Upscale target: ${fac}`);
+                        }}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                          upscaleFactor === fac
+                            ? 'bg-[#d1fe17] text-black shadow-md'
+                            : 'bg-white/5 text-neutral-300 hover:text-white border border-white/10'
+                        }`}
+                      >
+                        {fac}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeDockTool === 'enhancer' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 flex items-center justify-between gap-4 animate-fade-in shrink-0">
+                  <div className="flex-1">
+                    <div className="flex justify-between text-xs font-bold text-white mb-1">
+                      <span>Face & Iris Enhancer</span>
+                      <span className="font-mono text-[#d1fe17]">{enhancerLevel}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="50"
+                      max="100"
+                      value={enhancerLevel}
+                      onChange={(e) => setEnhancerLevel(Number(e.target.value))}
+                      className="w-full accent-[#d1fe17] h-1.5"
+                    />
+                  </div>
+                  <button
+                    onClick={() => showToast(`Facial enhancer set to ${enhancerLevel}%`)}
+                    className="px-3 py-2 rounded-xl bg-[#d1fe17] text-black font-extrabold text-[11px] hover:bg-[#bce414] transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+
+              {activeDockTool === 'inpaint' && (
+                <div className="w-full max-w-xl p-3 rounded-2xl bg-[#14141c]/95 border border-white/15 backdrop-blur-md mb-2 flex items-center justify-between gap-3 animate-fade-in shrink-0">
+                  <div>
+                    <h4 className="text-xs font-bold text-white">Smart Inpaint Brush</h4>
+                    <p className="text-[10px] text-neutral-400">Brush over garments, jewelry or background to swap elements</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => showToast('Inpaint brush activated')}
+                      className="px-3 py-1.5 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white/20 transition-colors"
+                    >
+                      Brush Size: 24px
+                    </button>
+                    <button
+                      onClick={() => showToast('Mask cleared')}
+                      className="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-400 font-bold text-xs hover:bg-rose-500/30 transition-colors"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Bottom Dock: Overview, Color Grading, Upscale, Enhancer, Relight, Inpaint, Angles */}
-              <div className="w-full max-w-xl flex items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-[#16161e]/90 border border-white/10 backdrop-blur-md mt-4 overflow-x-auto no-scrollbar shrink-0">
-                <button className="px-3 py-1.5 rounded-xl bg-white/10 text-white font-bold text-xs shrink-0">
+              <div className="w-full max-w-xl flex items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-[#16161e]/90 border border-white/10 backdrop-blur-md mt-2 overflow-x-auto no-scrollbar shrink-0">
+                <button
+                  onClick={() => setActiveDockTool('overview')}
+                  className={`px-3 py-1.5 rounded-xl font-bold text-xs shrink-0 transition-all ${
+                    activeDockTool === 'overview'
+                      ? 'bg-white/20 text-white'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
+                >
                   Overview
                 </button>
                 <button
-                  onClick={() => showToast('Color grading tool opened')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0 flex items-center gap-1"
+                  onClick={() => setActiveDockTool(activeDockTool === 'color' ? 'overview' : 'color')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 flex items-center gap-1 transition-all ${
+                    activeDockTool === 'color'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   <span>Color Grading</span>
-                  <span className="text-[9px] px-1 py-0.2 rounded bg-[#d1fe17] text-black font-bold">New</span>
+                  <span className={`text-[9px] px-1 py-0.2 rounded font-bold ${activeDockTool === 'color' ? 'bg-black text-[#d1fe17]' : 'bg-[#d1fe17] text-black'}`}>New</span>
                 </button>
                 <button
-                  onClick={() => showToast('Upscaling to 4K...')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0"
+                  onClick={() => setActiveDockTool(activeDockTool === 'upscale' ? 'overview' : 'upscale')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 transition-all ${
+                    activeDockTool === 'upscale'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   Upscale
                 </button>
                 <button
-                  onClick={() => showToast('Facial enhancer applied')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0"
+                  onClick={() => setActiveDockTool(activeDockTool === 'enhancer' ? 'overview' : 'enhancer')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 transition-all ${
+                    activeDockTool === 'enhancer'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   Enhancer
                 </button>
                 <button
-                  onClick={() => showToast('Studio relighting ready')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0"
+                  onClick={() => setActiveDockTool(activeDockTool === 'relight' ? 'overview' : 'relight')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 transition-all ${
+                    activeDockTool === 'relight'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   Relight
                 </button>
                 <button
-                  onClick={() => showToast('Inpaint mask ready')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0"
+                  onClick={() => setActiveDockTool(activeDockTool === 'inpaint' ? 'overview' : 'inpaint')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 transition-all ${
+                    activeDockTool === 'inpaint'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   Inpaint
                 </button>
                 <button
-                  onClick={() => showToast('Multi-angle camera controls ready')}
-                  className="px-3 py-1.5 rounded-xl text-neutral-400 hover:text-white font-medium text-xs shrink-0"
+                  onClick={() => setActiveDockTool(activeDockTool === 'angles' ? 'overview' : 'angles')}
+                  className={`px-3 py-1.5 rounded-xl font-medium text-xs shrink-0 transition-all ${
+                    activeDockTool === 'angles'
+                      ? 'bg-[#d1fe17] text-black font-extrabold shadow'
+                      : 'text-neutral-400 hover:text-white'
+                  }`}
                 >
                   Angles
                 </button>

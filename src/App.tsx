@@ -12,45 +12,100 @@ import { InfluencerScreen } from './components/InfluencerScreen';
 import { PromptsNicheSubheader, ClassificationFilters } from './components/PromptsNicheSubheader';
 import { ExploreScreen } from './components/ExploreScreen';
 import { VideoStudioScreen } from './components/VideoStudioScreen';
+import { HiggsfieldProfileModal } from './components/HiggsfieldProfileModal';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 import { getCanonicalNiche } from './utils/categorizationFramework';
 
+const ACTIVE_TAB_KEY = 'halalfans_active_tab_v6';
+const SELECTED_CATEGORY_KEY = 'halalfans_selected_category_v6';
+const FILTERS_KEY = 'halalfans_filters_v6';
+
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
-  const [activeTab, setActiveTab] = useState<NavTab>('vault');
+  
+  // Persistent Navigation State (Leave off where user killed app)
+  const [activeTab, setActiveTabState] = useState<NavTab>(() => {
+    try {
+      const saved = localStorage.getItem(ACTIVE_TAB_KEY);
+      if (saved && ['vault', 'moodboard', 'create', 'influencer', 'video', 'assets', 'explore'].includes(saved)) {
+        return saved as NavTab;
+      }
+    } catch {}
+    return 'vault';
+  });
+
+  const setActiveTab = (tab: NavTab) => {
+    setActiveTabState(tab);
+    try {
+      localStorage.setItem(ACTIVE_TAB_KEY, tab);
+    } catch {}
+  };
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Search & Taxonomy state
+  // Search & Taxonomy state with Persistence
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Drops');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  // Advanced Classification & Search Chat Filters
-  const [filters, setFilters] = useState<ClassificationFilters>({
-    niche: 'All',
-    searchChat: '',
-    aspectRatio: 'All',
-    lighting: 'All',
-    shotType: 'All',
+  const [selectedCategory, setSelectedCategoryState] = useState(() => {
+    try {
+      const saved = localStorage.getItem(SELECTED_CATEGORY_KEY);
+      if (saved) return saved;
+    } catch {}
+    return 'All Drops';
   });
 
-  const handleUpdateFilters = (updated: Partial<ClassificationFilters>) => {
-    setFilters((prev) => ({ ...prev, ...updated }));
+  const setSelectedCategory = (cat: string) => {
+    setSelectedCategoryState(cat);
+    try {
+      localStorage.setItem(SELECTED_CATEGORY_KEY, cat);
+    } catch {}
   };
 
-  const handleResetFilters = () => {
-    setFilters({
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  // Advanced Classification & Search Chat Filters with Persistence
+  const [filters, setFilters] = useState<ClassificationFilters>(() => {
+    try {
+      const saved = localStorage.getItem(FILTERS_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
       niche: 'All',
       searchChat: '',
       aspectRatio: 'All',
       lighting: 'All',
       shotType: 'All',
+    };
+  });
+
+  const handleUpdateFilters = (updated: Partial<ClassificationFilters>) => {
+    setFilters((prev) => {
+      const next = { ...prev, ...updated };
+      try {
+        localStorage.setItem(FILTERS_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
     });
+  };
+
+  const handleResetFilters = () => {
+    const defaultFilters: ClassificationFilters = {
+      niche: 'All',
+      searchChat: '',
+      aspectRatio: 'All',
+      lighting: 'All',
+      shotType: 'All',
+    };
+    setFilters(defaultFilters);
     setSelectedCategory('All Drops');
+    try {
+      localStorage.setItem(FILTERS_KEY, JSON.stringify(defaultFilters));
+      localStorage.setItem(SELECTED_CATEGORY_KEY, 'All Drops');
+    } catch {}
   };
 
   // Sidebar Drawer State
@@ -207,6 +262,7 @@ export const App: React.FC = () => {
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenProfile={() => setIsProfileOpen(true)}
       />
 
       {/* Main View Router */}
@@ -352,6 +408,15 @@ export const App: React.FC = () => {
         onSelectCategory={(cat) => {
           setSelectedCategory(cat);
           setIsSidebarOpen(false);
+        }}
+      />
+      {/* Higgsfield Profile & Settings Modal */}
+      <HiggsfieldProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        onOpenCreate={() => {
+          setIsProfileOpen(false);
+          setActiveTab('create');
         }}
       />
     </div>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Influencer Vault & Creation Flow Proposal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              lime: '#d1fe17',
+              dark: '#0a0a0d',
+              card: '#121216',
+              border: 'rgba(255, 255, 255, 0.08)',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #08080a;
+      color: #f3f4f6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(209, 254, 23, 0.4);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#08080a] text-neutral-100 overflow-x-hidden selection:bg-[#d1fe17] selection:text-black">
+
+  <!-- TOP PROPOSAL SWITCHER TOOLBAR (FOR INTERACTIVE DEMO REVIEW ONLY) -->
+  <div id="proposal-toolbar" class="sticky top-0 z-50 bg-[#121217] border-b border-white/15 px-4 py-2 flex items-center justify-between text-xs backdrop-blur-md">
+    <div class="flex items-center gap-2">
+      <span class="px-2 py-0.5 rounded bg-[#d1fe17]/20 text-[#d1fe17] font-mono text-[10px] font-bold uppercase tracking-wider">
+        Architecture Proposal
+      </span>
+      <span class="text-neutral-400 font-medium hidden sm:inline">Inspect Screens:</span>
+    </div>
+
+    <!-- Screen Switcher Tabs -->
+    <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar">
+      <button onclick="setScreen('vault-roster')" id="btn-screen-vault-roster" class="px-3 py-1 rounded-lg font-bold transition-all bg-[#d1fe17] text-black">
+        1. 400+ Extracted Influencers Vault
+      </button>
+      <button onclick="setScreen('studio-blank')" id="btn-screen-studio-blank" class="px-3 py-1 rounded-lg font-medium transition-all text-white/70 hover:text-white">
+        2. Studio Stage (Blank)
+      </button>
+      <button onclick="setScreen('studio-selected')" id="btn-screen-studio-selected" class="px-3 py-1 rounded-lg font-medium transition-all text-white/70 hover:text-white">
+        3. Studio Stage (Preset Loaded)
+      </button>
+      <button onclick="setScreen('studio-attributes')" id="btn-screen-studio-attributes" class="px-3 py-1 rounded-lg font-medium transition-all text-white/70 hover:text-white">
+        4. Attribute Builder & Sliders
+      </button>
+      <button onclick="setScreen('studio-policy')" id="btn-screen-studio-policy" class="px-3 py-1 rounded-lg font-medium transition-all text-white/70 hover:text-white">
+        5. Responsible Use Policy
+      </button>
+      <button onclick="setScreen('prompts-subheader')" id="btn-screen-prompts-subheader" class="px-3 py-1 rounded-lg font-medium transition-all text-white/70 hover:text-white border-l border-white/10 ml-1">
+        6. Prompts Page & Niche Subheader
+      </button>
+    </div>
+
+    <span class="text-[10px] text-neutral-400 font-mono hidden md:inline">NO HEADER OVERLAP</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 1. THE EXACT LIVE PRODUCTION HEADER (MATCHING https://halalfans.me)       -->
+  <!-- ========================================================================= -->
+  <header class="h-16 px-6 bg-[#0a0a0d]/95 border-b border-white/10 flex items-center justify-between shrink-0 select-none sticky top-10 z-40 backdrop-blur-xl">
+    
+    <!-- LEFT: MINIMAL BRAND LOGO ICON ONLY (ZERO TEXT) -->
+    <div class="flex items-center">
+      <button class="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#d1fe17] to-[#88a804] flex items-center justify-center text-black font-extrabold text-xs shadow-[0_0_15px_rgba(209,254,23,0.25)] hover:scale-105 transition-transform">
+        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- CENTER: THE 4 NAVIGATION MENU OPTIONS (STRICTLY PURE SVG ICONS, 0 EMOJIS) -->
+    <nav class="flex items-center gap-1 sm:gap-2 p-1 rounded-2xl bg-white/[0.03] border border-white/5">
+      <!-- 1. Prompts Vault -->
+      <button onclick="setScreen('prompts-subheader')" id="nav-btn-vault" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+        <span>Prompts Vault</span>
+      </button>
+
+      <!-- 2. AI Influencer (ACTIVE) -->
+      <button onclick="setScreen('vault-roster')" id="nav-btn-influencer" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#d1fe17] text-black shadow-[0_0_15px_rgba(209,254,23,0.25)] transition-all">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M19 8v6m3-3h-6" />
+        </svg>
+        <span>AI Influencer</span>
+      </button>
+
+      <!-- 3. Moodboard -->
+      <button class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="9" rx="1" />
+          <rect x="14" y="3" width="7" height="5" rx="1" />
+          <rect x="14" y="12" width="7" height="9" rx="1" />
+          <rect x="3" y="16" width="7" height="5" rx="1" />
+        </svg>
+        <span>Moodboard</span>
+      </button>
+
+      <!-- 4. Explore -->
+      <button class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+        </svg>
+        <span>Explore</span>
+      </button>
+    </nav>
+
+    <!-- RIGHT: SEARCH, ASSETS & PROFILE AVATAR CLUSTER -->
+    <div class="flex items-center gap-2">
+      <button class="w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+      </button>
+      <button class="w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2H4z" />
+        </svg>
+      </button>
+      <div class="ml-1">
+        <div class="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md">
+          <img src="/images/influencer-avatar.png" alt="Profile" class="w-full h-full rounded-full object-cover" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN CONTENT CONTAINER (SITS STRICTLY BELOW HEADER, ZERO OVERLAP)        -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 flex flex-col min-h-[calc(100vh-4rem)] relative bg-[#09090c]">
+
+    <!-- ======================================================================= -->
+    <!-- VIEW A: THE 400+ EXTRACTED INFLUENCER VAULT ROSTER                      -->
+    <!-- ======================================================================= -->
+    <div id="view-vault-roster" class="flex-1 flex flex-col p-6 max-w-7xl mx-auto w-full">
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/10">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#d1fe17]/10 text-[#d1fe17] border border-[#d1fe17]/20">
+              Prompt Vault Personas
+            </span>
+            <span class="text-xs text-neutral-400 font-mono">400 Stored Influencers</span>
+          </div>
+          <h1 class="text-2xl font-extrabold tracking-tight text-white">AI Influencer Vault</h1>
+          <p class="text-xs text-neutral-400 mt-1 max-w-2xl">
+            Each influencer extracted from the Prompt Vault is stored and ready-to-go. Select any persona to start a photoshoot, customize their look in the studio, or create a brand new character.
+          </p>
+        </div>
+
+        <!-- Primary Action: Create Brand New Influencer -->
+        <div class="flex items-center gap-3">
+          <button onclick="setScreen('studio-blank')" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs shadow-[0_0_20px_rgba(209,254,23,0.3)] hover:scale-[1.02] transition-all cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Create New Influencer</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+        <!-- Niche Category Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 text-xs">
+          <button class="px-3 py-1.5 rounded-xl bg-white/10 text-white font-bold border border-white/15">
+            All (400)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Nightlife & Flash (48)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Editorial & Luxury (74)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Gym & Fitness (62)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Dubai Poolside & Resort (80)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Streetwear & 35mm (56)
+          </button>
+          <button class="px-3 py-1.5 rounded-xl bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5">
+            Modest & Silk (80)
+          </button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative w-full md:w-64">
+          <input type="text" placeholder="Search influencers by name or style..." class="w-full bg-white/[0.04] border border-white/10 rounded-xl px-3 pl-8 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]" />
+          <svg class="w-3.5 h-3.5 text-neutral-500 absolute left-2.5 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Influencer Cards Grid (Showing Extracted Personas) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-2">
+        
+        <!-- CARD 0: CREATE NEW CARD (SLOT 1) -->
+        <div onclick="setScreen('studio-blank')" class="aspect-[3/4] rounded-2xl border-2 border-dashed border-white/15 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#d1fe17]/50 flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all group">
+          <div class="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-[#d1fe17]/20 border border-white/10 group-hover:border-[#d1fe17]/40 flex items-center justify-center text-neutral-400 group-hover:text-[#d1fe17] transition-all mb-3">
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </div>
+          <h4 class="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">Create Influencer</h4>
+          <p class="text-[10px] text-neutral-400 mt-1">Design attributes or upload custom reference face</p>
+        </div>
+
+        <!-- CARD 1: ARIA A. (Nightlife & Flash) -->
+        <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/4d37c94c-d52a-4ae7-9e7c-0957ef3c14d7_resize.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Aria A." />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+          
+          <!-- Top Badge -->
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
+              4 Drops
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+              Nightlife
+            </span>
+          </div>
+
+          <!-- Card Content -->
+          <div class="relative z-10 space-y-1">
+            <h3 class="text-xs font-bold text-white leading-tight">Aria A.</h3>
+            <p class="text-[10px] text-neutral-300">Caucasian · Brunette · Glamour</p>
+            
+            <div class="pt-2 flex items-center gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
+              <button onclick="setScreen('studio-selected')" class="flex-1 py-1 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors">
+                Open Studio
+              </button>
+              <button class="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="View 4 Vault Drops">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: AMIRA B. (Gym & Fitness) -->
+        <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/77ec7dae-7d92-4034-abab-c31de739cfc3.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Amira B." />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+          
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
+              4 Drops
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+              Fitness
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-1">
+            <h3 class="text-xs font-bold text-white leading-tight">Amira B.</h3>
+            <p class="text-[10px] text-neutral-300">Middle Eastern · Olive · Athletic</p>
+            
+            <div class="pt-2 flex items-center gap-1.5">
+              <button onclick="setScreen('studio-selected')" class="flex-1 py-1 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors">
+                Open Studio
+              </button>
+              <button class="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="View 4 Vault Drops">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: LAYLA C. (Editorial & Luxury) -->
+        <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/bb665ac2-fb7c-40b5-8a7e-3fe941456aa2.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Layla C." />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+          
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
+              4 Drops
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+              Luxury
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-1">
+            <h3 class="text-xs font-bold text-white leading-tight">Layla C.</h3>
+            <p class="text-[10px] text-neutral-300">Caucasian · Bronze Tan · Satin</p>
+            
+            <div class="pt-2 flex items-center gap-1.5">
+              <button onclick="setScreen('studio-selected')" class="flex-1 py-1 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors">
+                Open Studio
+              </button>
+              <button class="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="View 4 Vault Drops">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 4: ELENA D. (35mm Streetwear) -->
+        <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/9e65d411-2010-4714-8029-33ce51a826f5.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Elena D." />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+          
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
+              4 Drops
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+              Streetwear
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-1">
+            <h3 class="text-xs font-bold text-white leading-tight">Elena D.</h3>
+            <p class="text-[10px] text-neutral-300">Latina · Warm Olive · Oversized</p>
+            
+            <div class="pt-2 flex items-center gap-1.5">
+              <button onclick="setScreen('studio-selected')" class="flex-1 py-1 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors">
+                Open Studio
+              </button>
+              <button class="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white" title="View 4 Vault Drops">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 5: SOPHIA E. (Dubai Poolside) -->
+        <div class="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/70083ee1-6d26-4fc5-93a4-bb6ff94da280_resize.jpg" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Sophia E." />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none"></div>
+          
+          <div class="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
+              4 Drops
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10">
+              Resort
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-1">
+            <h3 class="text-xs font-bold text-white leading-tight">Sophia E.</h3>
+            <p class="text-[10px] text-neutral-300">Caucasian · Golden · High Fashion</p>
+            
+            <div class="pt-2 flex items-center gap-1.5">
+              <button onclick="setScreen('studio-selected')" class="flex-1 py-1 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors">
+                Open Studio
+              </button>
+              <button class="p-1 rounded-lg bg-white/10 hover:bg-white/20 text-white">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-6 p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between text-xs text-neutral-400">
+        <span>Showing 5 of 400 extracted prompt vault influencers. Full dataset pre-loaded in browser storage.</span>
+        <button class="px-4 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium">Load All 400 Personas</button>
+      </div>
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- VIEW B: THE AI INFLUENCER CREATION STUDIO (BLANK / CUSTOMIZE)           -->
+    <!-- ======================================================================= -->
+    <div id="view-studio" class="hidden flex-1 flex w-full">
+      
+      <!-- COLUMN 1: LEFT STORED INFLUENCERS ROSTER DRAWER -->
+      <aside class="w-64 border-r border-white/10 bg-[#0c0c10] flex flex-col shrink-0">
+        <div class="p-3 border-b border-white/10 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-white tracking-wide uppercase">Influencer Vault</span>
+            <span class="px-1.5 py-0.5 rounded-full bg-white/10 text-[9px] font-mono text-neutral-300">400</span>
+          </div>
+          <button onclick="setScreen('vault-roster')" class="text-[11px] text-[#d1fe17] hover:underline">View All</button>
+        </div>
+
+        <div class="p-2 border-b border-white/5">
+          <button onclick="setScreen('studio-blank')" class="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-dashed border-white/20 text-xs font-bold text-white transition-all">
+            <svg class="w-3.5 h-3.5 text-[#d1fe17]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>New Influencer</span>
+          </button>
+        </div>
+
+        <!-- Mini Roster List -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
+          <!-- Active Card: Aria A. -->
+          <div onclick="setScreen('studio-selected')" class="flex items-center gap-2.5 p-2 rounded-xl bg-[#d1fe17]/10 border border-[#d1fe17]/30 cursor-pointer">
+            <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/4d37c94c-d52a-4ae7-9e7c-0957ef3c14d7_resize.jpg" class="w-9 h-9 rounded-lg object-cover" />
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-bold text-white truncate">Aria A.</p>
+              <p class="text-[10px] text-neutral-400 truncate">Nightlife & Flash</p>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-[#d1fe17]"></span>
+          </div>
+
+          <!-- Amira B. -->
+          <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/[0.04] cursor-pointer">
+            <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/77ec7dae-7d92-4034-abab-c31de739cfc3.jpg" class="w-9 h-9 rounded-lg object-cover" />
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-medium text-neutral-200 truncate">Amira B.</p>
+              <p class="text-[10px] text-neutral-500 truncate">Gym & Fitness</p>
+            </div>
+          </div>
+
+          <!-- Layla C. -->
+          <div class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-white/[0.04] cursor-pointer">
+            <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/bb665ac2-fb7c-40b5-8a7e-3fe941456aa2.jpg" class="w-9 h-9 rounded-lg object-cover" />
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-medium text-neutral-200 truncate">Layla C.</p>
+              <p class="text-[10px] text-neutral-500 truncate">Editorial & Luxury</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- COLUMN 2: CENTER STUDIO STAGE -->
+      <section class="flex-1 flex flex-col items-center justify-between p-6 relative bg-gradient-to-b from-[#0a0a0d] to-[#060608] overflow-y-auto">
+        
+        <!-- Top Status Bar & Model Badges -->
+        <div class="w-full flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-neutral-400">
+              STUDIO CANVAS · 1024×1365
+            </span>
+            <span id="stage-persona-tag" class="px-2.5 py-1 rounded-full bg-[#d1fe17]/10 border border-[#d1fe17]/30 text-[10px] font-mono text-[#d1fe17]">
+              ARIA A. (VAULT PRESET)
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="px-3 py-1 rounded-xl bg-white/5 hover:bg-white/10 text-white text-xs font-medium flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+              </svg>
+              <span>Randomize Look</span>
+            </button>
+            <button onclick="setScreen('studio-policy')" class="px-3 py-1 rounded-xl bg-[#d1fe17] text-black text-xs font-bold hover:bg-[#bce414] transition-all">
+              Save Influencer
+            </button>
+          </div>
+        </div>
+
+        <!-- The Canvas Stage -->
+        <div class="relative w-full max-w-lg aspect-[3/4] rounded-3xl bg-[#121217] border border-white/15 overflow-hidden shadow-2xl flex items-center justify-center group">
+          
+          <!-- IMAGE WHEN LOADED -->
+          <img id="stage-loaded-image" src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" class="w-full h-full object-cover" />
+          
+          <!-- BLANK CANVAS PLACEHOLDER (SHOWN WHEN BLANK) -->
+          <div id="stage-blank-placeholder" class="hidden flex-col items-center justify-center p-8 text-center">
+            <div class="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 mb-4">
+              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h3 class="text-sm font-bold text-white">Clean Influencer Studio</h3>
+            <p class="text-xs text-neutral-400 mt-1.5 max-w-xs">
+              Configure attributes on the right panel or select a stored influencer from your vault to begin generation.
+            </p>
+          </div>
+
+          <!-- Stage Floating Action Dock -->
+          <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between p-2 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/15 shadow-xl">
+            <div class="flex items-center gap-1.5">
+              <button class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white" title="Regenerate Variation">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 4v6h-6M1 20v-6h6" />
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+              </button>
+              <button class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white" title="Generate Turnaround Sheet">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <line x1="9" y1="3" x2="9" y2="21" />
+                  <line x1="15" y1="3" x2="15" y2="21" />
+                </svg>
+              </button>
+            </div>
+
+            <button onclick="setScreen('studio-policy')" class="px-4 py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs flex items-center gap-2 hover:bg-[#bce414]">
+              <span>Generate Persona</span>
+              <span class="px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono">2 Credits</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Prompt Bar -->
+        <div class="w-full max-w-xl mt-4">
+          <div class="relative flex items-center">
+            <input type="text" value="A full-body photograph of Aria standing at the Burj Al Arab courtyard in pastel pink gown..." class="w-full bg-[#121217] border border-white/15 rounded-2xl px-4 py-3 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] pr-24" />
+            <button class="absolute right-2 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-[#d1fe17]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+              </svg>
+              <span>Edit Prompt</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLUMN 3: RIGHT ATTRIBUTE BUILDER ACCORDION -->
+      <aside class="w-80 border-l border-white/10 bg-[#0c0c10] flex flex-col shrink-0 overflow-y-auto custom-scrollbar p-4 space-y-4">
+        <div>
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">Attribute Builder</h2>
+          <p class="text-[10px] text-neutral-400 mt-0.5">Control identity characteristics</p>
+        </div>
+
+        <!-- Character Type -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-semibold text-neutral-300">Character Type</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button class="py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs">Human</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white text-xs">Cyberpunk</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white text-xs">Anime</button>
+          </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-semibold text-neutral-300">Gender</label>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button class="py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs">Female</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white text-xs">Male</button>
+          </div>
+        </div>
+
+        <!-- Ethnicity / Origin Base -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-semibold text-neutral-300">Ethnicity / Origin</label>
+          <div class="grid grid-cols-2 gap-1.5 text-xs">
+            <button class="py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold">Caucasian</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Middle Eastern</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Latina</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">South Asian</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">East Asian</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Afro-Caribbean</button>
+          </div>
+        </div>
+
+        <!-- Age Slider -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-semibold text-neutral-300">Age Bracket</span>
+            <span class="font-mono text-[#d1fe17]">22 Years Old</span>
+          </div>
+          <input type="range" min="18" max="50" value="22" class="w-full accent-[#d1fe17]" />
+        </div>
+
+        <!-- Hair Color & Style -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-semibold text-neutral-300">Hair Style & Color</label>
+          <div class="grid grid-cols-2 gap-1.5 text-xs">
+            <button class="py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold">Long Brunette</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Blonde Bob</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Dark Waves</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Auburn Curls</button>
+          </div>
+        </div>
+
+        <!-- Signature Aesthetic -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-semibold text-neutral-300">Signature Aesthetic</label>
+          <div class="grid grid-cols-2 gap-1.5 text-xs">
+            <button class="py-1.5 rounded-xl bg-[#d1fe17] text-black font-bold">Luxury & Silk</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Gym & Active</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">35mm Flash</button>
+            <button class="py-1.5 rounded-xl bg-white/5 text-neutral-400 hover:text-white">Dubai Poolside</button>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button onclick="setScreen('studio-policy')" class="w-full py-2.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs shadow-lg hover:scale-[1.02] transition-transform">
+            Save Persona to Vault
+          </button>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW C: PROMPTS PAGE WITH NICHE SUBHEADER NAVIGATION                   -->
+    <!-- ======================================================================= -->
+    <div id="view-prompts-subheader" class="hidden flex-1 flex flex-col">
+      <!-- THE NICHE SUBHEADER BAR -->
+      <div class="h-12 px-6 bg-[#0e0e12] border-b border-white/10 flex items-center justify-between shrink-0 select-none">
+        <div class="flex items-center gap-2 overflow-x-auto custom-scrollbar text-xs">
+          <button class="px-3 py-1 rounded-xl bg-[#d1fe17] text-black font-bold">
+            All Drops (1,604)
+          </button>
+          <button class="px-3 py-1 rounded-xl bg-white/5 text-neutral-300 hover:text-white border border-white/10 whitespace-nowrap">
+            Burj Al Arab & Poolside
+          </button>
+          <button class="px-3 py-1 rounded-xl bg-white/5 text-neutral-300 hover:text-white border border-white/10 whitespace-nowrap">
+            Editorial Silk & Abaya
+          </button>
+          <button class="px-3 py-1 rounded-xl bg-white/5 text-neutral-300 hover:text-white border border-white/10 whitespace-nowrap">
+            Gym & Fitness Selfies
+          </button>
+          <button class="px-3 py-1 rounded-xl bg-white/5 text-neutral-300 hover:text-white border border-white/10 whitespace-nowrap">
+            35mm Night Flash & Streetwear
+          </button>
+          <button class="px-3 py-1 rounded-xl bg-white/5 text-neutral-300 hover:text-white border border-white/10 whitespace-nowrap">
+            Yacht & Beach Resort
+          </button>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-2 text-xs text-neutral-400">
+          <span class="font-mono">Sorted by Latest</span>
+        </div>
+      </div>
+
+      <!-- Feed Grid Preview -->
+      <div class="p-6 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div class="aspect-[3/4] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative group">
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end">
+            <span class="text-[10px] text-white font-bold">Burj Al Arab Halter</span>
+            <span class="text-[9px] text-[#d1fe17]">Aria A.</span>
+          </div>
+        </div>
+        <div class="aspect-[3/4] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative group">
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end">
+            <span class="text-[10px] text-white font-bold">Gym Mirror Selfie</span>
+            <span class="text-[9px] text-[#d1fe17]">Amira B.</span>
+          </div>
+        </div>
+        <div class="aspect-[3/4] rounded-2xl bg-white/5 border border-white/10 overflow-hidden relative group">
+          <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_032931_c42263f6-eaf5-4d50-ac9c-9296754064bb_min.webp" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-2 flex flex-col justify-end">
+            <span class="text-[10px] text-white font-bold">Editorial Satin</span>
+            <span class="text-[9px] text-[#d1fe17]">Layla C.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- MODAL: RESPONSIBLE USE POLICY GATE (OVERLAY)                            -->
+    <!-- ======================================================================= -->
+    <div id="modal-policy" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="w-full max-w-md rounded-3xl bg-[#121217] border border-white/15 p-6 shadow-2xl space-y-4">
+        <div class="w-12 h-12 rounded-2xl bg-[#d1fe17]/10 border border-[#d1fe17]/20 flex items-center justify-center text-[#d1fe17]">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </div>
+
+        <div>
+          <h3 class="text-base font-bold text-white">Responsible AI Influencer Policy</h3>
+          <p class="text-xs text-neutral-400 mt-1 leading-relaxed">
+            By creating or using an AI influencer, you agree to transparent generation guidelines and verify that characters created do not impersonate real living individuals without consent.
+          </p>
+        </div>
+
+        <div class="p-3 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between text-xs">
+          <span class="text-neutral-300 font-medium">Automatic Watermark / Disclosure</span>
+          <span class="text-[#d1fe17] font-bold">Enabled</span>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <button onclick="closePolicyModal()" class="flex-1 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold">
+            Cancel
+          </button>
+          <button onclick="savePersonaAndClose()" class="flex-1 py-2.5 rounded-xl bg-[#d1fe17] hover:bg-[#bce414] text-black text-xs font-bold shadow-lg">
+            Agree & Store Influencer
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT STATE CONTROLLER -->
+  <script>
+    function setScreen(screen) {
+      // Hide all views
+      document.getElementById('view-vault-roster').classList.add('hidden');
+      document.getElementById('view-studio').classList.add('hidden');
+      document.getElementById('view-prompts-subheader').classList.add('hidden');
+      document.getElementById('modal-policy').classList.add('hidden');
+
+      // Update proposal buttons
+      const buttons = document.querySelectorAll('#proposal-toolbar button');
+      buttons.forEach(b => {
+        b.classList.remove('bg-[#d1fe17]', 'text-black', 'font-bold');
+        b.classList.add('text-white/70', 'font-medium');
+      });
+
+      const activeBtn = document.getElementById('btn-screen-' + screen);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-[#d1fe17]', 'text-black', 'font-bold');
+        activeBtn.classList.remove('text-white/70', 'font-medium');
+      }
+
+      // Nav header buttons
+      const navVault = document.getElementById('nav-btn-vault');
+      const navInf = document.getElementById('nav-btn-influencer');
+
+      if (screen === 'prompts-subheader') {
+        navVault.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#d1fe17] text-black shadow-[0_0_15px_rgba(209,254,23,0.25)] transition-all";
+        navInf.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all";
+        document.getElementById('view-prompts-subheader').classList.remove('hidden');
+      } else {
+        navInf.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#d1fe17] text-black shadow-[0_0_15px_rgba(209,254,23,0.25)] transition-all";
+        navVault.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-medium text-neutral-400 hover:text-white hover:bg-white/[0.06] transition-all";
+
+        if (screen === 'vault-roster') {
+          document.getElementById('view-vault-roster').classList.remove('hidden');
+        } else if (screen === 'studio-blank') {
+          document.getElementById('view-studio').classList.remove('hidden');
+          document.getElementById('stage-loaded-image').classList.add('hidden');
+          document.getElementById('stage-blank-placeholder').classList.remove('hidden');
+          document.getElementById('stage-persona-tag').innerText = 'NEW BLANK INFLUENCER';
+        } else if (screen === 'studio-selected' || screen === 'studio-attributes') {
+          document.getElementById('view-studio').classList.remove('hidden');
+          document.getElementById('stage-loaded-image').classList.remove('hidden');
+          document.getElementById('stage-blank-placeholder').classList.add('hidden');
+          document.getElementById('stage-persona-tag').innerText = 'ARIA A. (VAULT PRESET)';
+        } else if (screen === 'studio-policy') {
+          document.getElementById('view-studio').classList.remove('hidden');
+          document.getElementById('modal-policy').classList.remove('hidden');
+        }
+      }
+    }
+
+    function closePolicyModal() {
+      document.getElementById('modal-policy').classList.add('hidden');
+    }
+
+    function savePersonaAndClose() {
+      document.getElementById('modal-policy').classList.add('hidden');
+      alert('Influencer saved successfully to your Stored Influencer Vault!');
+      setScreen('vault-roster');
+    }
+  </script>
+</body>
+</html>

@@ -25,7 +25,31 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
   onClose,
   onOpenCreate
 }) => {
-  const [activeTab, setActiveTab] = useState<'All works' | 'Projects' | 'Shots' | 'Blog' | 'Rating' | 'Achievements'>('All works');
+  const [activeTab, setActiveTab] = useState<'All works' | 'Projects' | 'Shots' | 'Blog' | 'Rating' | 'Settings'>('All works');
+  const [modelChoice, setModelChoice] = useState(() => localStorage.getItem('halalfans_model_pref') || 'Seedance 2.0 Turbo');
+  const [aspectChoice, setAspectChoice] = useState(() => localStorage.getItem('halalfans_aspect_pref') || '9:16 Vertical Reel');
+  const [disclosureEnabled, setDisclosureEnabled] = useState(() => localStorage.getItem('halalfans_disclosure_pref') !== 'false');
+
+  const handleSavePref = (key: string, val: string) => {
+    localStorage.setItem(key, val);
+  };
+
+  const handleClearCache = () => {
+    if (confirm('Clear local application cache and restore initial presets?')) {
+      const keysToRemove = [
+        'halalfans_active_tab_v6',
+        'halalfans_selected_category_v6',
+        'halalfans_filters_v6',
+        'halalfans_audience_mode_v6',
+        'halalfans_selected_archetype_v6',
+        'halalfans_active_headshot_v6',
+        'halalfans_custom_prompt_v6',
+      ];
+      keysToRemove.forEach((k) => localStorage.removeItem(k));
+      alert('Application cache cleared. The page will now reload.');
+      window.location.reload();
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -150,7 +174,7 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
 
         {/* Profile Tabs Navigation */}
         <div className="flex items-center gap-2 border-b border-white/10 pb-4 overflow-x-auto">
-          {(['All works', 'Projects', 'Shots', 'Blog', 'Rating', 'Achievements'] as const).map((tab) => (
+          {(['All works', 'Projects', 'Shots', 'Blog', 'Rating', 'Settings'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -165,8 +189,106 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
           ))}
         </div>
 
-        {/* Sections based on screenshot */}
-        <div className="space-y-6">
+        {/* Settings Tab View */}
+        {activeTab === 'Settings' ? (
+          <div className="space-y-6 max-w-3xl">
+            {/* 1. Default Video Model */}
+            <div className="p-6 rounded-2xl bg-[#141416] border border-white/5 space-y-3">
+              <h3 className="text-sm font-bold text-white">Default Video Model</h3>
+              <p className="text-xs text-neutral-400">
+                Select the default video inference engine for storyboards and reels.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                {['Seedance 2.0 Turbo', 'LTX-Video', 'Flux.1 Pro'].map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => {
+                      setModelChoice(m);
+                      handleSavePref('halalfans_model_pref', m);
+                    }}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      modelChoice === m
+                        ? 'bg-[#d1fe17] text-black shadow-md'
+                        : 'bg-white/5 text-neutral-300 hover:text-white hover:bg-white/10 border border-white/5'
+                    }`}
+                  >
+                    {m}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 2. Output Aspect Ratio */}
+            <div className="p-6 rounded-2xl bg-[#141416] border border-white/5 space-y-3">
+              <h3 className="text-sm font-bold text-white">Default Aspect Ratio</h3>
+              <p className="text-xs text-neutral-400">
+                Preferred frame orientation for camera renders.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                {['9:16 Vertical Reel', '16:9 Cinema', '1:1 Feed'].map((a) => (
+                  <button
+                    key={a}
+                    onClick={() => {
+                      setAspectChoice(a);
+                      handleSavePref('halalfans_aspect_pref', a);
+                    }}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      aspectChoice === a
+                        ? 'bg-[#d1fe17] text-black shadow-md'
+                        : 'bg-white/5 text-neutral-300 hover:text-white hover:bg-white/10 border border-white/5'
+                    }`}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Responsible Use & Policy Disclosure */}
+            <div className="p-6 rounded-2xl bg-[#141416] border border-white/5 flex items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-white">Synthetic Media Watermark</h3>
+                <p className="text-xs text-neutral-400">
+                  Embed responsible AI disclosure tags in exported media metadata.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  const nextVal = !disclosureEnabled;
+                  setDisclosureEnabled(nextVal);
+                  handleSavePref('halalfans_disclosure_pref', String(nextVal));
+                }}
+                className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
+                  disclosureEnabled ? 'bg-[#d1fe17]' : 'bg-white/20'
+                }`}
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-black transition-transform absolute top-0.5 ${
+                    disclosureEnabled ? 'left-6.5' : 'left-0.5'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* 4. App Cache & Persistence Manager */}
+            <div className="p-6 rounded-2xl bg-[#141416] border border-white/5 flex items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-white">Reset Local Session & Cache</h3>
+                <p className="text-xs text-neutral-400">
+                  Clear stored navigation state, filters, and custom prompts to start fresh.
+                </p>
+              </div>
+              <button
+                onClick={handleClearCache}
+                className="px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-bold transition-colors cursor-pointer"
+              >
+                Clear Cache
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Works & Showcase sections */
+          <div className="space-y-6">
           {/* Projects Card */}
           <div className="p-6 rounded-2xl bg-[#141416] border border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-white/10 transition-colors">
             <div className="flex items-center gap-5">
@@ -224,7 +346,8 @@ export const HiggsfieldProfileModal: React.FC<HiggsfieldProfileModalProps> = ({
             </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 };

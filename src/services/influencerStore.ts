@@ -161,9 +161,9 @@ export const InfluencerStore = {
       id,
       name: influencer.name || 'New Influencer',
       instagramHandle: influencer.instagramHandle || `@${(influencer.name || 'influencer').toLowerCase().replace(/\s+/g, '')}`,
-      referenceImage: influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
-      sampleImageUrl: influencer.sampleImageUrl || influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
-      headshotImage: influencer.headshotImage || influencer.referenceImage || '/images/baha/baha-headshot-openhair-gray.png',
+      referenceImage: influencer.referenceImage || '/images/archetypes/business-penthouse.png',
+      sampleImageUrl: influencer.sampleImageUrl || influencer.referenceImage || '/images/archetypes/business-penthouse.png',
+      headshotImage: influencer.headshotImage || influencer.referenceImage || '/images/archetypes/business-penthouse.png',
       category: influencer.category || 'Fashion & Editorial',
       ethnicity: influencer.ethnicity || 'Mediterranean / Levantine',
       hair: influencer.hair || 'Long Brunette',
@@ -217,14 +217,16 @@ export const InfluencerStore = {
         saved &&
         !saved.includes('baha-headshot-openhair-gray.png') &&
         !saved.includes('baha-headshot-blazer-gray.png') &&
-        !saved.includes('baha-headshot-ponytail-gray.png')
+        !saved.includes('baha-headshot-ponytail-gray.png') &&
+        !saved.includes('baha-headshot') &&
+        !saved.includes('da580608')
       ) {
         return saved;
       }
     } catch {
       // fallback
     }
-    return '/images/archetypes/business-founder.png';
+    return '/images/archetypes/business-penthouse.png';
   },
 
   setActiveHeadshot(imageUrl: string): void {

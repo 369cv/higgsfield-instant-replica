@@ -7,12 +7,14 @@ interface VaultHeaderProps {
   activeTab: NavTab;
   onSelectTab: (tab: NavTab) => void;
   onOpenSearch: () => void;
+  onOpenProfile?: () => void;
 }
 
 export const VaultHeader: React.FC<VaultHeaderProps> = ({
   activeTab,
   onSelectTab,
   onOpenSearch,
+  onOpenProfile,
 }) => {
   const [avatarUrl, setAvatarUrl] = useState<string>(() =>
     InfluencerStore.getActiveHeadshot()
@@ -201,16 +203,21 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           </svg>
         </button>
 
-        {/* Profile Avatar Display (Unlinked) */}
-        <div className="ml-1">
-          <div className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none">
+        {/* Profile Avatar Button */}
+        <button
+          onClick={onOpenProfile}
+          className="ml-1 cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95"
+          title="Open Profile & Settings"
+          aria-label="Open Profile & Settings"
+        >
+          <div className="w-9 h-9 rounded-full p-0.5 bg-gradient-to-tr from-amber-500 via-rose-500 to-fuchsia-500 shadow-md select-none overflow-hidden">
             <img
               src={avatarUrl}
               alt="Profile Avatar"
-              className="w-full h-full rounded-full object-cover"
+              className="w-full h-full rounded-full object-cover object-top"
             />
           </div>
-        </div>
+        </button>
       </div>
     </header>
   );

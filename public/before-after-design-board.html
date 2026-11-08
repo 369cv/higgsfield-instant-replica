@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Vault - Before & After UI Component & Screen Design Board</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              lime: '#d1fe17',
+              limeHover: '#bbf00e',
+              dark: '#070709',
+              card: '#0e0e12',
+              border: 'rgba(255, 255, 255, 0.08)',
+              subtext: '#8a8a93'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #050507;
+      color: #f3f3f5;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body class="p-8 max-w-[1600px] mx-auto flex flex-col gap-12 text-white">
+
+  <!-- HEADER INTRO -->
+  <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-[#d1fe17]/20 border border-[#d1fe17]/40 text-[#d1fe17] text-[11px] font-bold tracking-wider uppercase">
+          Visual UI Design Reference
+        </span>
+        <span class="text-xs text-brand-subtext font-mono">Screen-by-Screen Component Evolution</span>
+      </div>
+      <h1 class="text-3xl font-extrabold tracking-tight">Prompt Vault: Before vs. After Visual Architecture</h1>
+      <p class="text-xs text-brand-subtext mt-1 max-w-2xl">
+        Concrete side-by-side visual comparisons of navigation shell, Pinterest segregation, self-contained prompt generation studio, and tutorial inspector/editor.
+      </p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="px-3 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-right">
+        <span class="text-[10px] text-white/50 block font-mono">STATUS</span>
+        <span class="text-xs font-bold text-[#d1fe17]">PROPOSAL MOCKUPS (ZERO CODE TOUCHED)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- COMPARISON 1: NAVIGATION & SHELL ARCHITECTURE -->
+  <!-- ========================================================================= -->
+  <section class="flex flex-col gap-4">
+    <div class="flex items-center gap-3">
+      <span class="w-7 h-7 rounded-lg bg-blue-500/20 border border-blue-500/40 text-blue-400 flex items-center justify-center text-xs font-bold font-mono">01</span>
+      <div>
+        <h2 class="text-lg font-bold text-white">Navigation Architecture: Top Header vs. Side Navigation Menu</h2>
+        <p class="text-xs text-brand-subtext">Transitioning from a top navbar with isolated icons to an Instagram + Buffer hybrid side rail with clear word labels and pure SVG icons.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- BEFORE: TOP HEADER -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-red-500/30 flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span> BEFORE: Top Header (Current Live)
+          </span>
+          <span class="text-[10px] text-white/40 font-mono">Isolated top right icons</span>
+        </div>
+
+        <!-- MOCKUP OF CURRENT TOP BAR -->
+        <div class="rounded-xl border border-white/10 bg-[#070709] p-4 flex flex-col gap-4">
+          <div class="h-14 px-4 bg-[#0a0a0d] rounded-lg border border-white/10 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded bg-[#d1fe17] text-black text-xs font-black flex items-center justify-center">PV</div>
+              <span class="text-xs font-bold text-white">PROMPT VAULT</span>
+            </div>
+            <!-- Current Top Right Cluster -->
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/70" title="Search">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/70" title="Assets">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center text-[10px] font-bold text-white">
+                SM
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-3 bg-red-500/5 rounded-lg border border-red-500/20 text-xs text-red-300 flex flex-col gap-1">
+            <span class="font-semibold">• No visible navigation for Mood Board, Influencer, or Prompts.</span>
+            <span class="font-semibold">• Top navigation steals vertical canvas real-estate from high-res portrait drops.</span>
+            <span class="font-semibold">• No quick workspace switcher or plan context.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER: SIDE NAVIGATION MENU -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-[#d1fe17]/40 flex flex-col gap-3 shadow-[0_0_30px_rgba(209,254,23,0.05)]">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-[#d1fe17] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#d1fe17]"></span> AFTER: Instagram + Buffer Side Navigation Menu
+          </span>
+          <span class="text-[10px] text-[#d1fe17] font-mono">Word + Pure SVG Vector Icon</span>
+        </div>
+
+        <!-- MOCKUP OF NEW SIDEBAR COMPONENT -->
+        <div class="rounded-xl border border-white/10 bg-[#0a0a0e] p-4 flex gap-4">
+          <!-- The Sidebar Component Rail -->
+          <div class="w-56 bg-[#070709] rounded-xl border border-white/10 p-3 flex flex-col justify-between shrink-0">
+            <div class="flex flex-col gap-3">
+              <!-- Logo -->
+              <div class="flex items-center gap-2 px-1">
+                <div class="w-6 h-6 rounded-lg bg-[#d1fe17] text-black flex items-center justify-center text-xs font-bold">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                </div>
+                <span class="text-xs font-bold tracking-tight text-white">PROMPT VAULT</span>
+              </div>
+
+              <!-- Buffer Workspace Switcher -->
+              <div class="p-1.5 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between text-[11px]">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-4 h-4 rounded bg-white/10 flex items-center justify-center text-[9px] font-bold">B</div>
+                  <span class="font-semibold text-white/90">Baha Savage</span>
+                </div>
+                <span class="text-[9px] text-[#d1fe17]">Studio</span>
+              </div>
+
+              <!-- Nav items with text and icon -->
+              <div class="flex flex-col gap-1 text-xs">
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-[#d1fe17]/10 text-[#d1fe17] font-bold border border-[#d1fe17]/20">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                  <span>Prompts</span>
+                  <span class="ml-auto text-[9px] font-mono">1.6k</span>
+                </div>
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-white/70 hover:text-white">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                  <span>Mood Board</span>
+                </div>
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-white/70 hover:text-white">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                  <span>Influencer</span>
+                  <span class="ml-auto text-[8px] px-1 rounded bg-pink-500/20 text-pink-400">HOT</span>
+                </div>
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-white/70 hover:text-white">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                  <span>Create</span>
+                </div>
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-white/70 hover:text-white">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
+                  <span>Assets</span>
+                  <span class="ml-auto text-[9px] font-mono text-white/30">0</span>
+                </div>
+                <div class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-white/70 hover:text-white">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  <span>Search</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile at bottom -->
+            <div class="pt-2 border-t border-white/5 flex items-center gap-2">
+              <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 text-[9px] font-bold flex items-center justify-center">SM</div>
+              <span class="text-[11px] font-semibold text-white/90">savage_mode</span>
+            </div>
+          </div>
+
+          <!-- Feature Highlights Callout -->
+          <div class="flex-1 flex flex-col justify-center gap-2 text-xs text-brand-subtext">
+            <div class="p-2.5 rounded-lg bg-[#d1fe17]/5 border border-[#d1fe17]/20 text-white/90">
+              <span class="font-bold text-[#d1fe17] block mb-1">Key Advantages:</span>
+              <ul class="list-disc list-inside space-y-1 text-[11px] text-white/80">
+                <li>Instagram-style fixed left rail gives maximum vertical space for portrait drops.</li>
+                <li>Clear text labels + pure SVG icons (0 emojis).</li>
+                <li>Buffer-style workspace context (`Baha Savage / Personal Studio`).</li>
+                <li>Immediate access to `Mood Board`, `Influencer`, `Prompts`, `Create`, `Assets`, and `Search`.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- COMPARISON 2: PINTEREST-STYLE CONTENT SEGREGATION -->
+  <!-- ========================================================================= -->
+  <section class="flex flex-col gap-4">
+    <div class="flex items-center gap-3">
+      <span class="w-7 h-7 rounded-lg bg-pink-500/20 border border-pink-500/40 text-pink-400 flex items-center justify-center text-xs font-bold font-mono">02</span>
+      <div>
+        <h2 class="text-lg font-bold text-white">Content Segregation: Pinterest Taxonomy & Board Pinning</h2>
+        <p class="text-xs text-brand-subtext">Organizing the 1,606 prompt drops by visual themes with one-click "Save to Board" pinning and visual lens search.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- BEFORE: LINEAR UNSEGREGATED FEED -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-red-500/30 flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span> BEFORE: Linear Feed
+          </span>
+          <span class="text-[10px] text-white/40 font-mono">No visual taxonomy</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#070709] p-4 flex flex-col gap-3">
+          <div class="flex items-center justify-between text-xs text-white/60">
+            <span>All Drops (Linear Stream)</span>
+            <button class="px-2.5 py-1 rounded bg-white/5 border border-white/10">Filter</button>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" class="rounded-lg aspect-[3/4] object-cover opacity-60" />
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261106_033015_1a550c13-3ba4-4a03-8d73-1baaf405cfff_min.webp" class="rounded-lg aspect-[3/4] object-cover opacity-60" />
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_787510e3-c547-4994-b0ef-c7004c10e5d7_min.webp" class="rounded-lg aspect-[3/4] object-cover opacity-60" />
+          </div>
+          <p class="text-[11px] text-red-400">All themes (luxury dresses, gym workouts, night streetwear) are mixed together without thematic segmentation or board collections.</p>
+        </div>
+      </div>
+
+      <!-- AFTER: PINTEREST TAXONOMY & BOARD PINNING -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-[#d1fe17]/40 flex flex-col gap-3 shadow-[0_0_30px_rgba(209,254,23,0.05)]">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-[#d1fe17] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#d1fe17]"></span> AFTER: Pinterest-Style Thematic Segregation
+          </span>
+          <span class="text-[10px] text-[#d1fe17] font-mono">Topic Pills + Board Pinning</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#070709] p-4 flex flex-col gap-3">
+          <!-- Topic Pills Bar -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+            <span class="px-2.5 py-1 rounded-lg bg-white text-black font-bold shrink-0">All (1.6k)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 text-white/80 border border-white/10 shrink-0 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Burj Poolside
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 text-white/80 border border-white/10 shrink-0 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span> Editorial Silk
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 text-white/80 border border-white/10 shrink-0 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Gym Selfies
+            </span>
+          </div>
+
+          <!-- Card with Pinterest Hover Actions -->
+          <div class="relative rounded-xl overflow-hidden aspect-[16/9] bg-neutral-900 border border-white/10">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" class="w-full h-full object-cover object-top" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/60 p-3 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <!-- PINTEREST SAVE BUTTON -->
+                <button class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#d1fe17] text-black font-extrabold text-[11px] shadow-lg">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 5a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM5 8a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zM8 11a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zM10 14a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1z" /></svg>
+                  Save to Board
+                </button>
+                <div class="flex items-center gap-1">
+                  <div class="w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-white/80">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                  </div>
+                  <div class="w-6 h-6 rounded-full bg-black/60 flex items-center justify-center text-white/80">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-bold text-white">Burj Al Arab Halter Dress</span>
+                <span class="text-[10px] text-white/60">Pinned in 42 Boards</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- COMPARISON 3: IN-PLATFORM PROMPT STUDIO (NO CHATGPT / CLAUDE) -->
+  <!-- ========================================================================= -->
+  <section class="flex flex-col gap-4">
+    <div class="flex items-center gap-3">
+      <span class="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xs font-bold font-mono">03</span>
+      <div>
+        <h2 class="text-lg font-bold text-white">Prompt Vault Workflow: Eliminating ChatGPT / Claude Round-Tripping</h2>
+        <p class="text-xs text-brand-subtext">Empowering creators to select models, lock face personas, and click recipe modifiers right in the studio.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- BEFORE: EXTERNAL ROUNDTRIP -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-red-500/30 flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span> BEFORE: Fragmented External Workflow
+          </span>
+          <span class="text-[10px] text-white/40 font-mono">High user friction</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#070709] p-4 flex flex-col gap-3">
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+            <span class="text-xl">1.</span>
+            <span class="text-xs text-white/80">User copies prompt fragment from platform.</span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300">
+            <span class="text-xl">2.</span>
+            <span class="text-xs">User switches tabs to ChatGPT/Claude: <i>"Rewrite this prompt for FLUX and change hair to brunette..."</i></span>
+          </div>
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border border-white/5">
+            <span class="text-xl">3.</span>
+            <span class="text-xs text-white/80">User copies back into image generator and manually uploads face.</span>
+          </div>
+          <p class="text-[11px] text-red-400 font-semibold">Result: Drop-off in user engagement, inconsistent character identity, broken prompt formulas.</p>
+        </div>
+      </div>
+
+      <!-- AFTER: SELF-CONTAINED IN-PLATFORM STUDIO -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-[#d1fe17]/40 flex flex-col gap-3 shadow-[0_0_30px_rgba(209,254,23,0.05)]">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-[#d1fe17] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#d1fe17]"></span> AFTER: In-Platform Prompt & Avatar Studio
+          </span>
+          <span class="text-[10px] text-[#d1fe17] font-mono">100% In-Platform Experience</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#0a0a0e] p-4 flex flex-col gap-3">
+          <!-- Step 1: Model Choice -->
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-white/60">Model:</span>
+            <div class="flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded bg-[#d1fe17]/20 border border-[#d1fe17]/40 text-[#d1fe17] font-bold text-[10px]">Nano Banana 2.1</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 text-white/60 text-[10px]">FLUX Cinema</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 text-white/60 text-[10px]">Kling 1.5 HD</span>
+            </div>
+          </div>
+
+          <!-- Step 2: Avatar Persona Lock -->
+          <div class="flex items-center justify-between text-xs p-2 rounded-lg bg-white/5 border border-white/5">
+            <div class="flex items-center gap-2">
+              <img src="https://d8j0ntlcm91z4.cloudfront.net/user_336JgWTlqHQHPYleCS3LEJ2wTSb/hf_20261107_214641_9271be3f-9133-4616-80ad-78f86ba445f9_min.webp" class="w-6 h-6 rounded-full object-cover ring-1 ring-[#d1fe17]" />
+              <span class="font-bold text-white">@Baha_Savage_Anchor</span>
+            </div>
+            <span class="text-[10px] font-mono text-[#d1fe17]">LOCKED (0.85 LoRA)</span>
+          </div>
+
+          <!-- Step 3: 1-Click Modifier Chips -->
+          <div class="flex flex-col gap-1.5">
+            <span class="text-[10px] text-white/60 font-semibold uppercase">One-Click Recipe Chips:</span>
+            <div class="flex flex-wrap gap-1 text-[10px]">
+              <span class="px-2 py-0.5 rounded bg-[#d1fe17]/15 border border-[#d1fe17]/30 text-[#d1fe17] font-medium">+ Direct Night Flash</span>
+              <span class="px-2 py-0.5 rounded bg-[#d1fe17]/15 border border-[#d1fe17]/30 text-[#d1fe17] font-medium">+ 35mm Leica Summilux</span>
+              <span class="px-2 py-0.5 rounded bg-[#d1fe17]/15 border border-[#d1fe17]/30 text-[#d1fe17] font-medium">+ Burj Al Arab Balcony</span>
+            </div>
+          </div>
+
+          <!-- Step 4: Final Action -->
+          <button class="w-full py-2 rounded-lg bg-[#d1fe17] text-black font-bold text-xs shadow-md">
+            GENERATE (Instant Synthesis)
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- COMPARISON 4: IMAGE INSPECTOR & EDITING WORKFLOW -->
+  <!-- ========================================================================= -->
+  <section class="flex flex-col gap-4">
+    <div class="flex items-center gap-3">
+      <span class="w-7 h-7 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xs font-bold font-mono">04</span>
+      <div>
+        <h2 class="text-lg font-bold text-white">Image Detail & Inspector: Static Lightbox vs. Tutorial Multi-Tab Edit Studio</h2>
+        <p class="text-xs text-brand-subtext">Evolving from a simple modal to the full-featured inspector shown in the tutorial video with layers, inpainting canvas tools, and video conversion.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- BEFORE: BASIC LIGHTBOX -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-red-500/30 flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-500"></span> BEFORE: Static Lightbox (Current Live)
+          </span>
+          <span class="text-[10px] text-white/40 font-mono">Static modal</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#070709] p-4 flex flex-col gap-3">
+          <div class="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+            <span class="font-bold text-white">Halal Fans (Author)</span>
+            <span class="text-white/40 flex items-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </span>
+          </div>
+          <div class="p-2.5 rounded bg-black/40 text-xs font-mono text-white/70">
+            A full-body, straight-on night photograph showcases a young adult Caucasian woman...
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-[10px] text-white/40">
+            <span>Model: Soul 2.0</span>
+            <span>Size: 1536x2048</span>
+          </div>
+          <p class="text-[11px] text-red-400">Edit and Comments tabs are non-functional; no layer decomposition or canvas inpainting tools.</p>
+        </div>
+      </div>
+
+      <!-- AFTER: MULTI-TAB INSPECTOR & EDIT STUDIO -->
+      <div class="p-5 rounded-2xl bg-[#09090d] border border-[#d1fe17]/40 flex flex-col gap-3 shadow-[0_0_30px_rgba(209,254,23,0.05)]">
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <span class="text-xs font-bold text-[#d1fe17] uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#d1fe17]"></span> AFTER: Tutorial Multi-Tab Edit Studio
+          </span>
+          <span class="text-[10px] text-[#d1fe17] font-mono">Layers + Canvas Inpainting</span>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-[#0a0a0e] p-4 flex flex-col gap-3">
+          <!-- Active Tabs -->
+          <div class="grid grid-cols-3 text-center text-xs border-b border-white/10 pb-1">
+            <span class="text-white/40">Info</span>
+            <span class="text-[#d1fe17] font-bold border-b border-[#d1fe17] pb-1">Edit (Active)</span>
+            <span class="text-white/40">Comments</span>
+          </div>
+
+          <!-- Edit Operations List from Video -->
+          <div class="grid grid-cols-2 gap-1.5 text-[11px]">
+            <span class="p-1.5 rounded bg-white/5 text-white/90 flex items-center justify-between">
+              Layer Decomposition <span class="text-[9px] text-[#d1fe17] font-mono">New</span>
+            </span>
+            <span class="p-1.5 rounded bg-white/5 text-white/90 flex items-center justify-between">
+              Edit text in image <span class="text-[9px] text-[#d1fe17] font-mono">New</span>
+            </span>
+            <span class="p-1.5 rounded bg-white/5 text-white/90 flex items-center justify-between">
+              Expand & Crop <span class="text-[9px] text-[#d1fe17] font-mono">New</span>
+            </span>
+            <span class="p-1.5 rounded bg-white/5 text-white/90">
+              Upscale to 4K ›
+            </span>
+            <span class="p-1.5 rounded bg-white/5 text-white/90">
+              Remove background ›
+            </span>
+            <span class="p-1.5 rounded bg-white/5 text-white/90">
+              Relight Scene ›
+            </span>
+          </div>
+
+          <!-- Canvas Inpaint Bar -->
+          <div class="flex items-center gap-2 p-2 rounded-lg bg-black/60 border border-white/10 text-xs">
+            <span class="text-white/40">+</span>
+            <span class="text-white/60 flex-1 truncate">Describe how to edit image or replace dress...</span>
+            <div class="w-5 h-5 rounded bg-[#d1fe17] text-black flex items-center justify-center">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </div>
+          </div>
+
+          <!-- Primary Video Action -->
+          <button class="w-full py-2.5 rounded-lg bg-[#d1fe17] text-black font-extrabold text-xs shadow-md flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            TURN TO VIDEO
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
