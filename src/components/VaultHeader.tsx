@@ -95,15 +95,16 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 h-16 px-6 bg-[#0a0a0d]/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between transition-all select-none">
-      {/* Left: Minimal Brand Mark */}
-      <div className="flex items-center gap-3">
+      {/* Left: Minimal Brand Logo Icon Only */}
+      <div className="flex items-center">
         <button
           onClick={() => onSelectTab('vault')}
-          className="flex items-center gap-2.5 text-left group cursor-pointer focus:outline-none"
+          className="group cursor-pointer focus:outline-none"
+          title="Return to Vault"
         >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#d1fe17] to-[#88a804] flex items-center justify-center text-black font-extrabold text-xs shadow-[0_0_15px_rgba(209,254,23,0.25)] group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#d1fe17] to-[#88a804] flex items-center justify-center text-black font-extrabold text-xs shadow-[0_0_15px_rgba(209,254,23,0.25)] group-hover:scale-105 transition-transform active:scale-95">
             <svg
-              className="w-4 h-4"
+              className="w-4.5 h-4.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -116,9 +117,6 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
               />
             </svg>
           </div>
-          <span className="text-xs font-bold tracking-tight text-white hidden sm:inline-block">
-            PROMPT VAULT
-          </span>
         </button>
       </div>
 
