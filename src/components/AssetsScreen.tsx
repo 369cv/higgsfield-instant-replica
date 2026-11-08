@@ -155,25 +155,37 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
     setIsCreatingProject(false);
   };
 
-  // Filter vault items: exclude trash
-  const nonTrashVault = useMemo(() => {
-    return vaultItems.filter((i) => !trashIds.has(i.id));
-  }, [vaultItems, trashIds]);
+  // User personal creations stored in localStorage (empty slate until created)
+  const [userCreations] = useState<VaultItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('halalfans_user_creations');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Filter personal user creations: exclude trash
+  const nonTrashCreations = useMemo(() => {
+    return userCreations.filter((i) => !trashIds.has(i.id));
+  }, [userCreations, trashIds]);
 
   // Derived datasets for each tab
   const tabData = useMemo(() => {
     let list: VaultItem[] = [];
 
-    if (activeTab === 'assets' || activeTab === 'images') {
-      list = nonTrashVault;
+    if (activeTab === 'assets') {
+      list = [...nonTrashCreations, ...videos.filter((v) => !trashIds.has(v.id))];
+    } else if (activeTab === 'images') {
+      list = nonTrashCreations;
     } else if (activeTab === 'favourites') {
-      list = nonTrashVault.filter((i) => favorites.has(i.id));
+      list = nonTrashCreations.filter((i) => favorites.has(i.id));
     } else if (activeTab === 'enhanced') {
-      list = nonTrashVault.filter((i) => enhancedIds.has(i.id));
+      list = nonTrashCreations.filter((i) => enhancedIds.has(i.id));
     } else if (activeTab === 'video') {
       list = videos.filter((v) => !trashIds.has(v.id));
     } else if (activeTab === 'trash') {
-      list = vaultItems.filter((i) => trashIds.has(i.id));
+      list = userCreations.filter((i) => trashIds.has(i.id));
     }
 
     if (searchQuery.trim()) {
@@ -186,7 +198,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
     }
 
     return list;
-  }, [activeTab, nonTrashVault, favorites, enhancedIds, videos, trashIds, vaultItems, searchQuery]);
+  }, [activeTab, nonTrashCreations, favorites, enhancedIds, videos, trashIds, userCreations, searchQuery]);
 
   // Group items by date for natural timeline presentation
   const groupedByDate = useMemo(() => {
@@ -246,17 +258,17 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
     });
   };
 
-  // Badges counts
+  // Badges counts - All clean empty slates for new user accounts
   const counts = {
-    assets: nonTrashVault.length,
+    assets: nonTrashCreations.length + videos.filter((v) => !trashIds.has(v.id)).length,
     projects: projects.length,
-    favourites: nonTrashVault.filter((i) => favorites.has(i.id)).length,
+    favourites: nonTrashCreations.filter((i) => favorites.has(i.id)).length,
     elements: elements.length,
     trash: trashIds.size,
-    images: nonTrashVault.length,
+    images: nonTrashCreations.length,
     video: videos.filter((v) => !trashIds.has(v.id)).length,
     audio: audio.length,
-    enhanced: nonTrashVault.filter((i) => enhancedIds.has(i.id)).length,
+    enhanced: nonTrashCreations.filter((i) => enhancedIds.has(i.id)).length,
   };
 
   const navItemsTop: { id: AssetTab; label: string; count: number; icon: React.ReactNode }[] = [
@@ -804,12 +816,70 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
             </div>
           )}
 
-          {/* ================= VIEW: DATE-GROUPED REAL ASSETS (Assets, Images, Trash, Favourites, Enhanced) ================= */}
-          {(activeTab === 'assets' ||
-            activeTab === 'images' ||
-            (activeTab === 'favourites' && counts.favourites > 0) ||
-            (activeTab === 'trash' && counts.trash > 0) ||
-            (activeTab === 'enhanced' && counts.enhanced > 0)) && (
+          {/* ================= VIEW: ASSETS (EMPTY SLATE IF ZERO) ================= */}
+          {activeTab === 'assets' && counts.assets === 0 && (
+            <div className="py-24 text-center space-y-4 max-w-md mx-auto">
+              <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 mx-auto">
+                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                  <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">No assets yet</h3>
+                <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                  Images, videos, and projects created in your account will appear here.
+                </p>
+              </div>
+              {onNavigateToStudio && (
+                <button
+                  onClick={() => onNavigateToStudio('create')}
+                  className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  <span>Create New Asset</span>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ================= VIEW: IMAGES (EMPTY SLATE IF ZERO) ================= */}
+          {activeTab === 'images' && counts.images === 0 && (
+            <div className="py-24 text-center space-y-4 max-w-md mx-auto">
+              <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 mx-auto">
+                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                  <circle cx="9" cy="9" r="2" />
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">No images yet</h3>
+                <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                  Generated photos and portraits from Prompt Studio will be saved to your personal library.
+                </p>
+              </div>
+              {onNavigateToStudio && (
+                <button
+                  onClick={() => onNavigateToStudio('create')}
+                  className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  <span>Generate New Image</span>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* ================= VIEW: DATE-GROUPED REAL ASSETS (Only when items exist) ================= */}
+          {tabData.length > 0 && (
             <div className="space-y-10">
               {Object.entries(groupedByDate).map(([dateLabel, items]) => {
                 const allSelected = items.every((i) => selectedAssetIds.has(i.id));
