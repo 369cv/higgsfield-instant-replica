@@ -91,23 +91,32 @@ export const CardGrid: React.FC<CardGridProps> = ({
     }
   };
 
-  const renderCard = (item: VaultItem) => {
+  const renderCard = (item: VaultItem, index: number) => {
     const isSquare = layout === 'square';
     const isFavorited = favorites.has(item.id);
+    const isAboveFold = index < 8;
 
     return (
       <div
         key={item.id}
         onClick={() => onSelectItem(item)}
-        className="group relative cursor-pointer overflow-hidden bg-black select-none"
+        className="group relative cursor-pointer overflow-hidden bg-neutral-900 select-none will-change-transform"
       >
-        {/* Seamless Image Container - Zero gap between cards */}
-        <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'}`}>
+        {/* Seamless Media Container */}
+        <div className={`w-full overflow-hidden ${isSquare ? 'aspect-square' : 'aspect-[3/4]'} bg-[#121318]`}>
           <img
-            src={item.imageUrl}
+            src={item.imageUrl || item.fullImageUrl}
             alt=""
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.015]"
+            loading={isAboveFold ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchPriority={index < 4 ? 'high' : 'auto'}
+            className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
+            onError={(e) => {
+              const target = e.currentTarget as HTMLImageElement;
+              if (item.fullImageUrl && target.src !== item.fullImageUrl) {
+                target.src = item.fullImageUrl;
+              }
+            }}
           />
         </div>
 
@@ -162,7 +171,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
             </div>
             {/* Fine line separation between images */}
             <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
-              {groupItems.map(renderCard)}
+              {groupItems.map((item, idx) => renderCard(item, idx))}
             </div>
           </div>
         ))}
@@ -190,7 +199,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
   return (
     <div className="w-full pb-12">
       <div className={`grid gap-1 sm:gap-1.5 ${getColClass()}`}>
-        {displayedItems.map(renderCard)}
+        {displayedItems.map((item, idx) => renderCard(item, idx))}
       </div>
 
       {/* Infinite Scroll Sentinel */}

@@ -18,7 +18,7 @@ function formatDate(isoString) {
     const minutes = d.getUTCMinutes().toString().padStart(2, '0');
     return `${month} ${day}, ${year} at ${hours}:${minutes} ${ampm}`;
   } catch {
-    return 'November 5, 2026';
+    return 'November 7, 2026';
   }
 }
 
@@ -38,6 +38,7 @@ function formatSoulItem(job) {
     fullImageUrl: job.result_url || job.min_result_url,
     createdAt: formatDate(job.created_at),
     createdAtRaw: job.created_at,
+    isVideo: false,
     author: {
       username: 'Halal Fans',
       role: 'Author',
@@ -58,83 +59,22 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const token = process.env.HIGGSFIELD_TOKEN || 'oat_O7KY63444YM6W8EM25GE4G2FJXDRPHMB';
-  const workspaceId = process.env.HIGGSFIELD_WORKSPACE_ID || '2aaba1d1-1494-48db-b962-bcb047481c9a';
-
-  try {
-    let allFetched = [];
-    let cursor = null;
-
-    // Fetch up to 4 pages (400 jobs) to cover all generations down to cutoff
-    for (let page = 0; page < 4; page++) {
-      let url = `https://fnf-api-gw.higgsfield.ai/fnf/developer/v2alpha/jobs?size=100`;
-      if (cursor) url += `&cursor=${cursor}`;
-
-      const apiRes = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'hf-workspace-id': workspaceId
-        }
-      });
-
-      if (!apiRes.ok) break;
-
-      const data = await apiRes.json();
-      const items = data.items || [];
-      if (!items.length) break;
-
-      allFetched = allFetched.concat(items);
-      cursor = data.cursor;
-
-      if (items.some(j => j.id === CUTOFF_JOB_ID) || !data.cursor) {
-        break;
-      }
-    }
-
-    if (allFetched.length > 0) {
-      // Find active queued or in_progress jobs
-      const inProgress = allFetched.filter(
-        j => j.job_type === 'text2image_soul_v2' && (j.status === 'queued' || j.status === 'in_progress')
-      );
-
-      // Filter soul jobs down to cutoff
-      const soulJobs = allFetched.filter(j => j.job_type === 'text2image_soul_v2');
-      const cutoffIdx = soulJobs.findIndex(j => j.id === CUTOFF_JOB_ID);
-      const relevant = cutoffIdx !== -1 ? soulJobs.slice(0, cutoffIdx + 1) : soulJobs;
-
-      const completed = relevant
-        .filter(j => j.status === 'completed' && (j.result_url || j.min_result_url))
-        .map(formatSoulItem);
-
-      if (completed.length > 0) {
-        return res.status(200).json({
-          success: true,
-          total: completed.length,
-          inProgressCount: inProgress.length,
-          items: completed,
-          source: 'live-higgsfield-cloud'
-        });
-      }
-    }
-  } catch (err) {
-    console.error('Live API fetch error in /api/vault:', err);
-  }
-
-  // Resilient fallback to static data
+  // Load the pre-indexed clean library of Soul images from car cutoff onward
   try {
     const dataFilePath = path.join(process.cwd(), 'public/data/soul-generations.json');
     if (fs.existsSync(dataFilePath)) {
       const fileData = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+      const items = (fileData.items || []).filter(i => !i.isVideo);
       return res.status(200).json({
         success: true,
-        items: fileData.items || [],
-        total: fileData.total || (fileData.items || []).length,
+        total: items.length,
         inProgressCount: 0,
-        source: 'cached-fallback'
+        items: items,
+        source: 'clean-soul-vault'
       });
     }
   } catch (e) {
-    console.error('Cached fallback read error:', e);
+    console.error('File read error in /api/vault:', e);
   }
 
   return res.status(200).json({

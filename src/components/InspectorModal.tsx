@@ -23,7 +23,6 @@ interface InspectorModalProps {
   onClose: () => void;
   onRecreate: (item: VaultItem) => void;
   onTurnToVideo: (item: VaultItem) => void;
-  onSelectReferenceItem?: (refUrl: string) => void;
   isFavorited?: boolean;
   onToggleFavorite?: (id: string) => void;
 }
@@ -40,28 +39,43 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
   const [copied, setCopied] = useState(false);
   const [expandedPrompt, setExpandedPrompt] = useState(false);
   const [inspectingRef, setInspectingRef] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [editedPrompt, setEditedPrompt] = useState('');
+
+  useEffect(() => {
+    if (item) {
+      setEditedPrompt(item.prompt || '');
+    }
+  }, [item]);
 
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        if (isZoomed) {
+          setIsZoomed(false);
+        } else {
+          onClose();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [onClose, isZoomed]);
 
   if (!item) return null;
 
   const previewImage = item.imageUrl || item.fullImageUrl;
   const fullImage = item.fullImageUrl || item.imageUrl;
   const currentDisplayImage = inspectingRef ? (item.referenceImage || previewImage) : previewImage;
+  const cleanPrompt = (item.prompt || '').replace(/\nHEX VALUES:.*$/s, '').trim();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(item.prompt);
+    navigator.clipboard.writeText(cleanPrompt);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   const handleDownload = () => {
@@ -86,7 +100,9 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
         <img
           src={currentDisplayImage}
           alt=""
-          className="relative max-h-full max-w-full object-contain shadow-2xl transition-all duration-200 z-10 p-2 md:p-6"
+          decoding="async"
+          onClick={() => setIsZoomed(!isZoomed)}
+          className="relative max-h-full max-w-full object-contain shadow-2xl transition-all duration-200 z-10 p-2 md:p-6 cursor-zoom-in"
         />
 
         {/* Close Button on Mobile (Top Right of image) */}
@@ -98,17 +114,39 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Minimal Fullscreen / Open in New Tab control at bottom right */}
+        {/* Minimal Fullscreen / In-Platform Zoom at bottom right */}
         <div className="absolute bottom-3 right-3 md:bottom-5 md:right-5 z-20">
           <button
-            onClick={() => window.open(currentDisplayImage, '_blank')}
+            onClick={() => setIsZoomed(!isZoomed)}
             className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 hover:bg-black/85 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer shadow-lg"
-            title="Open full size"
+            title={isZoomed ? "Exit full view" : "Inspect full size"}
           >
             <Maximize2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </button>
         </div>
       </div>
+
+      {/* In-Platform Fullscreen Lightbox Zoom View (Stays inside app, mobile friendly) */}
+      {isZoomed && (
+        <div
+          onClick={() => setIsZoomed(false)}
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 cursor-zoom-out animate-in fade-in duration-200"
+        >
+          <button
+            onClick={() => setIsZoomed(false)}
+            className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/80 border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-all"
+            title="Close zoom"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <img
+            src={currentDisplayImage}
+            alt=""
+            decoding="async"
+            className="max-h-full max-w-full object-contain shadow-2xl"
+          />
+        </div>
+      )}
 
       {/* Sidebar Drawer: Bottom on Mobile, Right on Desktop */}
       <div className="w-full md:w-[380px] lg:w-[400px] flex-1 md:h-full bg-[#0d0e12] border-t md:border-t-0 md:border-l border-[#1a1b22] flex flex-col justify-between z-20 overflow-hidden min-h-0">
@@ -141,9 +179,9 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
           </button>
         </div>
 
-        {/* Navigation Tabs (Info, Edit, Comments) */}
-        <div className="px-4 pt-3 pb-2 border-b border-[#181920]">
-          <div className="grid grid-cols-3 p-1 rounded-xl bg-[#15161c] border border-white/5 text-xs font-medium">
+        {/* 3 Nav Tabs: Info, Edit, Comments */}
+        <div className="px-4 pt-3 pb-1 border-b border-[#181920] shrink-0">
+          <div className="grid grid-cols-3 gap-1 bg-[#14151b] p-1 rounded-xl text-xs font-medium">
             <button
               onClick={() => setActiveTab('info')}
               className={`py-1.5 rounded-lg text-center transition-all ${
@@ -179,106 +217,132 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
 
         {/* Scrollable Body Content */}
         <div className="p-4 space-y-4 overflow-y-auto flex-1">
-          {/* PROMPT Section */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#717684] uppercase">
-              <span className="flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-[#717684]" />
-                <span>PROMPT</span>
-              </span>
-              <button
-                onClick={handleCopy}
-                className="flex items-center gap-1 text-[11px] font-medium text-[#9ca3af] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded-md cursor-pointer"
-              >
-                {copied ? <Check className="w-3 h-3 text-[#d1fe17]" /> : <Copy className="w-3 h-3 text-white/70" />}
-                <span>{copied ? 'Copied' : 'Copy'}</span>
-              </button>
-            </div>
+          {activeTab === 'info' && (
+            <>
+              {/* PROMPT Section */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#717684] uppercase">
+                  <span className="flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-[#717684]" />
+                    <span>PROMPT</span>
+                  </span>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-1 text-[11px] font-medium text-[#9ca3af] hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded-md cursor-pointer"
+                  >
+                    {copied ? <Check className="w-3 h-3 text-[#d1fe17]" /> : <Copy className="w-3 h-3 text-white/70" />}
+                    <span>{copied ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
 
-            {/* Prompt Box with Reference Thumbnail */}
-            <div className="rounded-xl bg-[#14151b] border border-[#21232d] p-3 flex gap-3 items-start">
-              {/* Reference Image Thumbnail with Upload Icon Overlay */}
-              {item.referenceImage ? (
-                <div
-                  onClick={() => setInspectingRef(!inspectingRef)}
-                  className={`relative w-14 h-14 rounded-lg overflow-hidden shrink-0 cursor-pointer border transition-all ${
-                    inspectingRef
-                      ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40'
-                      : 'border-white/15 hover:border-white/40'
-                  }`}
-                  title={inspectingRef ? "Show generated output" : "Click to view reference photo"}
-                >
-                  <img
-                    src={item.referenceImage}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-xs py-0.5 flex items-center justify-center">
-                    <Upload className="w-2.5 h-2.5 text-white/90" />
+                {/* Prompt Box with Reference Thumbnail */}
+                <div className="rounded-xl bg-[#14151b] border border-[#21232d] p-3 flex gap-3 items-start">
+                  {/* Reference Image Thumbnail with Upload Icon Overlay */}
+                  {item.referenceImage ? (
+                    <div
+                      onClick={() => setInspectingRef(!inspectingRef)}
+                      className={`relative w-14 h-14 rounded-lg overflow-hidden shrink-0 cursor-pointer border transition-all ${
+                        inspectingRef
+                          ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40'
+                          : 'border-white/15 hover:border-white/40'
+                      }`}
+                      title={inspectingRef ? "Show generated output" : "Click to view reference photo"}
+                    >
+                      <img
+                        src={item.referenceImage}
+                        alt=""
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-xs py-0.5 flex items-center justify-center">
+                        <Upload className="w-2.5 h-2.5 text-white/90" />
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {/* Prompt Text with Expansion */}
+                  <div className="flex-1 text-[12px] leading-relaxed text-[#d1d5db] font-normal">
+                    <p className={expandedPrompt ? '' : 'line-clamp-4'}>
+                      {cleanPrompt}
+                    </p>
+                    <button
+                      onClick={() => setExpandedPrompt(!expandedPrompt)}
+                      className="text-[#717684] hover:text-[#babdc5] text-[11px] font-medium mt-1.5 flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      {expandedPrompt ? (
+                        <>Show less <ChevronUp className="w-3 h-3" /></>
+                      ) : (
+                        <>See all <ChevronDown className="w-3 h-3" /></>
+                      )}
+                    </button>
                   </div>
                 </div>
-              ) : null}
-
-              {/* Prompt Text with Expansion */}
-              <div className="flex-1 text-[12px] leading-relaxed text-[#d1d5db] font-normal">
-                <p className={expandedPrompt ? '' : 'line-clamp-4'}>
-                  {item.prompt}
-                </p>
-                <button
-                  onClick={() => setExpandedPrompt(!expandedPrompt)}
-                  className="text-[#717684] hover:text-[#babdc5] text-[11px] font-medium mt-1.5 flex items-center gap-1 transition-colors cursor-pointer"
-                >
-                  {expandedPrompt ? (
-                    <>Show less <ChevronUp className="w-3 h-3" /></>
-                  ) : (
-                    <>See all <ChevronDown className="w-3 h-3" /></>
-                  )}
-                </button>
               </div>
+
+              {/* DETAILS Section */}
+              <div className="space-y-2 pt-1">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] flex items-center gap-1.5">
+                  <Info className="w-3.5 h-3.5 text-[#717684]" />
+                  <span>DETAILS</span>
+                </div>
+
+                <div className="space-y-1.5 text-[12px]">
+                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
+                    <span className="text-[#717684]">Model</span>
+                    <span className="text-white font-medium">{item.model || 'Higgsfield Soul 2.0'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
+                    <span className="text-[#717684]">Moodboard</span>
+                    <span className="text-white font-medium flex items-center gap-1">
+                      {item.moodboard || 'General'}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
+                    <span className="text-[#717684]">Quality</span>
+                    <span className="text-white font-medium">{item.quality || '2k'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-2 border-b border-[#1b1c24]">
+                    <span className="text-[#717684]">Size</span>
+                    <span className="text-white font-mono">{item.size || '1536x2048'}</span>
+                  </div>
+
+                  <div className="flex justify-between py-2">
+                    <span className="text-[#717684]">Created</span>
+                    <span className="text-[#9ca3af]">{item.createdAt}</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'edit' && (
+            <div className="space-y-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684]">
+                Edit Prompt
+              </div>
+              <textarea
+                value={editedPrompt}
+                onChange={(e) => setEditedPrompt(e.target.value)}
+                rows={6}
+                className="w-full bg-[#14151b] border border-[#21232d] rounded-xl p-3 text-[12px] text-white leading-relaxed focus:outline-none focus:border-[#d1fe17]/60"
+                placeholder="Edit prompt..."
+              />
             </div>
-          </div>
+          )}
 
-          {/* DETAILS Section */}
-          <div className="space-y-2 pt-1">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#717684] flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-[#717684]" />
-              <span>DETAILS</span>
+          {activeTab === 'comments' && (
+            <div className="space-y-3 py-6 text-center text-neutral-500">
+              <p className="text-xs">No comments yet.</p>
             </div>
-
-            <div className="space-y-1 text-[12px]">
-              <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                <span className="text-[#717684]">Model</span>
-                <span className="text-white font-medium">{item.model}</span>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                <span className="text-[#717684]">Moodboard</span>
-                <span className="text-white font-medium flex items-center gap-1">
-                  {item.moodboard}
-                </span>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                <span className="text-[#717684]">Quality</span>
-                <span className="text-white font-medium">{item.quality}</span>
-              </div>
-
-              <div className="flex justify-between py-2 border-b border-[#1b1c24]">
-                <span className="text-[#717684]">Size</span>
-                <span className="text-white font-mono">{item.size}</span>
-              </div>
-
-              <div className="flex justify-between py-2">
-                <span className="text-[#717684]">Created</span>
-                <span className="text-[#9ca3af]">{item.createdAt}</span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Sticky Bottom Actions - Exact 3-Row Layout from Higgsfield */}
+        {/* Sticky Bottom Actions - Exact Layout */}
         <div className="p-4 bg-[#0d0e12] border-t border-[#1a1b22] space-y-2.5 shrink-0">
-          {/* Row 1: Big Lime 'Turn to video' button */}
+          {/* Row 1: Turn to video */}
           <button
             onClick={() => onTurnToVideo(item)}
             className="w-full py-2.5 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-[12px] flex items-center justify-center gap-2 transition-transform active:scale-[0.98] shadow-md shadow-[#d1fe17]/20 cursor-pointer"

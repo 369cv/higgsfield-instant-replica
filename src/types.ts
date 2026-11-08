@@ -9,9 +9,12 @@ export interface VaultItem {
   author: Author;
   title: string;
   prompt: string;
+  category?: string;
   referenceImage: string;
   imageUrl: string;
   fullImageUrl?: string;
+  videoUrl?: string;
+  isVideo?: boolean;
   model: string;
   jobType: string;
   moodboard: string;
