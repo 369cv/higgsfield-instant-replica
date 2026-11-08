@@ -103,12 +103,15 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       // 2. Category Filter
       if (selectedCategory !== 'All') {
         const cat = selectedCategory.toLowerCase();
-        if (cat.includes('nightlife') && !inf.category.toLowerCase().includes('nightlife')) return false;
-        if (cat.includes('editorial') && !inf.category.toLowerCase().includes('editorial')) return false;
-        if (cat.includes('gym') && !inf.category.toLowerCase().includes('gym')) return false;
-        if (cat.includes('poolside') && !inf.category.toLowerCase().includes('poolside') && !inf.category.toLowerCase().includes('resort')) return false;
-        if (cat.includes('streetwear') && !inf.category.toLowerCase().includes('streetwear') && !inf.category.toLowerCase().includes('flash')) return false;
-        if (cat.includes('modest') && !inf.category.toLowerCase().includes('modest')) return false;
+        const infCat = inf.category.toLowerCase();
+        if (cat.includes('luxury') && !infCat.includes('luxury') && !infCat.includes('lifestyle')) return false;
+        if (cat.includes('nightlife') && !infCat.includes('nightlife') && !infCat.includes('flash')) return false;
+        if (cat.includes('fashion') && !infCat.includes('fashion') && !infCat.includes('editorial')) return false;
+        if (cat.includes('fitness') && !infCat.includes('fitness') && !infCat.includes('wellness')) return false;
+        if (cat.includes('travel') && !infCat.includes('travel') && !infCat.includes('resort')) return false;
+        if (cat.includes('modest') && !infCat.includes('modest') && !infCat.includes('silk')) return false;
+        if (cat.includes('streetwear') && !infCat.includes('streetwear') && !infCat.includes('urban')) return false;
+        if (cat.includes('beauty') && !infCat.includes('beauty') && !infCat.includes('glamour')) return false;
       }
 
       return true;
@@ -121,10 +124,11 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       name: influencerName || 'Custom Influencer',
       referenceImage: selectedInfluencer
         ? selectedInfluencer.referenceImage
-        : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+        : '/images/influencer-avatar.png',
       sampleImageUrl: selectedInfluencer
         ? selectedInfluencer.sampleImageUrl
-        : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80',
+        : '/images/influencer-avatar.png',
+      headshotImage: '/images/influencer-avatar.png',
       category: aesthetic,
       ethnicity,
       hair,
@@ -142,13 +146,15 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
   };
 
   const categories = [
-    { id: 'All', label: `All (${influencers.length || 400})` },
-    { id: 'Nightlife', label: 'Nightlife & Flash' },
-    { id: 'Editorial', label: 'Editorial & Luxury' },
-    { id: 'Gym', label: 'Gym & Fitness' },
-    { id: 'Poolside', label: 'Dubai Poolside & Resort' },
-    { id: 'Streetwear', label: 'Streetwear & 35mm' },
-    { id: 'Modest', label: 'Modest & Silk' },
+    { id: 'All', label: 'All' },
+    { id: 'Luxury & Lifestyle', label: 'Luxury & Lifestyle' },
+    { id: 'Nightlife & Flash', label: 'Nightlife & Flash' },
+    { id: 'Fashion & Editorial', label: 'Fashion & Editorial' },
+    { id: 'Fitness & Wellness', label: 'Fitness & Wellness' },
+    { id: 'Travel & Resort', label: 'Travel & Resort' },
+    { id: 'Modest & Silk', label: 'Modest & Silk' },
+    { id: 'Streetwear & Urban', label: 'Streetwear & Urban' },
+    { id: 'Beauty & Glamour', label: 'Beauty & Glamour' },
   ];
 
   return (
@@ -168,38 +174,23 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
       {/* ===================================================================== */}
       {viewMode === 'vault' && (
         <div className="flex-1 flex flex-col p-4 sm:p-6 max-w-7xl mx-auto w-full">
-          {/* Header Banner */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-white/10">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#d1fe17]/10 text-[#d1fe17] border border-[#d1fe17]/20">
-                  Prompt Vault Personas
-                </span>
-                <span className="text-xs text-neutral-400 font-mono">
-                  {influencers.length} Stored Influencers
-                </span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                AI Influencer Vault
-              </h1>
-              <p className="text-xs text-neutral-400 mt-1 max-w-2xl">
-                Each influencer extracted from the Prompt Vault is stored and ready-to-go. Select any persona to start a photoshoot, customize their look in the studio, or create a brand new character.
-              </p>
-            </div>
+          {/* Header Banner: Clean & Minimalist */}
+          <div className="flex items-center justify-between pb-5 border-b border-white/10">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+              AI Influencer
+            </h1>
 
             {/* Actions: Create New */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleCreateNewBlank}
-                className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs shadow-[0_0_20px_rgba(209,254,23,0.3)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19" />
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                </svg>
-                <span>Create New Influencer</span>
-              </button>
-            </div>
+            <button
+              onClick={handleCreateNewBlank}
+              className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl bg-[#d1fe17] text-black font-bold text-xs shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span>Create New Influencer</span>
+            </button>
           </div>
 
           {/* Filters & Search Toolbar */}
@@ -214,8 +205,8 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
                     onClick={() => setSelectedCategory(cat.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-white/10 text-white font-bold border border-white/20'
-                        : 'bg-white/[0.03] text-neutral-400 hover:text-white border border-white/5'
+                        ? 'bg-[#d1fe17] text-black font-bold shadow-[0_0_15px_rgba(209,254,23,0.25)]'
+                        : 'bg-white/[0.04] text-neutral-400 hover:text-white hover:bg-white/[0.08] border border-white/5'
                     }`}
                   >
                     {cat.label}
@@ -240,100 +231,39 @@ export const InfluencerScreen: React.FC<InfluencerScreenProps> = ({
             </div>
           </div>
 
-          {/* Grid of Influencers */}
+          {/* Grid of Influencers - Minimalist Prompt Vault Cards */}
           {isLoading ? (
             <div className="flex items-center justify-center py-24 text-neutral-400 text-xs font-mono">
               <svg className="w-5 h-5 text-[#d1fe17] animate-spin mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" strokeDasharray="32" strokeDashoffset="10" />
               </svg>
-              <span>Loading 400 Extracted Influencers...</span>
+              <span>Loading Influencers...</span>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 mt-2">
-              {/* CARD 0: CREATE NEW CARD */}
-              <div
-                onClick={handleCreateNewBlank}
-                className="aspect-[3/4] rounded-2xl border-2 border-dashed border-white/15 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#d1fe17]/50 flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all group"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-white/5 group-hover:bg-[#d1fe17]/20 border border-white/10 group-hover:border-[#d1fe17]/40 flex items-center justify-center text-neutral-400 group-hover:text-[#d1fe17] transition-all mb-3">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                  </svg>
-                </div>
-                <h4 className="text-xs font-bold text-white group-hover:text-[#d1fe17] transition-colors">
-                  Create Influencer
-                </h4>
-                <p className="text-[10px] text-neutral-400 mt-1">
-                  Design attributes or upload custom reference face
-                </p>
-              </div>
-
               {/* STORED INFLUENCER CARDS */}
-              {filteredInfluencers.slice(0, 100).map((inf) => (
+              {filteredInfluencers.map((inf) => (
                 <div
                   key={inf.id}
-                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all flex flex-col justify-end p-3 shadow-lg"
+                  onClick={() => handleOpenStudioWithInfluencer(inf)}
+                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/60 transition-all cursor-pointer shadow-lg select-none"
                 >
                   <img
-                    src={inf.referenceImage}
+                    src={inf.headshotImage || inf.referenceImage || '/images/influencer-avatar.png'}
                     alt={inf.name}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between z-10">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10 font-mono">
-                      {inf.dropsCount} Drops
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-medium bg-black/60 backdrop-blur-md text-white/80 border border-white/10 truncate max-w-[90px]">
-                      {inf.category}
-                    </span>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="relative z-10 space-y-1">
-                    <h3 className="text-xs font-bold text-white leading-tight">
+                  {/* Minimal Title at Bottom Just Like Prompt Vault */}
+                  <div className="absolute bottom-3 left-3 right-3 pointer-events-none">
+                    <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide truncate">
                       {inf.name}
                     </h3>
-                    <p className="text-[10px] text-neutral-300 truncate">
-                      {inf.ethnicity} · {inf.hair}
-                    </p>
-
-                    <div className="pt-2 flex items-center gap-1.5">
-                      <button
-                        onClick={() => handleOpenStudioWithInfluencer(inf)}
-                        className="flex-1 py-1.5 rounded-lg bg-[#d1fe17] text-black text-[10px] font-bold text-center hover:bg-[#bce414] transition-colors cursor-pointer"
-                      >
-                        Open Studio
-                      </button>
-                      {onSelectInfluencerDrops && inf.associatedDropIds && inf.associatedDropIds.length > 0 && (
-                        <button
-                          onClick={() => onSelectInfluencerDrops(inf.associatedDropIds || [], inf.name)}
-                          className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
-                          title={`View ${inf.dropsCount} Prompt Vault Drops`}
-                        >
-                          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                            <polyline points="15 3 21 3 21 9" />
-                            <line x1="10" y1="14" x2="21" y2="3" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
                   </div>
                 </div>
               ))}
-            </div>
-          )}
-
-          {filteredInfluencers.length > 100 && (
-            <div className="mt-8 p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between text-xs text-neutral-400">
-              <span>
-                Showing 100 of {filteredInfluencers.length} influencers in catalog. Use search or categories to filter.
-              </span>
             </div>
           )}
         </div>

@@ -54,6 +54,7 @@ export interface StoredInfluencer {
   name: string;
   referenceImage: string;
   sampleImageUrl: string;
+  headshotImage?: string;
   category: string;
   ethnicity: string;
   hair: string;

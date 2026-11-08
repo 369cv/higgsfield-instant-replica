@@ -98,26 +98,33 @@ export const App: React.FC = () => {
       if (!matchesPrompt && !matchesTitle) return false;
     }
 
-    // 2. Taxonomy Category
+    // 2. Taxonomy Niche Category
     if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'All Drops') {
       const cat = selectedCategory.toLowerCase();
-      if (cat.includes('burj') || cat.includes('poolside')) {
-        return item.prompt.toLowerCase().includes('burj') || item.prompt.toLowerCase().includes('pool') || item.prompt.toLowerCase().includes('palm');
+      const p = item.prompt.toLowerCase();
+      if (cat.includes('luxury') || cat.includes('lifestyle')) {
+        return p.includes('burj') || p.includes('poolside') || p.includes('luxury') || p.includes('palm') || p.includes('hotel') || p.includes('cabana') || p.includes('opulent');
       }
-      if (cat.includes('editorial') || cat.includes('silk') || cat.includes('abaya')) {
-        return item.prompt.toLowerCase().includes('silk') || item.prompt.toLowerCase().includes('abaya') || item.prompt.toLowerCase().includes('luxury') || item.prompt.toLowerCase().includes('satin') || item.prompt.toLowerCase().includes('couture');
+      if (cat.includes('fashion') || cat.includes('editorial')) {
+        return p.includes('editorial') || p.includes('couture') || p.includes('fashion') || p.includes('trench') || p.includes('runway') || p.includes('suit');
       }
-      if (cat.includes('gym') || cat.includes('fitness')) {
-        return item.prompt.toLowerCase().includes('gym') || item.prompt.toLowerCase().includes('fitness') || item.prompt.toLowerCase().includes('athletic') || item.prompt.toLowerCase().includes('mirror selfie');
+      if (cat.includes('fitness') || cat.includes('wellness')) {
+        return p.includes('gym') || p.includes('fitness') || p.includes('athletic') || p.includes('selfie') || p.includes('workout') || p.includes('leggings');
       }
-      if (cat.includes('nightlife') || cat.includes('35mm') || cat.includes('flash') || cat.includes('streetwear')) {
-        return item.prompt.toLowerCase().includes('night') || item.prompt.toLowerCase().includes('flash') || item.prompt.toLowerCase().includes('35mm') || item.prompt.toLowerCase().includes('streetwear');
+      if (cat.includes('nightlife') || cat.includes('flash')) {
+        return p.includes('night') || p.includes('flash') || p.includes('35mm') || p.includes('halter') || p.includes('cocktail') || p.includes('feather');
       }
-      if (cat.includes('beach') || cat.includes('yacht') || cat.includes('resort')) {
-        return item.prompt.toLowerCase().includes('beach') || item.prompt.toLowerCase().includes('yacht') || item.prompt.toLowerCase().includes('resort') || item.prompt.toLowerCase().includes('ocean');
+      if (cat.includes('travel') || cat.includes('resort')) {
+        return p.includes('resort') || p.includes('yacht') || p.includes('beach') || p.includes('infinity pool') || p.includes('ocean') || p.includes('bikini');
       }
-      if (cat.includes('modest') || cat.includes('hijab')) {
-        return item.prompt.toLowerCase().includes('abaya') || item.prompt.toLowerCase().includes('hijab') || item.prompt.toLowerCase().includes('modest');
+      if (cat.includes('streetwear') || cat.includes('urban')) {
+        return p.includes('streetwear') || p.includes('bomber') || p.includes('urban') || p.includes('tokyo') || p.includes('neon') || p.includes('denim');
+      }
+      if (cat.includes('modest') || cat.includes('silk')) {
+        return p.includes('abaya') || p.includes('modest') || p.includes('silk') || p.includes('embroidery') || p.includes('dune') || p.includes('sunset');
+      }
+      if (cat.includes('beauty') || cat.includes('glamour')) {
+        return p.includes('car') || p.includes('close-up') || p.includes('glamour') || p.includes('radiant') || p.includes('portrait') || p.includes('selfie');
       }
     }
 
@@ -174,7 +181,6 @@ export const App: React.FC = () => {
           <PromptsNicheSubheader
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
-            totalCount={vault.length || 1604}
           />
 
           {/* Active Generation Queue - Only when actively generating */}

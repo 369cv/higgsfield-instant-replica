@@ -232,160 +232,52 @@ export const MoodBoardScreen: React.FC<MoodBoardScreenProps> = ({
             </button>
           </div>
 
-          {/* Tabs: My Moodboards vs Curated */}
-          <div className="flex items-center gap-2 border-b border-white/10 pb-3 mb-6">
-            <button
-              onClick={() => setActiveTab('my')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'my'
-                  ? 'bg-white/10 text-white border border-white/15'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              My Moodboards ({myBoards.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('curated')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === 'curated'
-                  ? 'bg-white/10 text-white border border-white/15'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              Curated ({curatedBoards.length})
-            </button>
+
+
+          {/* UNIFIED MINIMALIST MOODBOARD GRID MATCHING REFERENCE SCREENSHOT */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-2 pb-16">
+            {/* User created boards prepended */}
+            {myBoards.map((board) => (
+              <div
+                key={board.id}
+                onClick={() => setSelectedBoard(board)}
+                className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+              >
+                <img
+                  src={board.sampleImages[0] || (vaultItems.length > 0 ? vaultItems[0].imageUrl : '')}
+                  alt={board.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3.5 left-4 right-4 pointer-events-none">
+                  <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                    {board.title}
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            {/* Curated Reference Presets */}
+            {curatedBoards.map((board) => (
+              <div
+                key={board.id}
+                onClick={() => setSelectedBoard(board)}
+                className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all cursor-pointer shadow-lg select-none"
+              >
+                <img
+                  src={board.sampleImages[0]}
+                  alt={board.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3.5 left-4 right-4 pointer-events-none">
+                  <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                    {board.title}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
-
-          {/* GRID OF MOODBOARDS */}
-          {activeTab === 'my' && (
-            <div>
-              {myBoards.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-white/10 rounded-3xl p-8 bg-white/[0.01]">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-neutral-400 mb-3">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="3" width="18" height="18" rx="2" />
-                      <path d="M3 9h18M9 21V9" />
-                    </svg>
-                  </div>
-                  <h3 className="text-sm font-bold text-white">No personal moodboards yet</h3>
-                  <p className="text-xs text-neutral-400 mt-1 max-w-sm">
-                    Build your first moodboard by uploading 20+ reference photos or pulling directly from your saved assets.
-                  </p>
-                  <button
-                    onClick={handleStartCreate}
-                    className="mt-4 px-4 py-2 rounded-xl bg-[#d1fe17] text-black font-bold text-xs hover:bg-[#bce414] transition-all cursor-pointer"
-                  >
-                    Build your moodboard
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                  {myBoards.map((board) => (
-                    <div
-                      key={board.id}
-                      className="group relative aspect-square rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-white/30 transition-all flex flex-col justify-end p-3 cursor-pointer shadow-lg"
-                      onClick={() => setSelectedBoard(board)}
-                    >
-                      {/* 2x2 Image Collage */}
-                      <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5 p-1 bg-black/60 pointer-events-none">
-                        {board.sampleImages.slice(0, 4).map((img, i) => (
-                          <img key={i} src={img} alt="" className="w-full h-full object-cover" />
-                        ))}
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
-
-                      {/* Content */}
-                      <div className="relative z-10 flex items-center justify-between w-full">
-                        <span className="text-xs font-bold text-white truncate max-w-[140px]">
-                          {board.title}
-                        </span>
-
-                        {/* Three dots menu */}
-                        <div className="relative">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setMenuOpenId(menuOpenId === board.id ? null : board.id);
-                            }}
-                            className="p-1 rounded-lg bg-black/50 hover:bg-black/80 text-white/80 hover:text-white"
-                          >
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                              <circle cx="12" cy="12" r="1.5" />
-                              <circle cx="19" cy="12" r="1.5" />
-                              <circle cx="5" cy="12" r="1.5" />
-                            </svg>
-                          </button>
-
-                          {menuOpenId === board.id && (
-                            <div className="absolute right-0 bottom-8 z-30 w-32 rounded-xl bg-[#18181f] border border-white/15 p-1 shadow-2xl text-xs space-y-0.5">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setBoardName(board.title);
-                                  setUploadedImages(board.datasetImages || board.sampleImages);
-                                  setViewState('create');
-                                  setMenuOpenId(null);
-                                }}
-                                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-white"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setMenuOpenId(null);
-                                }}
-                                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-white"
-                              >
-                                Share
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteBoard(board.id);
-                                }}
-                                className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-rose-500/20 text-rose-400 font-medium"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'curated' && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {curatedBoards.map((board) => (
-                <div
-                  key={board.id}
-                  onClick={() => setSelectedBoard(board)}
-                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-[#121217] border border-white/10 hover:border-[#d1fe17]/50 transition-all flex flex-col justify-end p-4 cursor-pointer shadow-lg"
-                >
-                  <img
-                    src={board.sampleImages[0]}
-                    alt={board.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-
-                  <div className="relative z-10 flex items-center justify-between">
-                    <span className="text-xs font-bold text-white tracking-wide">
-                      {board.title}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-black/60 backdrop-blur-md text-[#d1fe17] border border-white/10">
-                      Curated
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
 

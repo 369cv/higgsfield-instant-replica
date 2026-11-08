@@ -3,30 +3,32 @@ import React from 'react';
 interface PromptsNicheSubheaderProps {
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
-  totalCount?: number;
 }
 
 export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
   selectedCategory,
   onSelectCategory,
-  totalCount = 1604,
 }) => {
   const niches = [
-    { id: 'All', label: `All Drops (${totalCount.toLocaleString()})` },
-    { id: 'Burj', label: 'Burj Al Arab & Poolside' },
-    { id: 'Editorial', label: 'Editorial Silk & Abaya' },
-    { id: 'Gym', label: 'Gym & Fitness Selfies' },
-    { id: 'Nightlife', label: '35mm Night Flash & Streetwear' },
-    { id: 'Beach', label: 'Yacht & Beach Resort' },
+    { id: 'All', label: 'All' },
+    { id: 'Luxury & Lifestyle', label: 'Luxury & Lifestyle' },
+    { id: 'Fashion & Editorial', label: 'Fashion & Editorial' },
+    { id: 'Fitness & Wellness', label: 'Fitness & Wellness' },
+    { id: 'Nightlife & Flash', label: 'Nightlife & Flash' },
+    { id: 'Travel & Resort', label: 'Travel & Resort' },
+    { id: 'Streetwear & Urban', label: 'Streetwear & Urban' },
+    { id: 'Modest & Silk', label: 'Modest & Silk' },
+    { id: 'Beauty & Glamour', label: 'Beauty & Glamour' },
   ];
 
   return (
-    <div className="w-full bg-[#0a0a0d] border-b border-white/10 px-4 sm:px-6 py-2.5 flex items-center justify-between shrink-0 select-none z-30 transition-all">
+    <div className="w-full bg-[#0a0a0d] border-b border-white/10 px-4 sm:px-6 py-2.5 flex items-center shrink-0 select-none z-30 transition-all">
       {/* Scrollable Niche Pills */}
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-0.5">
         {niches.map((niche) => {
           const isActive =
             (niche.id === 'All' && (!selectedCategory || selectedCategory === 'All' || selectedCategory === 'All Drops')) ||
+            selectedCategory.toLowerCase() === niche.label.toLowerCase() ||
             selectedCategory.toLowerCase().includes(niche.id.toLowerCase());
 
           return (
@@ -43,12 +45,6 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
             </button>
           );
         })}
-      </div>
-
-      {/* Right Sort / Status indicator */}
-      <div className="hidden md:flex items-center gap-2 text-[11px] text-neutral-400 font-mono pl-4 shrink-0">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#d1fe17] animate-pulse" />
-        <span>Live Drops</span>
       </div>
     </div>
   );

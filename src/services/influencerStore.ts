@@ -12,9 +12,9 @@ export const InfluencerStore = {
 
     let presets: StoredInfluencer[] = [];
 
-    // 1. Fetch from static extracted dataset (400 personas)
+    // 1. Fetch from consolidated curated dataset
     try {
-      const res = await fetch('/data/extracted-influencers.json');
+      const res = await fetch('/data/consolidated-influencers.json');
       if (res.ok) {
         const data = await res.json();
         if (data.influencers && Array.isArray(data.influencers)) {
@@ -22,7 +22,7 @@ export const InfluencerStore = {
         }
       }
     } catch (e) {
-      console.warn('Could not load /data/extracted-influencers.json', e);
+      console.warn('Could not load /data/consolidated-influencers.json', e);
     }
 
     // 2. Read user-created influencers from localStorage
