@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Home,
   Tv,
@@ -6,28 +6,21 @@ import {
   Search,
   Heart,
   Plus,
-  BarChart3,
+  Layers,
   Menu,
-  LayoutGrid
+  Sparkles
 } from 'lucide-react';
-import { CreatePopover, MoreMenuPopover, EcosystemPopover } from './NavigationPopovers';
+import { SidebarMode } from './HiggsfieldSidebar';
 
 interface HeaderProps {
   onHomeClick?: () => void;
-  onVideosClick?: () => void;
-  onFilterClick?: () => void;
-  onSearchClick?: () => void;
   onFavoritesClick?: () => void;
-  onCreateSoulDrop?: () => void;
-  onAnimateToVideo?: () => void;
-  onOpenScheduledContent?: () => void;
-  onAnalyticsClick?: () => void;
-  onProfileClick?: () => void;
+  onOpenSidebar: (mode: SidebarMode) => void;
   activeTab?: string;
   favoritesCount?: number;
 }
 
-// Halal Fans Outline Logo (Instagram-silhouette rounded squircle)
+// Halal Fans Outline Logo (rounded squircle silhouette)
 const HalalFansOutlineLogo: React.FC<{ className?: string }> = ({ className = 'w-6 h-6' }) => (
   <svg
     className={className}
@@ -46,39 +39,27 @@ const HalalFansOutlineLogo: React.FC<{ className?: string }> = ({ className = 'w
 
 export const Header: React.FC<HeaderProps> = ({
   onHomeClick,
-  onVideosClick,
-  onFilterClick,
-  onSearchClick,
   onFavoritesClick,
-  onCreateSoulDrop,
-  onAnimateToVideo,
-  onOpenScheduledContent,
-  onAnalyticsClick,
-  onProfileClick,
+  onOpenSidebar,
   activeTab = 'home',
   favoritesCount = 0
 }) => {
-  // Popover toggle states
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-  const [isEcosystemOpen, setIsEcosystemOpen] = useState(false);
-
   return (
     <>
-      {/* Top Desktop & Tablet Header Bar */}
+      {/* Desktop & Tablet Top Header Bar */}
       <header className="sticky top-0 z-40 w-full bg-[#070709]/95 backdrop-blur-xl border-b border-white/5 transition-all">
         <div className="w-full px-4 sm:px-8 py-2.5 flex items-center justify-between">
-          <div className="w-full flex items-center justify-between sm:justify-around gap-2 max-w-[1920px] mx-auto relative">
-            {/* 1. Halal Fans Logo */}
+          <div className="w-full flex items-center justify-between sm:justify-around gap-2 max-w-[1920px] mx-auto">
+            {/* 1. Halal Fans Brand Reset */}
             <button
               onClick={onHomeClick}
               className="w-10 h-10 rounded-xl flex items-center justify-center text-white hover:text-[#d1fe17] hover:bg-white/5 transition-all cursor-pointer"
-              title="Halal Fans"
+              title="Halal Fans Prompt Vault"
             >
               <HalalFansOutlineLogo className="w-5 h-5 text-white" />
             </button>
 
-            {/* 2. Home (Desktop) */}
+            {/* 2. Home */}
             <button
               onClick={onHomeClick}
               className={`hidden md:flex w-10 h-10 rounded-xl items-center justify-center transition-all cursor-pointer ${
@@ -86,43 +67,39 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'text-[#d1fe17] bg-[#d1fe17]/10'
                   : 'text-neutral-400 hover:text-white hover:bg-white/5'
               }`}
-              title="Home"
+              title="Home Feed (1,604 drops)"
             >
               <Home className="w-5 h-5" />
             </button>
 
-            {/* 3. Video / Reels (Desktop) */}
+            {/* 3. Video / Motion (Kling / Seedance) */}
             <button
-              onClick={onVideosClick}
-              className={`hidden md:flex w-10 h-10 rounded-xl items-center justify-center transition-all cursor-pointer ${
-                activeTab === 'videos'
-                  ? 'text-[#d1fe17] bg-[#d1fe17]/10'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/5'
-              }`}
-              title="Reels & Motion"
+              onClick={() => onOpenSidebar('motion')}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#d1fe17] hover:bg-white/5 transition-all cursor-pointer"
+              title="Camera Motion & Video (Kling / Seedance)"
             >
               <Tv className="w-5 h-5" />
             </button>
 
-            {/* 4. Filter Funnel */}
+            {/* 4. Filter Funnel (Taxonomy) */}
             <button
-              onClick={onFilterClick}
+              onClick={() => onOpenSidebar('filter')}
               className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-              title="Filter Categories"
+              title="Aesthetic Categories & Taxonomy"
             >
               <Filter className="w-5 h-5" />
             </button>
 
-            {/* 5. Search */}
+            {/* 5. Search (Prompt Explorer) */}
             <button
-              onClick={onSearchClick}
+              onClick={() => onOpenSidebar('search')}
               className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-              title="Search Prompts"
+              title="Prompt Explorer & Search"
             >
               <Search className="w-5 h-5" />
             </button>
 
-            {/* 6. Heart / Favorites (Desktop) */}
+            {/* 6. Heart / Favorites */}
             <button
               onClick={onFavoritesClick}
               className={`hidden md:flex w-10 h-10 rounded-xl items-center justify-center transition-all cursor-pointer ${
@@ -130,52 +107,38 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'text-red-500 bg-red-500/10'
                   : 'text-neutral-400 hover:text-white hover:bg-white/5'
               }`}
-              title="Favorites"
+              title="Saved Drops & Prompts"
             >
               <Heart className={`w-5 h-5 ${favoritesCount > 0 ? 'fill-red-500 text-red-500' : ''}`} />
             </button>
 
-            {/* 7. Plus / Create (Neon Button with Popover) */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setIsCreateOpen(prev => !prev);
-                  setIsMoreMenuOpen(false);
-                  setIsEcosystemOpen(false);
-                }}
-                className="w-10 h-10 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-black flex items-center justify-center transition-transform active:scale-95 shadow-lg shadow-[#d1fe17]/25 cursor-pointer"
-                title="Create Content"
-              >
-                <Plus className="w-5 h-5 stroke-[3]" />
-              </button>
-
-              <CreatePopover
-                isOpen={isCreateOpen}
-                onClose={() => setIsCreateOpen(false)}
-                onCreateSoulDrop={onCreateSoulDrop}
-                onAnimateToVideo={onAnimateToVideo}
-                onScheduleBuffer={onOpenScheduledContent}
-              />
-            </div>
-
-            {/* 8. Analytics Dashboard (Desktop) */}
+            {/* 7. Plus / Create (Higgsfield Prompt Studio) */}
             <button
-              onClick={onAnalyticsClick}
-              className="hidden md:flex w-10 h-10 rounded-xl items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-              title="Professional Dashboard"
+              onClick={() => onOpenSidebar('create')}
+              className="w-10 h-10 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-black flex items-center justify-center transition-transform active:scale-95 shadow-lg shadow-[#d1fe17]/25 cursor-pointer"
+              title="Generate Soul Drop (Higgsfield Studio)"
             >
-              <BarChart3 className="w-5 h-5" />
+              <Plus className="w-5 h-5 stroke-[3]" />
             </button>
 
-            {/* 9. Profile Avatar (Influencer Persona Studio) */}
+            {/* 8. Engine Specs / LoRA Layers */}
             <button
-              onClick={onProfileClick}
+              onClick={() => onOpenSidebar('settings')}
+              className="hidden md:flex w-10 h-10 rounded-xl items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+              title="Engine Models & Specifications"
+            >
+              <Layers className="w-5 h-5" />
+            </button>
+
+            {/* 9. Profile Avatar (Persona Identity Drawer) */}
+            <button
+              onClick={() => onOpenSidebar('persona')}
               className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20 hover:border-[#d1fe17] ring-1 ring-white/10 flex-shrink-0 transition-all cursor-pointer shadow-md"
-              title="Creator Profile & Influencer Studio"
+              title="Persona Identity & Consistency Lock"
             >
               <img
                 src="/images/influencer-avatar.png"
-                alt="Influencer Profile"
+                alt="Influencer Persona"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&auto=format&fit=crop&q=80';
@@ -183,60 +146,29 @@ export const Header: React.FC<HeaderProps> = ({
               />
             </button>
 
-            {/* 10. Hamburger Menu (More Menu Popover) */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setIsMoreMenuOpen(prev => !prev);
-                  setIsCreateOpen(false);
-                  setIsEcosystemOpen(false);
-                }}
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                title="More Options"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
+            {/* 10. Drawer Menu */}
+            <button
+              onClick={() => onOpenSidebar('create')}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+              title="Soul Studio Drawer"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
 
-              <MoreMenuPopover
-                isOpen={isMoreMenuOpen}
-                onClose={() => setIsMoreMenuOpen(false)}
-                onOpenScheduledContent={onOpenScheduledContent}
-                onOpenActivity={onAnalyticsClick}
-                onOpenSaved={onFavoritesClick}
-                onSwitchAccounts={onProfileClick}
-              />
-            </div>
-
-            {/* 11. Layout Grid / Ecosystem Popover */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setIsEcosystemOpen(prev => !prev);
-                  setIsCreateOpen(false);
-                  setIsMoreMenuOpen(false);
-                }}
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                title="Also from Meta / Ecosystem"
-              >
-                <LayoutGrid className="w-5 h-5" />
-              </button>
-
-              <EcosystemPopover
-                isOpen={isEcosystemOpen}
-                onClose={() => setIsEcosystemOpen(false)}
-                onSelectMetaAI={() => alert('Opening Meta AI / Higgsfield assistant.')}
-                onSelectAIStudio={() => alert('Opening AI Studio.')}
-                onSelectWhatsApp={() => alert('WhatsApp notification bridge.')}
-                onSelectThreads={() => alert('Threads content dispatcher.')}
-              />
-            </div>
+            {/* 11. Quick Remix */}
+            <button
+              onClick={() => onOpenSidebar('create')}
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-[#d1fe17] bg-[#d1fe17]/10 hover:bg-[#d1fe17]/20 transition-all cursor-pointer"
+              title="Quick Prompt Remix"
+            >
+              <Sparkles className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Bottom Dock (Instagram Native Mobile UX for screens < 768px) */}
+      {/* Mobile Bottom Dock (Aligned native mobile controls for screens < 768px) */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#070709]/95 backdrop-blur-2xl border-t border-white/10 px-6 py-2 flex items-center justify-between">
-        {/* Home */}
         <button
           onClick={onHomeClick}
           className={`p-2 rounded-xl flex items-center justify-center ${
@@ -247,27 +179,22 @@ export const Header: React.FC<HeaderProps> = ({
           <Home className="w-6 h-6" />
         </button>
 
-        {/* Reels */}
         <button
-          onClick={onVideosClick}
-          className={`p-2 rounded-xl flex items-center justify-center ${
-            activeTab === 'videos' ? 'text-[#d1fe17]' : 'text-neutral-400'
-          }`}
-          title="Reels"
+          onClick={() => onOpenSidebar('motion')}
+          className="p-2 rounded-xl flex items-center justify-center text-neutral-400 hover:text-[#d1fe17]"
+          title="Motion & Video"
         >
           <Tv className="w-6 h-6" />
         </button>
 
-        {/* Center Create Button */}
         <button
-          onClick={() => setIsCreateOpen(true)}
-          className="w-11 h-11 rounded-2xl bg-[#d1fe17] text-black font-black flex items-center justify-center shadow-lg shadow-[#d1fe17]/25 -translate-y-2"
-          title="Create"
+          onClick={() => onOpenSidebar('create')}
+          className="w-11 h-11 rounded-2xl bg-[#d1fe17] text-black font-black flex items-center justify-center shadow-lg shadow-[#d1fe17]/25 -translate-y-2 cursor-pointer"
+          title="Create Soul Drop"
         >
           <Plus className="w-6 h-6 stroke-[3]" />
         </button>
 
-        {/* Favorites */}
         <button
           onClick={onFavoritesClick}
           className={`p-2 rounded-xl flex items-center justify-center ${
@@ -278,13 +205,14 @@ export const Header: React.FC<HeaderProps> = ({
           <Heart className={`w-6 h-6 ${favoritesCount > 0 ? 'fill-red-500 text-red-500' : ''}`} />
         </button>
 
-        {/* Professional Dashboard */}
         <button
-          onClick={onAnalyticsClick}
-          className="p-2 rounded-xl flex items-center justify-center text-neutral-400"
-          title="Professional Dashboard"
+          onClick={() => onOpenSidebar('persona')}
+          className="p-2 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white"
+          title="Persona Profile"
         >
-          <BarChart3 className="w-6 h-6" />
+          <div className="w-6 h-6 rounded-full overflow-hidden border border-white/30">
+            <img src="/images/influencer-avatar.png" className="w-full h-full object-cover" />
+          </div>
         </button>
       </nav>
     </>

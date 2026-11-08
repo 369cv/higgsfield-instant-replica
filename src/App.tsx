@@ -3,26 +3,22 @@ import { Header } from './components/Header';
 import { CardGrid } from './components/CardGrid';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
-import { ProfessionalDashboardModal } from './components/ProfessionalDashboardModal';
-import { HiggsfieldProfileModal } from './components/HiggsfieldProfileModal';
-import { BufferQueueModal } from './components/BufferQueueModal';
+import { HiggsfieldSidebar, SidebarMode } from './components/HiggsfieldSidebar';
 import { HiggsfieldService } from './services/higgsfieldBridge';
 import { VaultItem } from './types';
 
 export const App: React.FC = () => {
   const [vault, setVault] = useState<VaultItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<VaultItem | null>(null);
-  const [activeTab, setActiveTab] = useState<'home' | 'videos' | 'favorites'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'favorites'>('home');
   const [isGenerating, setIsGenerating] = useState(false);
   const [inProgressCount, setInProgressCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Modals state
-  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isBufferQueueOpen, setIsBufferQueueOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // Higgsfield Sidebar Drawer State
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [sidebarMode, setSidebarMode] = useState<SidebarMode>('create');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   // Favorites state persisted in localStorage
   const [favorites, setFavorites] = useState<Set<string>>(() => {
@@ -59,7 +55,6 @@ export const App: React.FC = () => {
       try {
         const details = await HiggsfieldService.getVaultDetails();
         if (isMounted && details.items && details.items.length > 0) {
-          // Filter strictly images from car cutoff onward
           const imagesOnly = details.items.filter(i => !i.isVideo);
           setVault(imagesOnly);
           setInProgressCount(details.inProgressCount);
@@ -81,91 +76,60 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  // Filter items by tab and search
+  // Filter items by category and favorites
   const displayedItems = vault.filter(item => {
     if (activeTab === 'favorites' && !favorites.has(item.id)) return false;
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      return (
-        item.prompt.toLowerCase().includes(query) ||
-        (item.title && item.title.toLowerCase().includes(query))
-      );
+    if (selectedCategory && selectedCategory !== 'All' && selectedCategory !== 'All Drops') {
+      const cat = selectedCategory.toLowerCase();
+      if (cat.includes('modest') || cat.includes('hijab')) {
+        return item.prompt.toLowerCase().includes('abaya') || item.prompt.toLowerCase().includes('hijab') || item.prompt.toLowerCase().includes('modest');
+      }
+      if (cat.includes('nightlife') || cat.includes('flash')) {
+        return item.prompt.toLowerCase().includes('night') || item.prompt.toLowerCase().includes('flash') || item.prompt.toLowerCase().includes('burj');
+      }
+      if (cat.includes('luxury') || cat.includes('editorial')) {
+        return item.prompt.toLowerCase().includes('luxury') || item.prompt.toLowerCase().includes('silk') || item.prompt.toLowerCase().includes('satin') || item.prompt.toLowerCase().includes('couture');
+      }
+      if (cat.includes('gym') || cat.includes('fitness')) {
+        return item.prompt.toLowerCase().includes('gym') || item.prompt.toLowerCase().includes('fitness') || item.prompt.toLowerCase().includes('halter');
+      }
     }
     return true;
   });
 
-  const handleTurnToVideo = (_item: VaultItem) => {
+  const handleOpenSidebar = (mode: SidebarMode) => {
+    setSidebarMode(mode);
+    setIsSidebarOpen(true);
+  };
+
+  const handleGenerateDrop = (prompt: string, model: string, ratio: string) => {
     setIsGenerating(true);
     setTimeout(() => {
       setIsGenerating(false);
-      alert('Job queued on Halal Fans: turning into video with Higgsfield Soul.');
+      alert(`Queued on Higgsfield ${model} at ${ratio} ratio: "${prompt.slice(0, 50)}..."`);
+    }, 2000);
+  };
+
+  const handleAnimateVideo = (motionType: string) => {
+    setIsGenerating(true);
+    setTimeout(() => {
+      setIsGenerating(false);
+      alert(`Kling 1.5 camera motion queued with trajectory: ${motionType}.`);
     }, 2500);
   };
 
   return (
     <div className="min-h-screen bg-[#070709] text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
-      {/* Search Input Bar (when search is toggled) */}
-      {isSearchOpen && (
-        <div className="w-full bg-[#121214] border-b border-white/10 px-4 sm:px-8 py-3 animate-in slide-in-from-top duration-200">
-          <div className="max-w-xl mx-auto flex items-center gap-3">
-            <input
-              type="text"
-              autoFocus
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search prompts (e.g. 'black leather jacket', 'cyberpunk', 'abaya', 'car')..."
-              className="flex-1 bg-black/60 border border-white/15 rounded-xl px-4 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="text-xs text-neutral-400 hover:text-white px-2 py-1"
-              >
-                Clear
-              </button>
-            )}
-            <button
-              onClick={() => {
-                setIsSearchOpen(false);
-                setSearchQuery('');
-              }}
-              className="text-xs bg-white/10 hover:bg-white/15 px-3 py-2 rounded-xl text-neutral-300 font-medium"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Top Header with Full Width Icon Navigation and Floating Popovers */}
+      {/* Top Header with Aligned Sidebar Drawer Triggers */}
       <Header
         activeTab={activeTab}
         favoritesCount={favorites.size}
         onHomeClick={() => {
           setActiveTab('home');
-          setSearchQuery('');
+          setSelectedCategory('All');
         }}
         onFavoritesClick={() => setActiveTab(prev => prev === 'favorites' ? 'home' : 'favorites')}
-        onCreateSoulDrop={() => {
-          setIsGenerating(true);
-          setTimeout(() => {
-            setIsGenerating(false);
-            alert('Prompt dispatched to Higgsfield Soul Engine.');
-          }, 2000);
-        }}
-        onAnimateToVideo={() => {
-          if (vault.length > 0) {
-            handleTurnToVideo(vault[0]);
-          } else {
-            alert('Select an image to animate to video.');
-          }
-        }}
-        onOpenScheduledContent={() => setIsBufferQueueOpen(true)}
-        onVideosClick={() => alert('Soul Videos filter: 37 motion generations indexed.')}
-        onFilterClick={() => alert('Category filters: Modest/Hijab (280), Nightlife & Flash (659), Luxury (396).')}
-        onSearchClick={() => setIsSearchOpen(prev => !prev)}
-        onAnalyticsClick={() => setIsDashboardOpen(true)}
-        onProfileClick={() => setIsProfileOpen(true)}
+        onOpenSidebar={handleOpenSidebar}
       />
 
       {/* Main Grid View */}
@@ -198,31 +162,27 @@ export const App: React.FC = () => {
         isFavorited={selectedItem ? favorites.has(selectedItem.id) : false}
         onToggleFavorite={toggleFavorite}
         onClose={() => setSelectedItem(null)}
-        onRecreate={() => setSelectedItem(null)}
-        onTurnToVideo={handleTurnToVideo}
-      />
-
-      {/* Professional Dashboard Modal (Instagram Dashboard screenshot media_1794093981351_5532c639.png) */}
-      <ProfessionalDashboardModal
-        isOpen={isDashboardOpen}
-        onClose={() => setIsDashboardOpen(false)}
-      />
-
-      {/* Higgsfield Creator Profile Modal (screenshot media_1794094916442_070a1f7f.png) */}
-      <HiggsfieldProfileModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-        onOpenCreate={() => {
-          setIsGenerating(true);
-          setTimeout(() => setIsGenerating(false), 2000);
+        onRecreate={() => {
+          setSelectedItem(null);
+          handleOpenSidebar('create');
+        }}
+        onTurnToVideo={() => {
+          handleOpenSidebar('motion');
         }}
       />
 
-      {/* Buffer Scheduled Content Drawer/Modal */}
-      <BufferQueueModal
-        isOpen={isBufferQueueOpen}
-        onClose={() => setIsBufferQueueOpen(false)}
+      {/* Higgsfield Aligned Studio Sidebar Drawer */}
+      <HiggsfieldSidebar
+        isOpen={isSidebarOpen}
+        mode={sidebarMode}
+        onClose={() => setIsSidebarOpen(false)}
         activeItem={selectedItem}
+        onGenerateDrop={handleGenerateDrop}
+        onAnimateVideo={handleAnimateVideo}
+        onSelectCategory={(cat) => {
+          setSelectedCategory(cat);
+          setIsSidebarOpen(false);
+        }}
       />
     </div>
   );
