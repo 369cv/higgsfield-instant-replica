@@ -3,6 +3,8 @@
  * otherwise an in-memory store seeded with the preset clips (dev / preview only — not durable).
  */
 import presetClips from '../../db/seed/preset-clips.json';
+// Bundled as text by esbuild (--loader:.sql=text); applied automatically on first connect.
+import schemaSql from '../../db/migrations/001_scene_remix.sql';
 import type { Clip, Collection, Remix } from '../../src/features/scenes/logic';
 
 export interface Report {
@@ -113,6 +115,7 @@ async function pgRepo(url: string): Promise<Repo> {
   const g = globalThis as any;
   const pool: import('pg').Pool = (g.__scenePool ||= new pg.Pool({ connectionString: url, max: 3 }));
   const q = async <T = any>(sql: string, args: unknown[] = []) => (await pool.query(sql, args)).rows as T[];
+  await (g.__sceneSchema ||= ensureSchema(pool));
   const cols = (o: Record<string, unknown>) => Object.keys(o);
   const json = (v: unknown) => (v !== null && typeof v === 'object' && !Array.isArray(v) ? JSON.stringify(v) : Array.isArray(v) && v.length && typeof v[0] === 'object' ? JSON.stringify(v) : v);
   const insert = async <T>(table: string, row: Record<string, unknown>) => {
@@ -184,8 +187,46 @@ async function pgRepo(url: string): Promise<Repo> {
   };
 }
 
+/**
+ * Self-provisioning: if the clips table is missing, apply the migration and seed the presets.
+ * An advisory lock keeps concurrent cold starts from racing. Safe to run against an existing DB.
+ */
+async function ensureSchema(pool: import('pg').Pool) {
+  const c = await pool.connect();
+  try {
+    await c.query('SELECT pg_advisory_lock(727001)');
+    const exists = (await c.query("SELECT to_regclass('public.clips') AS t")).rows[0].t;
+    if (!exists) {
+      await c.query(schemaSql);
+      console.log('[scenes] schema created');
+    }
+    const n = Number((await c.query("SELECT count(*) FROM clips WHERE source='preset'")).rows[0].count);
+    if (n === 0) {
+      for (const p of presetClips as unknown as Clip[]) {
+        await c.query(
+          `INSERT INTO clips (id,title,source,owner_id,storage_url,poster_url,duration_s,aspect,genre,mood,setting,
+             people_count,people,transcript,tags,license_note,visibility,remix_count,like_count,created_at)
+           VALUES ($1,$2,'preset','platform',$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'public',$15,$16,$17)
+           ON CONFLICT (id) DO NOTHING`,
+          [p.id, p.title, p.storage_url, p.poster_url, p.duration_s, p.aspect, p.genre, p.mood, p.setting,
+           p.people_count, JSON.stringify(p.people), p.transcript, p.tags, p.license_note, p.remix_count, p.like_count, p.created_at]
+        );
+      }
+      console.log(`[scenes] seeded ${(presetClips as unknown[]).length} preset clips`);
+    }
+  } finally {
+    await c.query('SELECT pg_advisory_unlock(727001)').catch(() => {});
+    c.release();
+  }
+}
+
 let cached: Promise<Repo> | null = null;
 export function repo(): Promise<Repo> {
   const url = process.env.DATABASE_URL;
-  return (cached ||= url ? pgRepo(url) : Promise.resolve(memoryRepo()));
+  cached ||= (url ? pgRepo(url) : Promise.resolve(memoryRepo())).catch((e) => {
+    cached = null;
+    (globalThis as any).__sceneSchema = undefined;
+    throw e;
+  });
+  return cached;
 }

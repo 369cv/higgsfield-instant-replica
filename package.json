@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "bridge": "node server/bridge.cjs",
     "start": "concurrently \"npm run bridge\" \"npm run dev\"",
-    "build:api": "esbuild server/scenes/handler.ts --bundle --platform=node --format=esm --target=node20 --external:pg --banner:js=\"// GENERATED from server/scenes/handler.ts by npm run build:api. Do not edit.\" --outfile=api/scenes.js"
+    "build:api": "esbuild server/scenes/handler.ts --bundle --platform=node --format=esm --target=node20 --external:pg --loader:.sql=text --banner:js=\"// GENERATED from server/scenes/handler.ts by npm run build:api. Do not edit.\" --outfile=api/scenes.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
