@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Search, X, Lock, Clock, ArrowUpRight } from 'lucide-react';
+import { Search, X, Clock, ArrowUpRight } from 'lucide-react';
 import { VaultItem } from '../types';
 import {
   SEARCH_CATEGORIES,
   SEARCH_STYLES,
-  SEARCH_COMING_SOON,
   RECENT_SEARCHES_KEY,
 } from '../config/search';
 
@@ -18,8 +17,8 @@ interface SearchModalProps {
   vaultItems: VaultItem[];
 }
 
-type Tab = 'All' | 'Categories' | 'Styles' | 'Coming soon';
-const TABS: Tab[] = ['All', 'Categories', 'Styles', 'Coming soon'];
+type Tab = 'All' | 'Categories' | 'Styles';
+const TABS: Tab[] = ['All', 'Categories', 'Styles'];
 
 function loadRecents(): string[] {
   try {
@@ -245,25 +244,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             </div>
           )}
 
-          {show('Coming soon') && (
-            <div>
-              <span className={sectionTitle}>Unlocking soon</span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {SEARCH_COMING_SOON.map((c) => (
-                  <div
-                    key={c.label}
-                    className="p-3 rounded-2xl bg-white/[0.03] border border-white/10 flex items-start gap-2.5 opacity-80"
-                  >
-                    <Lock className="w-4 h-4 text-accent-ink mt-0.5 shrink-0" />
-                    <div>
-                      <div className="text-[13px] font-semibold text-white">{c.label}</div>
-                      <div className="text-[11px] text-neutral-400">{c.hint}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -228,19 +228,19 @@ export const App: React.FC = () => {
   const LOCKED_COPY: Record<'influencer' | 'moodboard' | 'video' | 'explore', { title: string; description: string }> = {
     influencer: {
       title: 'AI Influencer',
-      description: 'Build and manage consistent AI characters. This feature is unlocking soon.',
+      description: 'Coming soon.',
     },
     moodboard: {
       title: 'Moodboard',
-      description: 'Curated style boards you can apply to any prompt. Unlocking soon.',
+      description: 'Coming soon.',
     },
     video: {
       title: 'Cinema Studio',
-      description: 'Motion and cinematic video prompts are on the way. Unlocking soon.',
+      description: 'Coming soon.',
     },
     explore: {
       title: 'Explore',
-      description: 'Discover trending prompts from the community. Unlocking soon.',
+      description: 'Coming soon.',
     },
   };
 

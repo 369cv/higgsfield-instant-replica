@@ -5,10 +5,8 @@ import {
   Copy,
   Flame,
   Pencil,
-  Sparkles,
   LayoutGrid,
   Wind,
-  Bell,
   Search,
   Trash2,
   Share2,
@@ -176,7 +174,7 @@ export const HiggsfieldProfileModal: React.FC<ProfileProps> = ({
         <section className="rounded-2xl bg-surface border border-white/[0.06] p-6 mb-4 flex flex-col items-center text-center">
           <Avatar name={settings.displayName} hue={settings.avatarHue} size={88} />
           <h2 className="mt-3 text-[22px] font-bold tracking-tight">{name}</h2>
-          <p className="text-[14px] text-neutral-500">Free plan · Member since {memberSince}</p>
+          <p className="text-[14px] text-neutral-500">Member since {memberSince}</p>
           <button
             onClick={openEdit}
             className="mt-4 h-9 px-4 rounded-full bg-neutral-800 text-[14px] font-semibold text-white flex items-center gap-1.5 active:opacity-70 cursor-pointer"
@@ -198,20 +196,6 @@ export const HiggsfieldProfileModal: React.FC<ProfileProps> = ({
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Pro teaser (brand gradient) */}
-        <section className="theme-dark relative overflow-hidden rounded-2xl mb-7 p-5 bg-[linear-gradient(120deg,#6d28d9_0%,#db2777_45%,#2dd4bf_100%)]">
-          <div className="absolute -right-6 -top-6 opacity-30 pointer-events-none">
-            <BrandMark size={120} className="shadow-none" />
-          </div>
-          <span className="relative inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-black/25 text-white">
-            <Sparkles className="w-3 h-3" /> Coming soon
-          </span>
-          <h3 className="relative mt-3 text-[19px] font-bold text-white">Pro is unlocking soon</h3>
-          <p className="relative mt-1 text-[14px] leading-snug text-white/85 max-w-[34ch]">
-            Motion prompts, moodboards, Cinema Studio and AI Influencer.
-          </p>
         </section>
 
         <ListGroup title="Appearance" footer="System follows your device’s light or dark setting.">
@@ -247,17 +231,6 @@ export const HiggsfieldProfileModal: React.FC<ProfileProps> = ({
                 onChange={(reduceMotion) => updateSettings({ reduceMotion })}
               />
             }
-          />
-        </ListGroup>
-
-        <ListGroup title="Notifications">
-          <ListRow
-            icon={Bell}
-            iconBg="bg-[#ff375f]"
-            label="Daily prompt reminder"
-            badge="Soon"
-            description="Get notified when today’s prompts drop."
-            trailing={<Switch label="Daily prompt reminder" checked={false} onChange={() => {}} disabled />}
           />
         </ListGroup>
 

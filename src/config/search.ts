@@ -4,7 +4,6 @@
  * - `categories` set the vault's category filter (must match the niche labels
  *   in PromptsNicheSubheader / categorizationFramework).
  * - `styles` run a keyword search across every prompt.
- * - `comingSoon` render as locked rows (no action).
  */
 
 export interface SearchCategory {
@@ -15,11 +14,6 @@ export interface SearchCategory {
 export interface SearchStyle {
   label: string;
   query: string; // keyword(s) matched against prompt text
-}
-
-export interface ComingSoonItem {
-  label: string;
-  hint: string;
 }
 
 export const SEARCH_CATEGORIES: SearchCategory[] = [
@@ -42,12 +36,6 @@ export const SEARCH_STYLES: SearchStyle[] = [
   { label: 'Studio', query: 'studio' },
   { label: 'Night', query: 'night' },
   { label: 'Dubai', query: 'dubai' },
-];
-
-export const SEARCH_COMING_SOON: ComingSoonItem[] = [
-  { label: 'Motion prompts', hint: 'Video prompts for every drop' },
-  { label: 'Moodboards', hint: 'Curated style boards' },
-  { label: 'Cinema Studio', hint: 'Shot-by-shot cinematic prompts' },
 ];
 
 export const RECENT_SEARCHES_KEY = 'vault_recent_searches_v1';
