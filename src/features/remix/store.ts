@@ -25,6 +25,9 @@ export interface RemixGeneration {
     watermark: string;
     parentRemixId?: string;
   };
+  /** Job id on the self-hosted storyboard engine (real progress instead of the simulated runner). */
+  engineJobId?: string;
+  error?: string;
   credits: number;
   liked?: boolean;
   downloaded?: boolean;
@@ -61,6 +64,10 @@ export function addGeneration(g: Omit<RemixGeneration, 'id' | 'createdAt' | 'sta
   };
   items = [full, ...items];
   save();
+  if (full.engineJobId) {
+    pollEngine(full.id, full.engineJobId);
+    return full;
+  }
   // Simulated job runner (GET /jobs/:id). Replace with the real queue when the backend lands.
   const total = full.scene ? 8000 : 2500;
   const started = Date.now();
@@ -123,3 +130,38 @@ export function useLibraryLikes() {
     () => likes
   );
 }
+
+/* ---------- Storyboard engine polling (real jobs) ---------- */
+
+const polling = new Set<string>();
+function pollEngine(genId: string, jobId: string) {
+  if (polling.has(genId)) return;
+  polling.add(genId);
+  let delay = 3000;
+  const tick = async () => {
+    try {
+      const r = await fetch(`/api/storyboard?id=${encodeURIComponent(jobId)}`);
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || String(r.status));
+      if (d.status === 'done' && d.output_url) {
+        updateGeneration(genId, { status: 'done', progress: 100, output: { url: d.output_url, poster: d.poster_url } });
+        polling.delete(genId);
+        return;
+      }
+      if (d.status === 'failed') {
+        updateGeneration(genId, { status: 'failed', error: d.error || 'Generation failed' });
+        polling.delete(genId);
+        return;
+      }
+      updateGeneration(genId, { status: 'running', progress: typeof d.progress === 'number' ? d.progress : undefined });
+      delay = 4000;
+    } catch {
+      delay = Math.min(delay * 2, 30000); // engine busy or offline: back off, keep the job
+    }
+    setTimeout(tick, delay);
+  };
+  setTimeout(tick, delay);
+}
+
+// Resume polling for unfinished engine jobs after a reload.
+items.filter((g) => g.engineJobId && (g.status === 'queued' || g.status === 'running')).forEach((g) => pollEngine(g.id, g.engineJobId!));
