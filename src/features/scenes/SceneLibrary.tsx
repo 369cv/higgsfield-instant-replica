@@ -174,6 +174,7 @@ const LibraryTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onReport
     <>
       {/* Hero */}
       <section className="px-5 pt-8 pb-6 flex flex-col items-center text-center">
+        {hero.length > 0 && (
         <div className="relative h-[170px] sm:h-[210px] w-full max-w-[560px] mb-5" aria-hidden="true">
           {hero.map((c, i) => {
             const off = i - Math.floor(hero.length / 2);
@@ -192,6 +193,7 @@ const LibraryTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onReport
             );
           })}
         </div>
+        )}
         <h1 className="text-[28px] sm:text-[42px] font-black uppercase tracking-tight leading-none">Recast any scene</h1>
         <p className="mt-2 text-[13.5px] text-neutral-400 max-w-lg">Pick a moment, choose which of your AI influencers plays each part, and generate it in seconds.</p>
       </section>
@@ -293,6 +295,10 @@ const LibraryTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onReport
 
       {loading ? (
         <SkeletonGrid />
+      ) : clips.length === 0 ? (
+        <div className="text-center py-20 text-neutral-500 text-sm">
+          New scenes are on the way. Meanwhile, <span className="text-white">upload your own clip</span> to recast it.
+        </div>
       ) : results.length === 0 ? (
         <div className="text-center py-20 text-neutral-500 text-sm">
           No scenes match. Try another line or clear filters — or <span className="text-white">upload your own clip</span>.

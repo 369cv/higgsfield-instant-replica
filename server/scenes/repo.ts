@@ -200,9 +200,11 @@ async function ensureSchema(pool: import('pg').Pool) {
       await c.query(schemaSql);
       console.log('[scenes] schema created');
     }
-    const n = Number((await c.query("SELECT count(*) FROM clips WHERE source='preset'")).rows[0].count);
-    if (n === 0) {
-      for (const p of presetClips as unknown as Clip[]) {
+    // Presets mirror db/seed/preset-clips.json: insert any new ones, retire ones that were removed
+    // (hidden, not deleted, so existing remixes of them keep working).
+    const seed = presetClips as unknown as Clip[];
+    {
+      for (const p of seed) {
         await c.query(
           `INSERT INTO clips (id,title,source,owner_id,storage_url,poster_url,duration_s,aspect,genre,mood,setting,
              people_count,people,transcript,tags,license_note,visibility,remix_count,like_count,created_at)
@@ -212,7 +214,12 @@ async function ensureSchema(pool: import('pg').Pool) {
            p.people_count, JSON.stringify(p.people), p.transcript, p.tags, p.license_note, p.remix_count, p.like_count, p.created_at]
         );
       }
-      console.log(`[scenes] seeded ${(presetClips as unknown[]).length} preset clips`);
+      const retired = await c.query(
+        `UPDATE clips SET visibility='removed'
+           WHERE source='preset' AND visibility <> 'removed' AND NOT (id = ANY($1::text[]))`,
+        [seed.map((p) => p.id)]
+      );
+      if (retired.rowCount) console.log(`[scenes] retired ${retired.rowCount} preset clips`);
     }
   } finally {
     await c.query('SELECT pg_advisory_unlock(727001)').catch(() => {});
