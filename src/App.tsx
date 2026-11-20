@@ -4,6 +4,8 @@ import { CardGrid } from './components/CardGrid';
 import { AssetsScreen } from './components/AssetsScreen';
 import { LockedScreen } from './components/LockedScreen';
 import { InfluencerStudio } from './features/influencer/InfluencerStudio';
+import { RemixStudio } from './features/remix/RemixStudio';
+import { MoodboardStudio } from './features/moodboard/MoodboardStudio';
 import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
@@ -236,7 +238,7 @@ export const App: React.FC = () => {
       description: 'Coming soon.',
     },
     video: {
-      title: 'Cinema Studio',
+      title: 'Video Remix',
       description: 'Coming soon.',
     },
     explore: {
@@ -352,9 +354,19 @@ export const App: React.FC = () => {
         </main>
       )}
 
-      {(activeTab === 'moodboard' ||
-        activeTab === 'video' ||
-        activeTab === 'explore') && (
+      {activeTab === 'video' && (
+        <main className="flex-1 w-full flex flex-col">
+          <RemixStudio vaultItems={vault} />
+        </main>
+      )}
+
+      {activeTab === 'moodboard' && (
+        <main className="flex-1 w-full flex flex-col">
+          <MoodboardStudio vaultItems={vault} />
+        </main>
+      )}
+
+      {activeTab === 'explore' && (
         <main className="flex-1 w-full flex flex-col">
           <LockedScreen
             key={activeTab}
