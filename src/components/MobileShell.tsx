@@ -28,7 +28,7 @@ export const MOBILE_TITLES: Record<string, string> = {
   profile: 'Profile',
   influencer: 'AI Influencer',
   moodboard: 'Moodboard',
-  video: 'Cinema Studio',
+  video: 'Video Remix',
   explore: 'Explore',
 };
 
@@ -120,7 +120,7 @@ interface MobileDrawerProps {
 const LOCKED_ROWS: { id: NavTab; label: string; icon: React.ElementType }[] = [
   { id: 'influencer', label: 'AI Influencer', icon: UserPlus },
   { id: 'moodboard', label: 'Moodboard', icon: LayoutDashboard },
-  { id: 'video', label: 'Cinema Studio', icon: Clapperboard },
+  { id: 'video', label: 'Video Remix', icon: Clapperboard },
   { id: 'explore', label: 'Explore', icon: Compass },
 ];
 
@@ -221,6 +221,8 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
             />
             <Row icon={Folder} label="Assets" isActive={active === 'assets'} onClick={() => go('assets')} />
             <Row icon={UserPlus} label="AI Influencer" isActive={active === 'influencer'} onClick={() => go('influencer')} />
+            <Row icon={LayoutDashboard} label="Moodboard" isActive={active === 'moodboard'} onClick={() => go('moodboard')} />
+            <Row icon={Clapperboard} label="Video Remix" isActive={active === 'video'} onClick={() => go('video')} />
           </div>
 
           <div className={groupLabel}>Unlocking soon</div>

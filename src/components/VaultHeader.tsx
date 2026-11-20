@@ -7,7 +7,7 @@ import { useSettings } from '../services/settings';
 export type NavTab = 'vault' | 'moodboard' | 'create' | 'influencer' | 'video' | 'assets' | 'explore';
 
 /** Tabs that stay in the nav but open a blurred "unlocking soon" page. */
-export const LOCKED_TABS: NavTab[] = ['moodboard', 'video', 'explore'];
+export const LOCKED_TABS: NavTab[] = ['explore'];
 
 interface VaultHeaderProps {
   activeTab: NavTab;
@@ -85,7 +85,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
     },
     {
       id: 'video',
-      label: 'Cinema Studio',
+      label: 'Video Remix',
       icon: (
         <svg
           className="w-4 h-4"
