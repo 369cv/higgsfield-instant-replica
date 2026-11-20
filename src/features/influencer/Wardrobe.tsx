@@ -382,6 +382,7 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
           el.style.setProperty('--bx', `${-x * 22}px`);
           el.style.setProperty('--by', `${-y * 12}px`);
           el.style.setProperty('--mx', `${x * 10}px`);
+          el.style.setProperty('--ry', `${x * 5}deg`);
         }}
         className={`theme-dark relative ${embedded ? 'h-[56dvh] min-h-[380px]' : 'flex-1 min-h-[380px]'} overflow-hidden rounded-none lg:rounded-2xl lg:m-4 lg:mb-0 bg-[#cfd2d4] lg:border border-white/[0.08]`}
       >
@@ -406,9 +407,12 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
             className="relative h-full aspect-[2/3] transition-transform duration-1000 ease-[cubic-bezier(.65,0,.2,1)]"
             style={{ transform: framingTransform[current.framing], transformOrigin: '50% 6%' }}
           >
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-[0.5%] w-[46%] h-[4%] rounded-[50%] bg-[radial-gradient(closest-side,rgba(30,28,26,.55),rgba(30,28,26,0))] blur-[4px]" />
-            <div className="absolute inset-0 transition-transform duration-700" style={{ transform: 'translate3d(var(--mx,0),0,0)' }}>
-              <div className="absolute inset-0 wd-breath">
+            <div className="wd-shadow absolute left-1/2 bottom-[0.5%] w-[46%] h-[4%] rounded-[50%] bg-[radial-gradient(closest-side,rgba(30,28,26,.55),rgba(30,28,26,0))] blur-[4px]" />
+            <div
+              className="absolute inset-0 transition-transform duration-700 ease-out"
+              style={{ transform: 'perspective(1400px) translate3d(var(--mx,0),0,0) rotateY(var(--ry,0deg))' }}
+            >
+              <div className="absolute inset-0 wd-idle">
                 {layers.map((l) => (
                   <img
                     key={l.key}
@@ -423,6 +427,14 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
                   />
                 ))}
                 {scanKey > 0 && <div key={scanKey} className="wd-scan" aria-hidden="true" />}
+                {/* drifting window light, clipped to the figure */}
+                <div
+                  className="absolute inset-0 overflow-hidden pointer-events-none"
+                  style={{ WebkitMaskImage: `url(${src})`, maskImage: `url(${src})`, WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'bottom', maskPosition: 'bottom' }}
+                  aria-hidden="true"
+                >
+                  <div className="wd-light absolute -inset-x-1/4 inset-y-0" />
+                </div>
               </div>
             </div>
           </div>

@@ -195,3 +195,31 @@ html {
 .wd-pop {
   animation: wdPop .45s cubic-bezier(.3, 1.4, .5, 1) both;
 }
+
+/* ---------- Wardrobe: idle "alive" motion ---------- */
+@keyframes wdIdle {
+  0%   { transform: translateX(0) rotate(0deg) scaleY(1); }
+  22%  { transform: translateX(-1.2px) rotate(-0.35deg) scaleY(1.006); }
+  48%  { transform: translateX(0.4px) rotate(0.1deg) scaleY(1.001); }
+  74%  { transform: translateX(1.4px) rotate(0.4deg) scaleY(1.007); }
+  100% { transform: translateX(0) rotate(0deg) scaleY(1); }
+}
+.wd-idle {
+  transform-origin: 50% 98%;
+  animation: wdIdle 7.5s ease-in-out infinite;
+}
+@keyframes wdShadow {
+  0%, 100% { transform: translateX(-50%) scaleX(1); opacity: .9; }
+  22% { transform: translateX(calc(-50% - 3px)) scaleX(.97); opacity: .85; }
+  74% { transform: translateX(calc(-50% + 3px)) scaleX(1.03); opacity: 1; }
+}
+.wd-shadow { animation: wdShadow 7.5s ease-in-out infinite; }
+@keyframes wdLight {
+  0%, 100% { transform: translateX(-18%); opacity: .55; }
+  50% { transform: translateX(14%); opacity: .8; }
+}
+.wd-light {
+  background: linear-gradient(100deg, rgba(255,255,255,.0) 20%, rgba(255,250,240,.38) 42%, rgba(255,255,255,0) 64%);
+  mix-blend-mode: soft-light;
+  animation: wdLight 14s ease-in-out infinite;
+}
