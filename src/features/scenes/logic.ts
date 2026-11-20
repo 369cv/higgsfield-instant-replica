@@ -204,7 +204,7 @@ export function castComplete(peopleCount: number, cast: CastEntry[]) {
 
 /**
  * Person detection contract. Presets ship with annotated points; for uploads the server runs a detector
- * (see api/scenes/detect.ts) and, without one configured, returns evenly spaced placeholders the user can adjust.
+ * (see the detect route in api/scenes.ts) and, without one configured, returns evenly spaced placeholders the user can adjust.
  */
 export function placeholderPeople(count: number): PersonPoint[] {
   const n = Math.max(1, Math.min(LIMITS.maxPeople, count));

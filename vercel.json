@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/api/scenes/:path*", "destination": "/api/scenes?path=:path*" },
     { "source": "/sidepanel", "destination": "/sidepanel.html" },
     { "source": "/popup", "destination": "/popup.html" },
     { "source": "/(.*)", "destination": "/index.html" }
