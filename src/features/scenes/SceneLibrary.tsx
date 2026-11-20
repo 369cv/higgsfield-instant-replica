@@ -24,7 +24,6 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { toast } from '../../components/ui';
-import { StoryboardsTab } from './StoryboardsTab';
 import {
   Clip,
   ClipQuery,
@@ -59,7 +58,7 @@ import {
 } from './store';
 
 const fmt = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K` : String(n));
-type Tab = 'library' | 'storyboards' | 'collections' | 'uploads';
+type Tab = 'library' | 'collections' | 'uploads';
 
 /* ============================================================
  * Media: autoplay muted only while in view; poster drift for stills
@@ -101,7 +100,6 @@ export const SceneLibrary: React.FC<{ onRemix: (c: Clip) => void }> = ({ onRemix
         {(
           [
             ['library', 'Library'],
-            ['storyboards', 'Storyboards'],
             ['collections', `Collections${store.collections.length ? ` · ${store.collections.length}` : ''}`],
             ['uploads', `My Uploads${store.uploads.length ? ` · ${store.uploads.length}` : ''}`],
           ] as const
@@ -123,7 +121,6 @@ export const SceneLibrary: React.FC<{ onRemix: (c: Clip) => void }> = ({ onRemix
 
       <div key={tab} className="animate-fade-in">
         {tab === 'library' && <LibraryTab clips={all} onRemix={onRemix} onReport={setReport} />}
-        {tab === 'storyboards' && <StoryboardsTab />}
         {tab === 'collections' && <CollectionsTab clips={all} onRemix={onRemix} onReport={setReport} />}
         {tab === 'uploads' && <UploadsTab onRemix={onRemix} onUpload={() => setUploadOpen(true)} />}
       </div>
