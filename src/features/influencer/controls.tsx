@@ -96,7 +96,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
                 <button
                   key={o.value}
                   {...common}
-                  className={`relative aspect-[4/5] rounded-lg overflow-hidden border-2 transition-all cursor-pointer flex items-end ${
+                  className={`relative ${o.image ? 'aspect-[4/5] items-end' : 'min-h-[52px] items-center'} rounded-lg overflow-hidden border-2 transition-all cursor-pointer flex ${
                     active ? 'border-[#d1fe17] scale-[1.02]' : 'border-transparent hover:border-white/15'
                   } ${o.image ? 'bg-neutral-900' : 'bg-white/[0.04]'}`}
                 >
