@@ -220,6 +220,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
               trailing={savedCount > 0 ? <span className="text-[13px] text-neutral-500">{savedCount}</span> : null}
             />
             <Row icon={Folder} label="Assets" isActive={active === 'assets'} onClick={() => go('assets')} />
+            <Row icon={UserPlus} label="AI Influencer" isActive={active === 'influencer'} onClick={() => go('influencer')} />
           </div>
 
           <div className={groupLabel}>Unlocking soon</div>

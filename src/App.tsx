@@ -3,6 +3,7 @@ import { VaultHeader, NavTab } from './components/VaultHeader';
 import { CardGrid } from './components/CardGrid';
 import { AssetsScreen } from './components/AssetsScreen';
 import { LockedScreen } from './components/LockedScreen';
+import { InfluencerStudio } from './features/influencer/InfluencerStudio';
 import { SearchModal } from './components/SearchModal';
 import { GeneratingQueue } from './components/GeneratingQueue';
 import { InspectorModal } from './components/InspectorModal';
@@ -345,8 +346,13 @@ export const App: React.FC = () => {
       )}
 
       {/* Locked sections: kept in the nav, shown as a blurred page with a lock */}
-      {(activeTab === 'influencer' ||
-        activeTab === 'moodboard' ||
+      {activeTab === 'influencer' && (
+        <main className="flex-1 w-full flex flex-col">
+          <InfluencerStudio vaultItems={vault} />
+        </main>
+      )}
+
+      {(activeTab === 'moodboard' ||
         activeTab === 'video' ||
         activeTab === 'explore') && (
         <main className="flex-1 w-full flex flex-col">
