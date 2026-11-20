@@ -1,5 +1,5 @@
 /**
- * Scene Remix API (Vercel function, catch-all).
+ * Scene Remix API (Vercel function). vercel.json rewrites /api/scenes/<path> to /api/scenes?path=<path>.
  *
  *   GET    /api/scenes/clips?q=&genre=&mood=&setting=&people=&duration=&sort=   search + filters
  *   POST   /api/scenes/clips                    create user upload (requires rights attestation)
@@ -15,7 +15,7 @@
  *
  * Identity: `x-user-id` header until real auth lands (TODO: replace with session lookup).
  */
-import { repo } from './_repo';
+import { repo } from './_scenes/repo';
 import {
   Clip,
   Collection,
@@ -33,7 +33,7 @@ import {
   RIGHTS_STATEMENT,
   LIMITS,
   uid,
-} from '../../src/features/scenes/logic';
+} from '../src/features/scenes/logic';
 
 type Req = { method?: string; query: Record<string, string | string[]>; headers: Record<string, string | undefined>; body?: any };
 type Res = { status(n: number): Res; json(b: unknown): void; setHeader(k: string, v: string): void; end(): void };
@@ -55,7 +55,8 @@ export default async function handler(req: Req, res: Res) {
   res.setHeader('Cache-Control', 'no-store');
   const db = await repo();
   const user = (req.headers['x-user-id'] || 'anonymous').slice(0, 64);
-  const parts = list(req.query.path as string[]).length ? (req.query.path as string[]) : [];
+  const raw = req.query.path;
+  const parts = (Array.isArray(raw) ? raw.join('/') : raw || '').split('/').filter(Boolean);
   const [resource, id, action] = parts;
   const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
   const bad = (msg: string | string[], code = 400) => res.status(code).json({ error: Array.isArray(msg) ? msg : [msg] });
