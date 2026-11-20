@@ -333,6 +333,9 @@ const SkeletonGrid = () => (
   </div>
 );
 
+/** One-click searches on the external clip site (opens in a new tab). */
+const QUICK_SHOWS = ['Selling Sunset', 'Suits', 'Shark Tank'];
+
 const FindScene = () => {
   const [q, setQ] = useState('');
   const go = () => q.trim() && window.open(findSceneUrl(q), '_blank', 'noopener,noreferrer');
@@ -350,6 +353,17 @@ const FindScene = () => {
         <button onClick={go} disabled={!q.trim()} className="px-3 text-[12.5px] flex items-center gap-1 text-neutral-300 hover:text-white disabled:opacity-40 cursor-pointer border-l border-white/[0.06]">
           Search <ExternalLink className="w-3.5 h-3.5" />
         </button>
+      </div>
+      <div className="mt-1.5 flex flex-wrap gap-1.5" role="group" aria-label="Quick searches">
+        {QUICK_SHOWS.map((show) => (
+          <button
+            key={show}
+            onClick={() => window.open(findSceneUrl(show), '_blank', 'noopener,noreferrer')}
+            className="h-7 px-2.5 rounded-full bg-white/[0.06] hover:bg-white/10 text-[11.5px] text-neutral-300 flex items-center gap-1 cursor-pointer"
+          >
+            {show} <ExternalLink className="w-3 h-3" />
+          </button>
+        ))}
       </div>
       <span className="mt-1 text-[10.5px] text-neutral-500">Opens in a new tab. Downloaded clips must be ones you have rights to use.</span>
     </div>
