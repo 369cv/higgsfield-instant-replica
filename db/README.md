@@ -2,8 +2,12 @@
 
 ## Setup
 
-1. Provision Postgres 14+ and set `DATABASE_URL` in Vercel (Production + Preview).
-2. Apply the schema and seed the 12 placeholder preset clips:
+1. In the Vercel dashboard, open the project, go to **Storage**, choose **Create Database** and pick a Postgres provider (for example Neon). Connect it to Production and Preview. This sets `DATABASE_URL`.
+2. Redeploy.
+
+The API creates the schema and seeds the 12 presets on its first connection to an empty database. It takes an advisory lock so concurrent cold starts don't race, and it does nothing if the tables already exist.
+
+Manual alternative (local or CI):
 
 ```bash
 psql "$DATABASE_URL" -f db/migrations/001_scene_remix.sql
