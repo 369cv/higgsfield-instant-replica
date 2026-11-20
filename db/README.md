@@ -23,7 +23,9 @@ Without `DATABASE_URL` the API serves the seed from memory. That mode isn't dura
 | `PERSON_DETECTOR_URL` | `POST {video_url}` → `{people:[{x,y}]}` | Annotated points for presets, evenly spaced placeholders for uploads (user can adjust) |
 | `REMIX_WORKER_URL` | Receives `{remix, clip}`; renders, burns in the watermark, embeds provenance, updates status | Simulated progress (20s) |
 
-## API — `api/scenes.ts` (vercel.json rewrites `/api/scenes/*` to it)
+## API — source `server/scenes/handler.ts`, bundled to `api/scenes.js`
+
+Regenerate after any change to the handler, repo or `src/features/scenes/logic.ts`, and commit the output: `npm run build:api`. vercel.json rewrites `/api/scenes/*` to it.
 
 | Method | Path | Notes |
 |---|---|---|
