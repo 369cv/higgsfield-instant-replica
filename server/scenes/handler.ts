@@ -1,5 +1,6 @@
 /**
- * Scene Remix API (Vercel function). vercel.json rewrites /api/scenes/<path> to /api/scenes?path=<path>.
+ * Scene Remix API. Source of api/scenes.js (bundled: npm run build:api — commit the output).
+ * vercel.json rewrites /api/scenes/<path> to /api/scenes?path=<path>.
  *
  *   GET    /api/scenes/clips?q=&genre=&mood=&setting=&people=&duration=&sort=   search + filters
  *   POST   /api/scenes/clips                    create user upload (requires rights attestation)
@@ -15,7 +16,7 @@
  *
  * Identity: `x-user-id` header until real auth lands (TODO: replace with session lookup).
  */
-import { repo } from './_scenes/repo';
+import { repo } from './repo';
 import {
   Clip,
   Collection,
@@ -33,7 +34,7 @@ import {
   RIGHTS_STATEMENT,
   LIMITS,
   uid,
-} from '../src/features/scenes/logic';
+} from '../../src/features/scenes/logic';
 
 type Req = { method?: string; query: Record<string, string | string[]>; headers: Record<string, string | undefined>; body?: any };
 type Res = { status(n: number): Res; json(b: unknown): void; setHeader(k: string, v: string): void; end(): void };
