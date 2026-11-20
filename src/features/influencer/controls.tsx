@@ -26,7 +26,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
         className="w-full h-11 px-3.5 flex items-center gap-2 text-left cursor-pointer hover:bg-white/[0.03]"
       >
         <span className="text-[13px] font-medium text-white">{trait.label}</span>
-        <span className="text-[12px] text-neutral-500">· {trait.options.length}</span>
+        <span className="text-[12px] text-neutral-500">· {trait.multi && trait.max ? `pick up to ${trait.max}` : trait.options.length}</span>
         {summary && !open && (
           <span className="ml-auto mr-1 max-w-[45%] truncate text-[12px] text-accent-ink">{summary}</span>
         )}

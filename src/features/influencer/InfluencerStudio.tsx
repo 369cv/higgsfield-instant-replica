@@ -18,7 +18,8 @@ import {
 } from 'lucide-react';
 import { VaultItem } from '../../types';
 import { toast } from '../../components/ui';
-import { TraitSelection, compileCharacterPrompt, selectionChips, selectionCount } from './traits';
+import { TraitSelection, compileCharacterPrompt, sanitizeSelection, selectionChips, selectionCount } from './traits';
+import { presetTraits } from './presetTraits';
 import { BuilderPanel, MotionPanel, MotionState, initialMotion } from './panels';
 import {
   HERO_MEDIA,
@@ -83,7 +84,7 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
   const [galleryTab, setGalleryTab] = useState<GalleryTab>('influencers');
   const [selection, setSelection] = useState<TraitSelection>(() => {
     try {
-      return JSON.parse(localStorage.getItem(SELECTION_KEY) || '{}');
+      return sanitizeSelection(JSON.parse(localStorage.getItem(SELECTION_KEY) || '{}'));
     } catch {
       return {};
     }
@@ -177,7 +178,8 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
 
   const recreate = (traits?: TraitSelection, preset?: string) => {
     if (!traits && !preset) return;
-    if (traits) setSelection(traits);
+    if (traits) setSelection(sanitizeSelection(traits));
+    else if (preset) setSelection(presetTraits(preset) || {});
     setPresetId(preset || null);
     setLeftTab('create');
     setMobilePane('build');
@@ -185,8 +187,14 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
     toast('Loaded into the builder');
   };
 
-  const usePreset = (id: string) => {
+  /** Pick (or clear) a preset; picking loads her tagged traits into the builder. */
+  const choosePreset = (id: string | null) => {
     setPresetId(id);
+    if (id) setSelection(presetTraits(id) || {});
+  };
+
+  const usePreset = (id: string) => {
+    choosePreset(id);
     if (photo) {
       URL.revokeObjectURL(photo);
       setPhoto(null);
@@ -263,7 +271,7 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
           photo={photo}
           onPhoto={setPhoto}
           presetId={presetId}
-          onPreset={setPresetId}
+          onPreset={choosePreset}
           onGenerate={generateCharacter}
         />
       ) : (

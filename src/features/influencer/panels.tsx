@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ImagePlus, Shuffle, Sparkles, Video, Images, X, Palette, ChevronRight, Upload, Check } from 'lucide-react';
-import { TRAITS, TraitSelection, randomSelection } from './traits';
+import { TRAITS, TRAIT_SECTIONS, TraitSelection, isTraitVisible, randomSelection } from './traits';
 import { TraitAccordion, SelectPopover, Dropzone } from './controls';
+import { PRESET_TRAITS } from './presetTraits';
 import { MOTION_MODELS, QUALITIES, Quality, STYLE_PRESETS, CHARACTER_PRESETS, presetFace } from './catalog';
 import { Sheet, Switch, toast } from '../../components/ui';
 
@@ -30,6 +31,9 @@ export const BuilderPanel: React.FC<BuilderPanelProps> = ({
 }) => {
   const [openId, setOpenId] = useState<string | null>(TRAITS[0].id);
   const [allPresets, setAllPresets] = useState(false);
+  const [nicheFilter, setNicheFilter] = useState<string | null>(null);
+  const niches = TRAITS.find((t) => t.id === 'niche')!.options.map((o) => o.value).filter((n) => CHARACTER_PRESETS.some((p) => PRESET_TRAITS[p.id]?.niche?.[0] === n));
+  const filteredPresets = nicheFilter ? CHARACTER_PRESETS.filter((p) => PRESET_TRAITS[p.id]?.niche?.[0] === nicheFilter) : CHARACTER_PRESETS;
   const preset = CHARACTER_PRESETS.find((p) => p.id === presetId) || null;
   // Show the selected preset first in the strip.
   const strip = preset ? [preset, ...CHARACTER_PRESETS.filter((p) => p.id !== preset.id)] : CHARACTER_PRESETS;
@@ -46,7 +50,13 @@ export const BuilderPanel: React.FC<BuilderPanelProps> = ({
     const t = TRAITS.find((x) => x.id === traitId)!;
     const cur = selection[traitId] || [];
     let next: string[];
-    if (t.multi) next = cur.includes(value) ? cur.filter((v) => v !== value) : [...cur, value];
+    if (t.multi) {
+      if (cur.includes(value)) next = cur.filter((v) => v !== value);
+      else if (t.max && cur.length >= t.max) {
+        toast(`Up to ${t.max} ${t.label.toLowerCase()}`);
+        return;
+      } else next = [...cur, value];
+    }
     else next = cur[0] === value ? [] : [value];
     onChange({ ...selection, [traitId]: next });
   };
@@ -112,21 +122,44 @@ export const BuilderPanel: React.FC<BuilderPanelProps> = ({
           )}
         </Dropzone>
 
-        {TRAITS.map((t) => (
-          <TraitAccordion
-            key={t.id}
-            trait={t}
-            selected={selection[t.id] || []}
-            open={openId === t.id}
-            onToggleOpen={() => setOpenId(openId === t.id ? null : t.id)}
-            onSelect={(v) => select(t.id, v)}
-          />
+        {TRAIT_SECTIONS.map((sec) => (
+          <div key={sec.id} className="space-y-2">
+            <div className="px-1 pt-2 flex items-baseline gap-2">
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-neutral-300">{sec.label}</h3>
+              <span className="text-[11px] text-neutral-500">{sec.hint}</span>
+            </div>
+            {TRAITS.filter((t) => t.section === sec.id && isTraitVisible(t, selection)).map((t) => (
+              <TraitAccordion
+                key={t.id}
+                trait={t}
+                selected={selection[t.id] || []}
+                open={openId === t.id}
+                onToggleOpen={() => setOpenId(openId === t.id ? null : t.id)}
+                onSelect={(v) => select(t.id, v)}
+              />
+            ))}
+          </div>
         ))}
       </div>
 
       <Sheet open={allPresets} title="Preset characters" onClose={() => setAllPresets(false)}>
+        <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-3" role="group" aria-label="Filter by niche">
+          {[null, ...niches].map((n) => (
+            <button
+              key={n || 'all'}
+              type="button"
+              onClick={() => setNicheFilter(n)}
+              aria-pressed={nicheFilter === n}
+              className={`shrink-0 h-8 px-3 rounded-full text-[12px] cursor-pointer ${
+                nicheFilter === n ? 'bg-[#d1fe17] text-black font-semibold' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'
+              }`}
+            >
+              {n || `All · ${CHARACTER_PRESETS.length}`}
+            </button>
+          ))}
+        </div>
         <div role="radiogroup" aria-label="All preset characters" className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-          {CHARACTER_PRESETS.map((p) => (
+          {filteredPresets.map((p) => (
             <PresetTile
               key={p.id}
               id={p.id}
