@@ -200,8 +200,7 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
         )}
         <div role="radiogroup" aria-label="Outfits" className="grid grid-cols-2 gap-2">
           <OutfitCard
-            name={lookName(BASE_LOOK)}
-            sub="From the character sheet"
+            name={`${characterName(current.characterId)}, ${lookName(BASE_LOOK)}`}
             active={current.lookId === BASE_LOOK}
             src={lookImage(current.characterId, BASE_LOOK)}
             onClick={() => commit({ lookId: BASE_LOOK })}
@@ -211,7 +210,6 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
               <OutfitCard
                 key={`${category}-${o.id}`}
                 name={o.name}
-                sub={o.category}
                 active={current.lookId === o.id}
                 src={lookImage(current.characterId, o.id)}
                 delay={i * 45}
@@ -270,16 +268,17 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
 
 const OutfitCard: React.FC<{
   name: string;
-  sub: string;
   src: string;
   active: boolean;
   delay?: number;
   onClick: () => void;
-}> = ({ name, sub, src, active, delay = 0, onClick }) => (
+}> = ({ name, src, active, delay = 0, onClick }) => (
   <button
     type="button"
     role="radio"
     aria-checked={active}
+    aria-label={name}
+    title={name}
     onClick={onClick}
     style={{ animationDelay: `${delay}ms` }}
     className={`theme-dark group relative h-[150px] rounded-xl overflow-hidden border cursor-pointer text-left wd-card-in transition-transform hover:-translate-y-0.5 bg-[radial-gradient(120%_90%_at_50%_30%,#f3f1ee,#d9d6d1)] ${
@@ -292,10 +291,6 @@ const OutfitCard: React.FC<{
       loading="lazy"
       className="absolute inset-x-0 top-1 w-full h-[135%] object-contain object-top transition-transform duration-300 group-hover:scale-105"
     />
-    <span className="absolute inset-x-1.5 bottom-1.5 px-2 py-1 rounded-lg bg-black/55 backdrop-blur text-[11px] leading-tight text-white">
-      <span className="block font-semibold truncate">{name}</span>
-      <span className="block text-white/60 truncate">{sub}</span>
-    </span>
   </button>
 );
 
@@ -443,8 +438,10 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
         {/* Look label */}
         <div className="absolute top-3 left-3 pointer-events-none">
           <div className="rounded-xl bg-black/40 backdrop-blur-md border border-white/20 px-3 py-2 text-white">
-            <div className="text-[11px] text-white/70">{characterName(current.characterId)}</div>
-            <div className="text-[14px] font-semibold">{lookName(current.lookId)}</div>
+            <div className={current.lookId === BASE_LOOK ? 'text-[14px] font-semibold' : 'text-[11px] text-white/70'}>
+              {characterName(current.characterId)}
+            </div>
+            {current.lookId !== BASE_LOOK && <div className="text-[14px] font-semibold">{lookName(current.lookId)}</div>}
           </div>
         </div>
       </div>
