@@ -21,7 +21,9 @@ import {
   Framing,
   StageFilterId,
   lookImage,
+  availableOutfits,
   renderPrompt,
+  STAGE_BACKGROUND,
   characterName,
   Outfit,
 } from './wardrobe';
@@ -136,7 +138,9 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
   const [category, setCategory] = useState<(typeof OUTFIT_CATEGORIES)[number]>('All');
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const outfit = outfitById(current.lookId);
-  const shown = OUTFITS.filter((o) => category === 'All' || o.category === category);
+  const available = availableOutfits(current.characterId);
+  const shown = available.filter((o) => category === 'All' || o.category === category);
+  const categories = OUTFIT_CATEGORIES.filter((c) => c === 'All' || available.some((o) => o.category === c));
 
   return (
     <div className={`${embedded ? '' : 'flex-1 min-h-0 overflow-y-auto'} px-3 pb-4 space-y-3`}>
@@ -174,11 +178,12 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
         <div className="flex items-center justify-between px-1 pb-2">
           <span className="text-[13px] font-semibold uppercase tracking-wider text-white">Outfits</span>
           <span className="text-[12px] text-neutral-500">
-            {shown.length} look{shown.length === 1 ? '' : 's'}
+            {shown.length + 1} look{shown.length === 0 ? '' : 's'}
           </span>
         </div>
+        {categories.length > 1 && (
         <div role="tablist" aria-label="Outfit category" className="flex gap-1.5 overflow-x-auto no-scrollbar pb-2">
-          {OUTFIT_CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <button
               key={c}
               role="tab"
@@ -192,31 +197,32 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
             </button>
           ))}
         </div>
+        )}
         <div role="radiogroup" aria-label="Outfits" className="grid grid-cols-2 gap-2">
           <OutfitCard
             name={lookName(BASE_LOOK)}
             sub="From the character sheet"
             active={current.lookId === BASE_LOOK}
-            src={lookImage(current.characterId, BASE_LOOK).src}
-            rendered
+            src={lookImage(current.characterId, BASE_LOOK)}
             onClick={() => commit({ lookId: BASE_LOOK })}
           />
           {shown.map((o, i) => {
-            const img = lookImage(current.characterId, o.id);
             return (
               <OutfitCard
                 key={`${category}-${o.id}`}
                 name={o.name}
                 sub={o.category}
                 active={current.lookId === o.id}
-                src={img.src}
-                rendered={img.rendered}
+                src={lookImage(current.characterId, o.id)}
                 delay={i * 45}
                 onClick={() => commit({ lookId: o.id })}
               />
             );
           })}
         </div>
+        {available.length === 0 && (
+          <p className="px-1 pt-2.5 text-[12px] text-neutral-500">More looks for {characterName(current.characterId)} are on the way.</p>
+        )}
       </section>
 
       {/* Pieces */}
@@ -267,17 +273,16 @@ const OutfitCard: React.FC<{
   sub: string;
   src: string;
   active: boolean;
-  rendered: boolean;
   delay?: number;
   onClick: () => void;
-}> = ({ name, sub, src, active, rendered, delay = 0, onClick }) => (
+}> = ({ name, sub, src, active, delay = 0, onClick }) => (
   <button
     type="button"
     role="radio"
     aria-checked={active}
     onClick={onClick}
     style={{ animationDelay: `${delay}ms` }}
-    className={`theme-dark group relative h-[150px] rounded-xl overflow-hidden border cursor-pointer text-left wd-card-in transition-transform hover:-translate-y-0.5 bg-gradient-to-b from-white/25 to-white/5 ${
+    className={`theme-dark group relative h-[150px] rounded-xl overflow-hidden border cursor-pointer text-left wd-card-in transition-transform hover:-translate-y-0.5 bg-[radial-gradient(120%_90%_at_50%_30%,#f3f1ee,#d9d6d1)] ${
       active ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40' : 'border-white/15'
     }`}
   >
@@ -285,13 +290,8 @@ const OutfitCard: React.FC<{
       src={src}
       alt=""
       loading="lazy"
-      className={`absolute inset-0 w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105 ${rendered ? '' : 'opacity-50 grayscale'}`}
+      className="absolute inset-x-0 top-1 w-full h-[135%] object-contain object-top transition-transform duration-300 group-hover:scale-105"
     />
-    {!rendered && (
-      <span className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/60 text-[9.5px] font-semibold uppercase tracking-wide text-white/90">
-        Render pending
-      </span>
-    )}
     <span className="absolute inset-x-1.5 bottom-1.5 px-2 py-1 rounded-lg bg-black/55 backdrop-blur text-[11px] leading-tight text-white">
       <span className="block font-semibold truncate">{name}</span>
       <span className="block text-white/60 truncate">{sub}</span>
@@ -317,35 +317,34 @@ interface Layer {
 
 export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedded }) => {
   const { current, commit, undo, redo, canUndo, canRedo, reset, library, save, remove } = w;
-  const img = lookImage(current.characterId, current.lookId);
-  const outfit = outfitById(current.lookId);
+  const src = lookImage(current.characterId, current.lookId);
+  const stageRef = useRef<HTMLDivElement>(null);
   const filter = STAGE_FILTERS.find((f) => f.id === current.filter) || STAGE_FILTERS[0];
-  const [layers, setLayers] = useState<Layer[]>([{ key: 0, src: img.src, entering: false }]);
+  const [layers, setLayers] = useState<Layer[]>([{ key: 0, src, entering: false }]);
   const [scanKey, setScanKey] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   const token = useRef(0);
   const keySeq = useRef(1);
 
   // Swap the figure with a top-to-bottom wipe once the new image is decoded.
   useEffect(() => {
     const top = layers[layers.length - 1];
-    if (top && top.src === img.src) return;
+    if (top && top.src === src) return;
     const my = ++token.current;
     const im = new Image();
-    im.src = img.src;
+    im.src = src;
     const go = () => {
       if (my !== token.current) return;
-      setLayers((ls) => [...ls, { key: keySeq.current++, src: img.src, entering: true }]);
+      setLayers((ls) => [...ls, { key: keySeq.current++, src, entering: true }]);
       setScanKey((k) => k + 1);
     };
     (im.decode ? im.decode() : Promise.resolve()).then(go, go);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [img.src]);
+  }, [src]);
 
   // Keyboard: undo/redo, arrows step through looks.
   useEffect(() => {
-    const ids = [BASE_LOOK, ...OUTFITS.map((o) => o.id)];
+    const ids = [BASE_LOOK, ...availableOutfits(current.characterId).map((o) => o.id)];
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
@@ -361,72 +360,80 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [current.lookId, commit, undo, redo]);
+  }, [current.lookId, current.characterId, commit, undo, redo]);
 
   const framingTransform: Record<Framing, string> = {
     full: 'scale(1)',
-    mid: 'scale(1.7)',
-    portrait: 'scale(2.7)',
+    mid: 'scale(1.75)',
+    portrait: 'scale(2.9)',
   };
 
   return (
     <div className={`flex flex-col ${embedded ? '' : 'h-full min-h-0'}`}>
-      {/* Stage */}
-      <div className={`relative ${embedded ? 'h-[54dvh] min-h-[360px]' : 'flex-1 min-h-[360px]'} overflow-hidden rounded-none lg:rounded-2xl lg:m-4 lg:mb-0 bg-[radial-gradient(120%_95%_at_50%_35%,#ffffff_55%,#e4e4e8)] lg:border border-white/[0.08]`}>
-        <div className="absolute inset-0 transition-[filter] duration-700" style={{ filter: filter.filter }}>
-          <div className="absolute inset-x-0 top-[3%] bottom-[2%] flex justify-center">
+      {/* Stage: loft room + registered cut-out */}
+      <div
+        ref={stageRef}
+        onPointerMove={(e) => {
+          const el = stageRef.current;
+          if (!el) return;
+          const r = el.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - 0.5;
+          const y = (e.clientY - r.top) / r.height - 0.5;
+          el.style.setProperty('--bx', `${-x * 22}px`);
+          el.style.setProperty('--by', `${-y * 12}px`);
+          el.style.setProperty('--mx', `${x * 10}px`);
+        }}
+        className={`theme-dark relative ${embedded ? 'h-[56dvh] min-h-[380px]' : 'flex-1 min-h-[380px]'} overflow-hidden rounded-none lg:rounded-2xl lg:m-4 lg:mb-0 bg-[#cfd2d4] lg:border border-white/[0.08]`}
+      >
+        <div className="absolute -inset-[3%] transition-[filter] duration-700" style={{ filter: filter.filter }}>
           <div
-            className="relative h-full max-w-full aspect-[9/10] transition-transform duration-1000 ease-[cubic-bezier(.65,0,.2,1)]"
-            style={{ transform: framingTransform[current.framing], transformOrigin: '50% 8%' }}
-          >
-            {/* floor shadow */}
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-[-6px] w-[70%] h-6 rounded-[50%] bg-[radial-gradient(closest-side,rgba(20,18,16,.45),transparent)] blur-[3px]" />
-            <div className="absolute inset-0 wd-breath mix-blend-multiply">
-              {layers.map((l) => (
-                <img
-                  key={l.key}
-                  src={l.src}
-                  alt=""
-                  draggable={false}
-                  onAnimationEnd={() => {
-                    if (!l.entering) return;
-                    setLayers((ls) => ls.filter((x) => x.key >= l.key).map((x) => (x.key === l.key ? { ...x, entering: false } : x)));
-                  }}
-                  className={`absolute inset-0 w-full h-full object-contain object-bottom select-none ${l.entering ? 'wd-wipe' : ''}`}
-                />
-              ))}
-              {scanKey > 0 && <div key={scanKey} className="wd-scan" aria-hidden="true" />}
-            </div>
-          </div>
-          </div>
+            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)]"
+            style={{ backgroundImage: `url(${STAGE_BACKGROUND})`, transform: 'translate3d(var(--bx,0),var(--by,0),0) scale(1.04)' }}
+          />
           <div className="absolute inset-0 mix-blend-soft-light pointer-events-none transition-[background] duration-700" style={{ background: filter.tint }} />
         </div>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(20,18,22,.38) 100%), linear-gradient(180deg, rgba(20,20,24,.22), transparent 18%, transparent 70%, rgba(20,20,24,.35))',
+          }}
+        />
 
-        {/* Look label + render-pending notice */}
-        <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 pointer-events-none">
-          <div className="theme-dark pointer-events-auto rounded-xl bg-black/45 backdrop-blur-md px-3 py-2 text-white">
-            <div className="text-[11px] text-white/60">{characterName(current.characterId)}</div>
+        {/* Figure (2:3 canvas, feet on the floor line) */}
+        <div className="absolute inset-x-0 top-[5%] bottom-[5%] flex justify-center" style={{ filter: filter.filter }}>
+          <div
+            className="relative h-full aspect-[2/3] transition-transform duration-1000 ease-[cubic-bezier(.65,0,.2,1)]"
+            style={{ transform: framingTransform[current.framing], transformOrigin: '50% 6%' }}
+          >
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-[0.5%] w-[46%] h-[4%] rounded-[50%] bg-[radial-gradient(closest-side,rgba(30,28,26,.55),rgba(30,28,26,0))] blur-[4px]" />
+            <div className="absolute inset-0 transition-transform duration-700" style={{ transform: 'translate3d(var(--mx,0),0,0)' }}>
+              <div className="absolute inset-0 wd-breath">
+                {layers.map((l) => (
+                  <img
+                    key={l.key}
+                    src={l.src}
+                    alt=""
+                    draggable={false}
+                    onAnimationEnd={() => {
+                      if (!l.entering) return;
+                      setLayers((ls) => ls.filter((x) => x.key >= l.key).map((x) => (x.key === l.key ? { ...x, entering: false } : x)));
+                    }}
+                    className={`absolute inset-0 w-full h-full object-contain object-bottom select-none drop-shadow-[0_10px_18px_rgba(0,0,0,.18)] ${l.entering ? 'wd-wipe' : ''}`}
+                  />
+                ))}
+                {scanKey > 0 && <div key={scanKey} className="wd-scan" aria-hidden="true" />}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Look label */}
+        <div className="absolute top-3 left-3 pointer-events-none">
+          <div className="rounded-xl bg-black/40 backdrop-blur-md border border-white/20 px-3 py-2 text-white">
+            <div className="text-[11px] text-white/70">{characterName(current.characterId)}</div>
             <div className="text-[14px] font-semibold">{lookName(current.lookId)}</div>
           </div>
-          {!img.rendered && outfit && (
-            <div className="theme-dark pointer-events-auto max-w-[240px] rounded-xl bg-black/55 backdrop-blur-md p-2.5 text-white">
-              <div className="text-[11.5px] leading-snug text-white/80">
-                This look hasn’t been rendered for {characterName(current.characterId)} yet.
-              </div>
-              <button
-                type="button"
-                onClick={async () => {
-                  await copyText(renderPrompt(current.characterId, outfit));
-                  setCopied(true);
-                  setTimeout(() => setCopied(false), 1800);
-                  toast('Render prompt copied');
-                }}
-                className="mt-2 w-full h-8 rounded-lg bg-[#d1fe17] text-black text-[12px] font-bold flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />} Copy render prompt
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -532,7 +539,7 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
           ) : (
             <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
               {library.map((l) => (
-                <div key={l.id} className="theme-dark group relative shrink-0 w-[64px] h-[92px] rounded-lg overflow-hidden border border-white/15 bg-neutral-200 wd-pop">
+                <div key={l.id} className="theme-dark group relative shrink-0 w-[64px] h-[92px] rounded-lg overflow-hidden border border-white/15 bg-[radial-gradient(120%_90%_at_50%_30%,#f3f1ee,#d9d6d1)] wd-pop">
                   <button
                     type="button"
                     onClick={() => commit({ characterId: l.characterId, lookId: l.lookId, filter: l.filter, framing: l.framing })}
@@ -541,9 +548,9 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
                     className="absolute inset-0 cursor-pointer"
                   >
                     <img
-                      src={lookImage(l.characterId, l.lookId).src}
+                      src={lookImage(l.characterId, l.lookId)}
                       alt=""
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-[140%] object-contain object-top"
                       style={{ filter: STAGE_FILTERS.find((f) => f.id === l.filter)?.filter }}
                     />
                   </button>

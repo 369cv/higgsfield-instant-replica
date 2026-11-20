@@ -83,6 +83,8 @@ export const CHARACTER_PRESETS: CharacterPreset[] = [
 export const presetSheet = (id: string) => `/influencer/characters/${id}.webp`;
 export const presetFace = (id: string) => `/influencer/characters/${id}-face.webp`;
 export const presetBody = (id: string) => `/influencer/characters/${id}-body.webp`;
+/** Background-removed full body, registered on a 680×1020 canvas (same scale + floor line for every character). */
+export const presetCut = (id: string) => `/influencer/characters/${id}-cut.webp`;
 
 /** Hero carousel media (up to 5). Empty → falls back to preset characters. */
 export const HERO_MEDIA: { video?: string; image?: string }[] = [];

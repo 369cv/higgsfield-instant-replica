@@ -1,4 +1,4 @@
-import { CHARACTER_PRESETS, presetBody } from './catalog';
+import { CHARACTER_PRESETS, presetCut } from './catalog';
 
 /**
  * Wardrobe catalog.
@@ -6,8 +6,10 @@ import { CHARACTER_PRESETS, presetBody } from './catalog';
  * - OUTFITS: the looks (shared by every character).
  * - LOOK_RENDERS: per-character renders of each look. Every render of a character must use the
  *   SAME pose, framing and background so looks can be swapped with the wipe effect.
+ *   Renders must be background-removed cut-outs on the same 680×1020 canvas as the
+ *   characters' signature cut-outs (presetCut), so they line up for the wipe swap.
  *   Put files in /public/influencer/looks/{characterId}/{lookId}.webp and list them here.
- *   Until a render exists, the character's base image is shown with "Render pending".
+ *   Only looks that have a render are shown in the Wardrobe.
  */
 
 export type PieceGroup = 'tops' | 'bottoms' | 'full' | 'shoes' | 'acc';
@@ -137,10 +139,18 @@ export const LOOK_RENDERS: Record<string, Record<string, string>> = {};
 
 export const BASE_LOOK = 'base';
 
-export function lookImage(characterId: string, lookId: string): { src: string; rendered: boolean } {
-  const r = LOOK_RENDERS[characterId]?.[lookId];
-  return r ? { src: r, rendered: true } : { src: presetBody(characterId), rendered: lookId === BASE_LOOK };
+export function lookImage(characterId: string, lookId: string): string {
+  return LOOK_RENDERS[characterId]?.[lookId] || presetCut(characterId);
 }
+
+/** Outfits that have a render for this character (the only ones the Wardrobe shows). */
+export function availableOutfits(characterId: string): Outfit[] {
+  const r = LOOK_RENDERS[characterId] || {};
+  return OUTFITS.filter((o) => !!r[o.id]);
+}
+
+/** Room behind the stage. */
+export const STAGE_BACKGROUND = '/influencer/wardrobe/loft.webp';
 
 export const characterName = (id: string) => CHARACTER_PRESETS.find((c) => c.id === id)?.name || id;
 
