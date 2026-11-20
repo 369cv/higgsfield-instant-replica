@@ -147,3 +147,51 @@ html {
 .animate-sheet-up {
   animation: sheetUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
 }
+
+/* ---------- Wardrobe: outfit swap ---------- */
+@keyframes wdWipe {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.wd-wipe {
+  clip-path: inset(0 0 100% 0);
+  animation: wdWipe 1.05s cubic-bezier(.7, 0, .25, 1) forwards;
+}
+@keyframes wdScan {
+  0% { top: 0; opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.wd-scan {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  height: 2px;
+  top: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #fff 25%, #fff 75%, transparent);
+  box-shadow: 0 0 22px 6px rgba(255, 255, 255, .55), 0 0 60px 18px rgba(214, 226, 255, .35);
+  animation: wdScan 1.05s cubic-bezier(.7, 0, .25, 1) forwards;
+}
+@keyframes wdBreath {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.006); }
+}
+.wd-breath {
+  transform-origin: 50% 100%;
+  animation: wdBreath 5.5s ease-in-out infinite;
+}
+@keyframes wdCardIn {
+  from { opacity: 0; transform: translateY(14px) scale(.96); }
+  to { opacity: 1; transform: none; }
+}
+.wd-card-in {
+  animation: wdCardIn .5s cubic-bezier(.2, .7, .2, 1) both;
+}
+@keyframes wdPop {
+  from { opacity: 0; transform: scale(.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+.wd-pop {
+  animation: wdPop .45s cubic-bezier(.3, 1.4, .5, 1) both;
+}

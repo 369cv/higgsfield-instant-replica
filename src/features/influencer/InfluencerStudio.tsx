@@ -32,12 +32,25 @@ import {
   presetBody,
 } from './catalog';
 import { InfluencerJob, addJob, deleteJob, useJobs } from './history';
+import { WardrobePanel, WardrobeStage, useWardrobe, wardrobeLookPrompt, WardrobeSnapshot } from './Wardrobe';
 
 const SELECTION_KEY = 'influencer_selection_v1';
 const PRESET_KEY = 'influencer_preset_v1';
 const presetName = (id?: string | null) => CHARACTER_PRESETS.find((p) => p.id === id)?.name;
 
-type LeftTab = 'create' | 'motion';
+type LeftTab = 'create' | 'motion' | 'wardrobe';
+
+function useIsDesktop() {
+  const q = '(min-width: 1024px)';
+  const [m, setM] = useState(() => typeof window !== 'undefined' && window.matchMedia(q).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(q);
+    const on = () => setM(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return m;
+}
 type CanvasView = 'explore' | 'history';
 type GalleryTab = 'influencers' | 'presets' | 'trends';
 type MobilePane = 'build' | 'explore' | 'history';
@@ -87,6 +100,8 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
   const [motion, setMotion] = useState<MotionState>(initialMotion);
   const [motionCharacter, setMotionCharacter] = useState<InfluencerJob | null>(null);
   const [detail, setDetail] = useState<InfluencerJob | null>(null);
+  const wardrobe = useWardrobe(presetId || CHARACTER_PRESETS[0].id);
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     try {
@@ -189,6 +204,11 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
     toast('Character sent to Motion');
   };
 
+  const sendLookToMotion = (s: WardrobeSnapshot) => {
+    const job = addJob({ kind: 'character', prompt: wardrobeLookPrompt(s), traits: {}, presetId: s.characterId });
+    turnToMotion(job);
+  };
+
   const heroItems = useMemo(() => {
     if (HERO_MEDIA.length) return HERO_MEDIA.slice(0, 5);
     const picks = ['ananya-kapoor', 'layla-al-mansoor', 'sienna-o-connor', 'nadia-petrova', 'camila-santos'];
@@ -205,11 +225,12 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
         <div className="text-[22px] font-black tracking-tight uppercase">AI Influencer</div>
       </div>
       <div className="px-3 pb-3 shrink-0">
-        <div role="tablist" aria-label="Studio mode" className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-surface border border-white/[0.06]">
+        <div role="tablist" aria-label="Studio mode" className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-surface border border-white/[0.06]">
           {(
             [
-              ['create', 'Create Influencer'],
+              ['create', 'Create'],
               ['motion', 'Motion'],
+              ['wardrobe', 'Wardrobe'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -226,7 +247,16 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
           ))}
         </div>
       </div>
-      {leftTab === 'create' ? (
+      {leftTab === 'wardrobe' ? (
+        isDesktop ? (
+          <WardrobePanel w={wardrobe} />
+        ) : (
+          <div className="flex-1 min-h-0 overflow-y-auto pb-[calc(var(--m-tab-h)+16px)]">
+            <WardrobeStage w={wardrobe} onSendToMotion={sendLookToMotion} embedded />
+            <WardrobePanel w={wardrobe} embedded />
+          </div>
+        )
+      ) : leftTab === 'create' ? (
         <BuilderPanel
           selection={selection}
           onChange={setSelection}
@@ -253,7 +283,15 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
 
   /* ---------- Canvas ---------- */
   const canvas = (
-    <main className={`${mobilePane === 'build' ? 'hidden' : 'block'} lg:block flex-1 min-w-0 h-full overflow-y-auto`}>
+    <main
+      className={`${mobilePane === 'build' ? 'hidden' : 'block'} lg:block flex-1 min-w-0 h-full ${
+        leftTab === 'wardrobe' && isDesktop ? 'overflow-hidden' : 'overflow-y-auto'
+      }`}
+    >
+      {leftTab === 'wardrobe' && isDesktop ? (
+        <WardrobeStage w={wardrobe} onSendToMotion={sendLookToMotion} />
+      ) : (
+      <>
       <div className="hidden lg:flex px-5 pt-4 gap-1">
         <ViewToggle view={view} onChange={showCanvas} historyCount={jobs.length} />
       </div>
@@ -453,6 +491,8 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
             </div>
           )}
         </section>
+      )}
+      </>
       )}
     </main>
   );
