@@ -35,11 +35,11 @@ export default {
         line: v('line'),       // strong borders / elevated fills
         muted: v('muted'),     // tertiary text
         soft: v('soft'),       // secondary text
-        'accent-ink': v('accent-ink'), // lime as text (darker in light mode)
+        'accent-ink': v('accent-ink'), // accent as text (darker in light mode)
         lime: {
-          DEFAULT: '#d1fe17',
-          hover: '#bfee00',
-          dim: 'rgba(209, 254, 23, 0.15)'
+          DEFAULT: '#ff3d9a',
+          hover: '#e8197f',
+          dim: 'rgba(255, 61, 154, 0.15)'
         },
       },
       fontFamily: {
