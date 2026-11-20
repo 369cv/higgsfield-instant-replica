@@ -25,10 +25,16 @@ import {
   Check,
   Library,
   History as HistoryIcon,
+  Share2,
+  Flag,
 } from 'lucide-react';
 import { VaultItem } from '../../types';
 import { toast } from '../../components/ui';
 import { Dropzone, SelectPopover } from '../influencer/controls';
+import { SceneLibrary, ReportModal } from '../scenes/SceneLibrary';
+import { ScenePanel } from '../scenes/ScenePanel';
+import { PRESETS, useSceneStore } from '../scenes/store';
+import { Clip, CastEntry } from '../scenes/logic';
 import {
   MODES,
   RemixMode,
@@ -135,6 +141,24 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
   const [create, setCreate] = useState<CreateState>(initialCreate);
   const [modelSheet, setModelSheet] = useState(false);
   const [styleModal, setStyleModal] = useState(false);
+  const [scene, setScene] = useState<{ clip: Clip; parentRemixId?: string; cast?: CastEntry[] } | null>(null);
+  const sceneStore = useSceneStore();
+
+  const startScene = (clip: Clip, parentRemixId?: string, cast?: CastEntry[]) => {
+    setScene({ clip, parentRemixId, cast });
+    setLeftTab('create');
+    setMobilePane('build');
+  };
+
+  const remixAgain = (g: RemixGeneration) => {
+    const clip = [...sceneStore.uploads, ...PRESETS].find((c) => c.id === g.scene?.clipId);
+    if (!clip) return toast('That clip is no longer available');
+    startScene(
+      clip,
+      g.id,
+      g.scene!.cast.map((c) => ({ person_index: c.person_index, influencer_id: c.influencerId, keep: !c.influencerId }))
+    );
+  };
 
   const library = useMemo<LibraryCard[]>(() => {
     const withMedia = vaultItems.filter((v) => v.videoUrl || v.imageUrl);
@@ -155,21 +179,6 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
       };
     });
   }, [vaultItems]);
-
-  const recreate = (c: LibraryCard) => {
-    setCreate((s) => ({
-      ...s,
-      mode: 'swap',
-      video: { url: c.video || c.poster, name: 'Library clip', seconds: 8, poster: c.poster },
-      refs: c.refs,
-      usePrompt: !!c.prompt,
-      prompt: c.prompt,
-      parentId: c.id,
-    }));
-    setLeftTab('create');
-    setMobilePane('build');
-    toast('Loaded into the panel — swap in your own references');
-  };
 
   const generate = () => {
     if (!create.video) return;
@@ -230,7 +239,19 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
         ))}
       </div>
 
-      {leftTab === 'create' ? (
+      {scene && leftTab === 'create' ? (
+        <ScenePanel
+          key={scene.clip.id + (scene.parentRemixId || '')}
+          clip={scene.clip}
+          parentRemixId={scene.parentRemixId}
+          initialCast={scene.cast}
+          onClose={() => setScene(null)}
+          onSubmitted={() => {
+            setCanvasTab('history');
+            setMobilePane('canvas');
+          }}
+        />
+      ) : leftTab === 'create' ? (
         <CreatePanel
           state={create}
           onChange={setCreate}
@@ -260,7 +281,7 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
       <div className="sticky top-0 z-20 bg-canvas/90 backdrop-blur px-5 pt-3 border-b border-white/[0.06] flex gap-5">
         {(
           [
-            ['library', 'Motion Library', Library],
+            ['library', 'Scene Remix', Library],
             ['history', 'History', HistoryIcon],
           ] as const
         ).map(([id, label, Icon]) => (
@@ -276,7 +297,7 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
           </button>
         ))}
       </div>
-      {canvasTab === 'library' ? <MotionLibrary cards={library} onRecreate={recreate} /> : <HistoryView gens={gens} />}
+      {canvasTab === 'library' ? <SceneLibrary onRemix={(c) => startScene(c)} /> : <HistoryView gens={gens} onRemixAgain={remixAgain} />}
       {modelSheet && (
         <ModelSheet
           value={create.model}
@@ -1033,94 +1054,13 @@ const ModelSheet: React.FC<{ value: string; onPick: (id: string) => void; onClos
 };
 
 /* ============================================================
- * Motion Library
- * ============================================================ */
-
-const MotionLibrary: React.FC<{ cards: LibraryCard[]; onRecreate: (c: LibraryCard) => void }> = ({ cards, onRecreate }) => {
-  const [cat, setCat] = useState<Category>('All');
-  const [sort, setSort] = useState<'trending' | 'latest'>('trending');
-  const [limit, setLimit] = useState(30);
-  const likes = useLibraryLikes();
-  const sentinel = useRef<HTMLDivElement>(null);
-
-  const list = useMemo(() => {
-    const f = cards.filter((c) => cat === 'All' || c.category === cat);
-    return sort === 'trending' ? [...f].sort((a, b) => b.remixes * 2 + b.likes - (a.remixes * 2 + a.likes)) : [...f].sort((a, b) => b.timestamp - a.timestamp);
-  }, [cards, cat, sort]);
-
-  useEffect(() => {
-    const el = sentinel.current;
-    if (!el) return;
-    const io = new IntersectionObserver((e) => e[0].isIntersecting && setLimit((l) => l + 24));
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <div className="pb-24">
-      <section className="px-5 pt-8 pb-6 text-center">
-        <h1 className="text-[28px] sm:text-[40px] font-black uppercase tracking-tight leading-none">One video. Endless remixes.</h1>
-        <p className="mt-2 text-[13.5px] text-neutral-400 max-w-lg mx-auto">Pick a clip, drop in your own people and products, keep every move.</p>
-      </section>
-      <div className="sticky top-[41px] z-10 bg-canvas/90 backdrop-blur px-5 py-2 flex items-center gap-2 overflow-x-auto">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c}
-            onClick={() => setCat(c)}
-            className={`shrink-0 h-8 px-3 rounded-full text-[12.5px] cursor-pointer ${cat === c ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'}`}
-          >
-            {c}
-          </button>
-        ))}
-        <div className="ml-auto shrink-0 flex p-0.5 rounded-full bg-white/[0.06]">
-          {(['trending', 'latest'] as const).map((s) => (
-            <button key={s} onClick={() => setSort(s)} className={`h-7 px-3 rounded-full text-[12px] capitalize cursor-pointer ${sort === s ? 'bg-white/15 text-white' : 'text-neutral-500'}`}>
-              {s}
-            </button>
-          ))}
-        </div>
-      </div>
-      {list.length === 0 ? (
-        <p className="text-center text-neutral-500 text-sm py-20">No clips in this category yet.</p>
-      ) : (
-        <div className="px-5 pt-2 columns-2 md:columns-3 xl:columns-4 2xl:columns-5 gap-3">
-          {list.slice(0, limit).map((c) => (
-            <div key={c.id} className="theme-dark mb-3 break-inside-avoid relative group rounded-xl overflow-hidden bg-surface">
-              {c.video ? (
-                <video src={c.video} poster={c.poster} muted loop autoPlay playsInline className="w-full block" />
-              ) : (
-                <img src={c.poster} alt="" loading="lazy" className="w-full block" />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute left-2 right-2 bottom-2 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                <div className="flex items-center gap-3 text-[11.5px] text-white mb-2">
-                  <span className="flex items-center gap-1">
-                    <Repeat2 className="w-3.5 h-3.5" /> {fmtCount(c.remixes)}
-                  </span>
-                  <button onClick={() => toggleLibraryLike(c.id)} className="flex items-center gap-1 cursor-pointer" aria-label="Like">
-                    <Heart className={`w-3.5 h-3.5 ${likes.has(c.id) ? 'fill-red-500 text-red-500' : ''}`} /> {fmtCount(c.likes + (likes.has(c.id) ? 1 : 0))}
-                  </button>
-                </div>
-                <button onClick={() => onRecreate(c)} className="w-full h-9 rounded-lg bg-[#d1fe17] text-black text-[12.5px] font-semibold flex items-center justify-center gap-1.5 cursor-pointer">
-                  <Repeat2 className="w-3.5 h-3.5" /> Recreate
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      <div ref={sentinel} className="h-8" />
-    </div>
-  );
-};
-
-/* ============================================================
  * History (filter + view)
  * ============================================================ */
 
 type HistView = 'list' | 'grid' | 'masonry';
 
-const HistoryView: React.FC<{ gens: RemixGeneration[] }> = ({ gens }) => {
+const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGeneration) => void }> = ({ gens, onRemixAgain }) => {
+  const [reporting, setReporting] = useState<RemixGeneration | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [viewOpen, setViewOpen] = useState(false);
   const [f, setF] = useState({ model: 'all', from: '', to: '', hideFailed: false, liked: false, downloaded: false });
@@ -1150,14 +1090,25 @@ const HistoryView: React.FC<{ gens: RemixGeneration[] }> = ({ gens }) => {
   const mcols = ['', 'columns-1', 'columns-2', 'columns-3', 'columns-4', 'columns-5'][size];
 
   const Media: React.FC<{ g: RemixGeneration; className?: string }> = ({ g, className }) =>
-    g.status === 'queued' ? (
-      <div className={`${className} aspect-[9/16] max-h-[420px] bg-surface flex flex-col items-center justify-center gap-2 text-neutral-500 text-[12px]`}>
-        <span className="w-6 h-6 rounded-full border-2 border-white/20 border-t-[#d1fe17] animate-spin" /> Generating…
+    g.status === 'queued' || g.status === 'running' ? (
+      <div className={`${className} aspect-[9/16] max-h-[420px] relative overflow-hidden rounded-xl shimmer flex flex-col items-center justify-center gap-2 text-neutral-400 text-[12px]`}>
+        {g.output?.poster && <img src={g.output.poster} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm" />}
+        <span className="relative">{g.status === 'queued' ? 'Queued…' : `Generating · ${g.progress ?? 0}%`}</span>
+        <span className="relative w-2/3 h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <span className="block h-full bg-[#d1fe17] transition-[width] duration-300" style={{ width: `${g.progress ?? 2}%` }} />
+        </span>
       </div>
-    ) : g.output?.url && /\.(mp4|webm|mov)|^blob:/i.test(g.output.url) ? (
-      <video src={g.output.url} poster={g.output.poster} muted loop autoPlay playsInline controls={view === 'list'} className={`${className} bg-black`} />
     ) : (
-      <img src={g.output?.poster || g.output?.url} alt="" className={`${className} object-cover bg-black`} />
+      <div className={`${className} relative overflow-hidden`}>
+        {g.output?.url && /\.(mp4|webm|mov)|^blob:/i.test(g.output.url) ? (
+          <video src={g.output.url} poster={g.output.poster} muted loop autoPlay playsInline controls={view === 'list'} className="w-full h-full object-contain bg-black" />
+        ) : (
+          <img src={g.output?.poster || g.output?.url} alt="" className="w-full h-full object-cover bg-black" />
+        )}
+        {g.scene && (
+          <span className="theme-dark absolute right-2 bottom-2 px-1.5 py-0.5 rounded bg-black/55 text-[9.5px] text-white/85 tracking-wide pointer-events-none">{g.scene.watermark}</span>
+        )}
+      </div>
     );
 
   const Actions: React.FC<{ g: RemixGeneration }> = ({ g }) => (
@@ -1168,6 +1119,30 @@ const HistoryView: React.FC<{ gens: RemixGeneration[] }> = ({ gens }) => {
       <button onClick={() => download(g)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Download">
         <Download className={`w-4 h-4 ${g.downloaded ? 'text-[#d1fe17]' : 'text-neutral-400'}`} />
       </button>
+      {g.scene && g.status === 'done' && (
+        <>
+          <button
+            onClick={async () => {
+              const url = `${location.origin}/r/${g.id}`;
+              try {
+                if (navigator.share) await navigator.share({ title: g.scene!.clipTitle, url });
+                else await navigator.clipboard.writeText(url);
+                toast('Link ready to share');
+              } catch {}
+            }}
+            className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer"
+            aria-label="Share"
+          >
+            <Share2 className="w-4 h-4 text-neutral-400" />
+          </button>
+          <button onClick={() => onRemixAgain(g)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Remix again">
+            <Repeat2 className="w-4 h-4 text-neutral-400" />
+          </button>
+          <button onClick={() => setReporting(g)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Report">
+            <Flag className="w-4 h-4 text-neutral-400" />
+          </button>
+        </>
+      )}
       <button onClick={() => deleteGeneration(g.id)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Delete">
         <Trash2 className="w-4 h-4 text-neutral-400" />
       </button>
@@ -1268,7 +1243,21 @@ const HistoryView: React.FC<{ gens: RemixGeneration[] }> = ({ gens }) => {
                     ))}
                   </div>
                 )}
+                {g.scene && (
+                  <div className="text-[12px] text-neutral-300">
+                    <span className="text-neutral-500">Scene · </span>
+                    {g.scene.clipTitle}
+                    <span className="text-neutral-500"> · Cast </span>
+                    {g.scene.cast.map((c) => `${c.person_index}: ${c.name}`).join(', ')}
+                  </div>
+                )}
                 {g.inputs.prompt && <p className="text-[12.5px] text-neutral-300 line-clamp-4">{g.inputs.prompt}</p>}
+                {g.scene && (
+                  <details className="text-[11px] text-neutral-500">
+                    <summary className="cursor-pointer hover:text-white">Provenance</summary>
+                    <pre className="mt-1 p-2 rounded-lg bg-black/30 whitespace-pre-wrap break-all">{JSON.stringify(g.scene.provenance, null, 2)}</pre>
+                  </details>
+                )}
                 <dl className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11.5px]">
                   {[
                     ['Resolution', g.quality],
@@ -1311,6 +1300,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[] }> = ({ gens }) => {
           ))}
         </div>
       )}
+      {reporting && <ReportModal targetId={reporting.id} targetLabel={`remix of “${reporting.scene?.clipTitle}”`} onClose={() => setReporting(null)} />}
     </div>
   );
 };
