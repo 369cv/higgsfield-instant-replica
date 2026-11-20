@@ -14,7 +14,17 @@ export interface RemixGeneration {
   inputs: { video?: string; videoName?: string; refs: string[]; prompt: string; style: string };
   output?: { url: string; poster?: string };
   parentId?: string; // remix lineage (library source)
-  status: 'queued' | 'done' | 'failed';
+  status: 'queued' | 'running' | 'done' | 'failed';
+  progress?: number; // 0..100 while running
+  /** Scene Remix job: which clip, who was cast, and the provenance manifest stored with the output. */
+  scene?: {
+    clipId: string;
+    clipTitle: string;
+    cast: { person_index: number; influencerId: string | null; name: string }[];
+    provenance: Record<string, unknown>;
+    watermark: string;
+    parentRemixId?: string;
+  };
   credits: number;
   liked?: boolean;
   downloaded?: boolean;
@@ -52,7 +62,15 @@ export function addGeneration(g: Omit<RemixGeneration, 'id' | 'createdAt' | 'sta
   items = [full, ...items];
   save();
   // Simulated job runner (GET /jobs/:id). Replace with the real queue when the backend lands.
-  setTimeout(() => updateGeneration(full.id, { status: 'done' }), 2500);
+  const total = full.scene ? 8000 : 2500;
+  const started = Date.now();
+  const tick = setInterval(() => {
+    const p = Math.min(100, Math.round(((Date.now() - started) / total) * 100));
+    if (p >= 100) {
+      clearInterval(tick);
+      updateGeneration(full.id, { status: 'done', progress: 100 });
+    } else updateGeneration(full.id, { status: 'running', progress: p });
+  }, 400);
   return full;
 }
 
