@@ -46,7 +46,7 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
             {/* Top Status Header */}
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#d1fe17] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff3d9a] animate-pulse" />
                 <span className="text-white text-[10px] font-semibold tracking-wide uppercase">
                   {progressText}
                 </span>
@@ -61,11 +61,11 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
             <div className="relative z-10 flex flex-col items-center justify-center gap-3.5 my-auto">
               {/* Delicate concentric pulsing orbital rings */}
               <div className="relative w-14 h-14 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-full border border-[#d1fe17]/20 animate-ping opacity-25" />
-                <div className="absolute inset-1 rounded-full border border-dashed border-[#d1fe17]/40 animate-spin" style={{ animationDuration: '8s' }} />
+                <div className="absolute inset-0 rounded-full border border-[#ff3d9a]/20 animate-ping opacity-25" />
+                <div className="absolute inset-1 rounded-full border border-dashed border-[#ff3d9a]/40 animate-spin" style={{ animationDuration: '8s' }} />
 
                 {/* Inner Glow Core with Starburst Vector */}
-                <div className="w-8 h-8 rounded-full bg-[#d1fe17]/10 flex items-center justify-center text-accent-ink">
+                <div className="w-8 h-8 rounded-full bg-[#ff3d9a]/10 flex items-center justify-center text-accent-ink">
                   <svg className="w-4 h-4 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
                   </svg>
@@ -87,7 +87,7 @@ export const GeneratingQueue: React.FC<GeneratingQueueProps> = ({
             <div className="relative z-10 space-y-1.5">
               <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-[#d1fe17] to-cyan-400 rounded-full animate-pulse transition-all duration-700"
+                  className="h-full bg-gradient-to-r from-[#ff3d9a] to-cyan-400 rounded-full animate-pulse transition-all duration-700"
                   style={{ width: `${((stepIndex + 1) / steps.length) * 100}%` }}
                 />
               </div>

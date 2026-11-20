@@ -67,7 +67,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
                   <button key={o.value} {...common} className="flex flex-col items-center gap-1 w-[52px] cursor-pointer">
                     <span
                       className={`w-9 h-9 rounded-full border border-black/20 transition-all ${
-                        active ? 'ring-2 ring-[#d1fe17] ring-offset-2 ring-offset-surface scale-105' : ''
+                        active ? 'ring-2 ring-[#ff3d9a] ring-offset-2 ring-offset-surface scale-105' : ''
                       }`}
                       style={{ background: o.hex }}
                     />
@@ -84,7 +84,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
                     {...common}
                     className={`h-9 px-3.5 rounded-lg text-[13px] border transition-all cursor-pointer ${
                       active
-                        ? 'border-[#d1fe17] bg-[#d1fe17]/10 text-white'
+                        ? 'border-[#ff3d9a] bg-[#ff3d9a]/10 text-white'
                         : 'border-white/[0.08] bg-white/[0.03] text-neutral-300 hover:bg-white/[0.06]'
                     }`}
                   >
@@ -97,7 +97,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
                   key={o.value}
                   {...common}
                   className={`relative ${o.image ? 'aspect-[4/5] items-end' : 'min-h-[52px] items-center'} rounded-lg overflow-hidden border-2 transition-all cursor-pointer flex ${
-                    active ? 'border-[#d1fe17] scale-[1.02]' : 'border-transparent hover:border-white/15'
+                    active ? 'border-[#ff3d9a] scale-[1.02]' : 'border-transparent hover:border-white/15'
                   } ${o.image ? 'bg-neutral-900' : 'bg-white/[0.04]'}`}
                 >
                   {o.image && (
@@ -111,7 +111,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({ trait, selected,
                     {o.value}
                   </span>
                   {active && (
-                    <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#d1fe17] text-black flex items-center justify-center">
+                    <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#ff3d9a] text-[#fff] flex items-center justify-center">
                       <Check className="w-3 h-3" strokeWidth={3} />
                     </span>
                   )}
@@ -257,7 +257,7 @@ export const Dropzone: React.FC<DropzoneProps> = ({ accept, multiple, icon, titl
         onFiles(Array.from(e.dataTransfer.files));
       }}
       className={`rounded-xl border border-dashed transition-colors ${
-        over ? 'border-[#d1fe17] bg-[#d1fe17]/5' : 'border-white/[0.12] bg-surface'
+        over ? 'border-[#ff3d9a] bg-[#ff3d9a]/5' : 'border-white/[0.12] bg-surface'
       }`}
     >
       <button

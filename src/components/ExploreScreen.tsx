@@ -80,7 +80,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
         {onReturnToVault && (
           <button
             onClick={onReturnToVault}
-            className="mt-5 px-5 py-2.5 rounded-xl bg-[#d1fe17] text-black font-extrabold text-xs shadow-[0_0_20px_rgba(209,254,23,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
+            className="mt-5 px-5 py-2.5 rounded-xl bg-[#ff3d9a] text-[#fff] font-extrabold text-xs shadow-[0_0_20px_rgba(255,61,154,0.3)] hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
           >
             <span>Browse Full Prompt Vault</span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-black/15 font-bold">1,604 Drops</span>
@@ -99,7 +99,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
               {/* Channel Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-1">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#d1fe17] shadow-[0_0_8px_rgba(209,254,23,0.8)]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#ff3d9a] shadow-[0_0_8px_rgba(255,61,154,0.8)]" />
                   <div>
                     <h3 className="text-sm font-extrabold text-white tracking-wide">
                       {ch.title}
@@ -121,7 +121,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
                       <div
                         key={item.id}
                         onClick={() => onSelectItem && onSelectItem(item)}
-                        className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#d1fe17]/60 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(209,254,23,0.2)]"
+                        className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#ff3d9a]/60 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(255,61,154,0.2)]"
                       >
                         <img
                           src={item.imageUrl || item.fullImageUrl || ''}

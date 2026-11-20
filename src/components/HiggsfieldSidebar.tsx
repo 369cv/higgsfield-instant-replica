@@ -87,7 +87,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-surface">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#d1fe17] animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff3d9a] animate-pulse" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-white">
               {mode === 'create' && 'Prompt Studio'}
               {mode === 'motion' && 'Cinematic Camera Motion'}
@@ -120,7 +120,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
               <div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-bold text-sm text-white">Baha Savage</span>
-                  <span className="text-[10px] bg-[#d1fe17]/20 text-accent-ink px-1.5 py-0.5 rounded font-semibold">
+                  <span className="text-[10px] bg-[#ff3d9a]/20 text-accent-ink px-1.5 py-0.5 rounded font-semibold">
                     SOUL 2.0
                   </span>
                 </div>
@@ -159,7 +159,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                       onClick={() => setSelectedModel(m.id as any)}
                       className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                         selectedModel === m.id
-                          ? 'bg-[#d1fe17]/10 border-[#d1fe17] text-white shadow-lg shadow-[#d1fe17]/10'
+                          ? 'bg-[#ff3d9a]/10 border-[#ff3d9a] text-white shadow-lg shadow-[#ff3d9a]/10'
                           : 'bg-white/5 border-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -216,7 +216,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                   rows={4}
                   value={promptText}
                   onChange={(e) => setPromptText(e.target.value)}
-                  className="w-full p-3.5 rounded-xl bg-black/60 border border-white/10 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none focus:border-[#d1fe17] transition-colors resize-none"
+                  className="w-full p-3.5 rounded-xl bg-black/60 border border-white/10 text-white placeholder-neutral-500 text-xs leading-relaxed focus:outline-none focus:border-[#ff3d9a] transition-colors resize-none"
                   placeholder="Describe your scene or style..."
                 />
               </div>
@@ -286,7 +286,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                   max="100"
                   value={motionIntensity}
                   onChange={(e) => setMotionIntensity(Number(e.target.value))}
-                  className="w-full accent-[#d1fe17] cursor-pointer"
+                  className="w-full accent-[#ff3d9a] cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-neutral-500">
                   <span>Subtle Breeze (20%)</span>
@@ -321,7 +321,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
                     }}
                     className={`w-full p-3.5 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${
                       selectedCategory === cat.name
-                        ? 'bg-[#d1fe17]/10 border-[#d1fe17] text-white'
+                        ? 'bg-[#ff3d9a]/10 border-[#ff3d9a] text-white'
                         : 'bg-white/5 border-white/5 text-neutral-300 hover:bg-white/10'
                     }`}
                   >
@@ -405,7 +405,7 @@ export const HiggsfieldSidebar: React.FC<HiggsfieldSidebarProps> = ({
             <button
               onClick={handleGenerate}
               disabled={isSubmitting}
-              className="w-full py-3.5 bg-[#d1fe17] hover:bg-[#bfee00] text-black font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-transform active:scale-98 shadow-xl shadow-[#d1fe17]/25 cursor-pointer"
+              className="w-full py-3.5 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-transform active:scale-98 shadow-xl shadow-[#ff3d9a]/25 cursor-pointer"
             >
               {isSubmitting ? (
                 <>

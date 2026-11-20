@@ -181,7 +181,7 @@ const Landing: React.FC<{
         </p>
         <button
           onClick={onBuild}
-          className="mt-6 h-11 px-6 rounded-xl bg-[#d1fe17] text-black font-semibold text-[14px] flex items-center gap-2 shadow-[0_4px_0_#8fae0f] active:translate-y-0.5 active:shadow-none cursor-pointer"
+          className="mt-6 h-11 px-6 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-[14px] flex items-center gap-2 shadow-[0_4px_0_#8fae0f] active:translate-y-0.5 active:shadow-none cursor-pointer"
         >
           Build your moodboard <Sparkles className="w-4 h-4" />
         </button>
@@ -211,7 +211,7 @@ const Landing: React.FC<{
             <button
               key={g}
               onClick={() => setGroup(g)}
-              className={`shrink-0 h-8 px-3 rounded-full text-[12.5px] cursor-pointer ${group === g ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.06] text-neutral-300'}`}
+              className={`shrink-0 h-8 px-3 rounded-full text-[12.5px] cursor-pointer ${group === g ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.06] text-neutral-300'}`}
             >
               {g}
             </button>
@@ -232,7 +232,7 @@ const BoardCard: React.FC<{ b: BoardRef; status?: string; onOpen: (b: BoardRef) 
     <button onClick={() => onOpen(b)} className="absolute inset-0 cursor-pointer" aria-label={`Generate with ${b.name}`}>
       {b.cover && <img src={b.cover} alt="" loading="lazy" className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-50" />}
       <span className="absolute inset-0 flex items-center justify-center">
-        <span className="h-9 px-4 rounded-full bg-white text-black text-[13px] font-semibold flex items-center gap-1.5 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all">
+        <span className="h-9 px-4 rounded-full bg-[#ff3d9a] text-[#fff] text-[13px] font-semibold flex items-center gap-1.5 scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all">
           <Sparkles className="w-3.5 h-3.5" /> Generate
         </span>
       </span>
@@ -435,7 +435,7 @@ const Generator: React.FC<{
             <div className="h-8 pl-1 pr-1 rounded-lg bg-white/[0.06] flex items-center gap-1.5 text-[12px]">
               {board.cover ? <img src={board.cover} alt="" className="w-6 h-6 rounded object-cover" /> : <Sparkles className="w-3.5 h-3.5 ml-1 text-neutral-400" />}
               <span className="max-w-[110px] truncate">{board.name}</span>
-              <button onClick={onChangeBoard} className="text-[#d1fe17] hover:underline cursor-pointer">
+              <button onClick={onChangeBoard} className="text-[#ff3d9a] hover:underline cursor-pointer">
                 Change
               </button>
               {board.id !== 'general' && (
@@ -447,7 +447,7 @@ const Generator: React.FC<{
             <button
               onClick={generate}
               disabled={busy}
-              className="ml-auto h-10 px-5 rounded-xl bg-[#d1fe17] text-black font-semibold text-[13.5px] flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
+              className="ml-auto h-10 px-5 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-[13.5px] flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
             >
               {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Generate'}
               <span className="flex items-center gap-0.5 text-[12px]">
@@ -479,17 +479,17 @@ const Generator: React.FC<{
                       <span className="block text-[13px]">{q.label}</span>
                       <span className="block text-[11px] text-neutral-500">{q.desc}</span>
                     </span>
-                    {quality === q.id && <Check className="w-4 h-4 text-[#d1fe17]" />}
+                    {quality === q.id && <Check className="w-4 h-4 text-[#ff3d9a]" />}
                   </button>
                 ))}
               {pop === 'palette' && <PaletteSheet value={palette} onPick={(p) => (setPalette(p), close())} />}
               {pop === 'character' && (
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  <button onClick={() => (setCharacter(null), close())} className={`aspect-square rounded-xl bg-white/[0.05] text-[11px] text-neutral-400 cursor-pointer ${!character ? 'ring-2 ring-[#d1fe17]' : ''}`}>
+                  <button onClick={() => (setCharacter(null), close())} className={`aspect-square rounded-xl bg-white/[0.05] text-[11px] text-neutral-400 cursor-pointer ${!character ? 'ring-2 ring-[#ff3d9a]' : ''}`}>
                     None
                   </button>
                   {CHARACTER_PRESETS.map((c) => (
-                    <button key={c.id} onClick={() => (setCharacter(c.id), close())} title={c.name} className={`aspect-square rounded-xl overflow-hidden cursor-pointer ${character === c.id ? 'ring-2 ring-[#d1fe17]' : ''}`}>
+                    <button key={c.id} onClick={() => (setCharacter(c.id), close())} title={c.name} className={`aspect-square rounded-xl overflow-hidden cursor-pointer ${character === c.id ? 'ring-2 ring-[#ff3d9a]' : ''}`}>
                       <img src={presetFace(c.id)} alt={c.name} loading="lazy" className="w-full h-full object-cover" />
                     </button>
                   ))}
@@ -531,11 +531,11 @@ const ModelList: React.FC<{ value: string; onPick: (v: string) => void }> = ({ v
             <span className="block text-[11px] text-neutral-500">{m.desc}</span>
           </span>
           {m.badges.map((b) => (
-            <span key={b} className={`text-[10px] px-1.5 py-0.5 rounded ${b === 'New' ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.07] text-neutral-400'}`}>
+            <span key={b} className={`text-[10px] px-1.5 py-0.5 rounded ${b === 'New' ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.07] text-neutral-400'}`}>
               {b}
             </span>
           ))}
-          {value === m.id && <Check className="w-4 h-4 text-[#d1fe17]" />}
+          {value === m.id && <Check className="w-4 h-4 text-[#ff3d9a]" />}
         </button>
       ))}
     </>
@@ -585,7 +585,7 @@ const PaletteSheet: React.FC<{ value: Palette | null; onPick: (p: Palette | null
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {all.map((p) => (
-          <button key={p.id} onClick={() => onPick(p)} className={`rounded-xl overflow-hidden bg-white/[0.04] text-left cursor-pointer ${value?.id === p.id ? 'ring-2 ring-[#d1fe17]' : ''}`}>
+          <button key={p.id} onClick={() => onPick(p)} className={`rounded-xl overflow-hidden bg-white/[0.04] text-left cursor-pointer ${value?.id === p.id ? 'ring-2 ring-[#ff3d9a]' : ''}`}>
             <div className="h-14" style={{ background: `linear-gradient(135deg, ${p.colors[1]}, ${p.colors[3]})` }} />
             <div className="flex h-3">
               {p.colors.map((c) => (
@@ -623,7 +623,7 @@ const BoardPicker: React.FC<{
             <div className="text-[18px] font-black uppercase tracking-tight">Moodboards</div>
             <div className="text-[12px] text-neutral-400">Lock a look across every generation.</div>
           </div>
-          <button onClick={onBuild} className="h-9 px-4 rounded-xl bg-[#d1fe17] text-black text-[13px] font-semibold flex items-center gap-1.5 cursor-pointer">
+          <button onClick={onBuild} className="h-9 px-4 rounded-xl bg-[#ff3d9a] text-[#fff] text-[13px] font-semibold flex items-center gap-1.5 cursor-pointer">
             Build <Sparkles className="w-3.5 h-3.5" />
           </button>
           <button onClick={onClose} className="p-2 text-neutral-400 hover:text-white cursor-pointer" aria-label="Close">
@@ -637,7 +637,7 @@ const BoardPicker: React.FC<{
               ['mine', 'My Moodboards'],
             ] as const
           ).map(([id, l]) => (
-            <button key={id} onClick={() => setTab(id)} className={`pb-2.5 text-[13px] font-medium border-b-2 -mb-px cursor-pointer ${tab === id ? 'border-[#d1fe17] text-white' : 'border-transparent text-neutral-500'}`}>
+            <button key={id} onClick={() => setTab(id)} className={`pb-2.5 text-[13px] font-medium border-b-2 -mb-px cursor-pointer ${tab === id ? 'border-[#ff3d9a] text-white' : 'border-transparent text-neutral-500'}`}>
               {l}
             </button>
           ))}
@@ -658,11 +658,11 @@ const BoardPicker: React.FC<{
           ) : (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {list.map((b) => (
-                <button key={b.id} onClick={() => onPick(b)} className={`theme-dark relative aspect-square rounded-xl overflow-hidden bg-surface border-2 cursor-pointer ${value === b.id ? 'border-[#d1fe17]' : 'border-transparent'}`}>
+                <button key={b.id} onClick={() => onPick(b)} className={`theme-dark relative aspect-square rounded-xl overflow-hidden bg-surface border-2 cursor-pointer ${value === b.id ? 'border-[#ff3d9a]' : 'border-transparent'}`}>
                   {b.cover ? <img src={b.cover} alt="" loading="lazy" className="w-full h-full object-cover" /> : <span className="absolute inset-0 flex items-center justify-center text-neutral-500"><Sparkles className="w-5 h-5" /></span>}
                   <span className="absolute inset-x-0 bottom-0 p-2 text-[12px] font-medium text-white text-left bg-gradient-to-t from-black/80">{b.name}</span>
                   {value === b.id && (
-                    <span className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#d1fe17] text-black flex items-center justify-center">
+                    <span className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[#ff3d9a] text-[#fff] flex items-center justify-center">
                       <Check className="w-3 h-3" />
                     </span>
                   )}
@@ -784,11 +784,11 @@ const BuildModal: React.FC<{ vaultItems: VaultItem[]; onClose: () => void; onCre
           ) : (
             <>
               <div className="flex items-center gap-3 text-[12px]">
-                <span className={imgs.length >= BUILD_RULES.min ? 'text-[#d1fe17]' : 'text-neutral-400'}>
+                <span className={imgs.length >= BUILD_RULES.min ? 'text-[#ff3d9a]' : 'text-neutral-400'}>
                   {imgs.length}/{BUILD_RULES.min} minimum
                 </span>
                 <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
-                  <div className="h-full bg-[#d1fe17] transition-all" style={{ width: `${Math.min(100, (imgs.length / BUILD_RULES.ideal) * 100)}%` }} />
+                  <div className="h-full bg-[#ff3d9a] transition-all" style={{ width: `${Math.min(100, (imgs.length / BUILD_RULES.ideal) * 100)}%` }} />
                 </div>
                 <span className="text-neutral-500">ideal {BUILD_RULES.ideal}</span>
               </div>
@@ -825,7 +825,7 @@ const BuildModal: React.FC<{ vaultItems: VaultItem[]; onClose: () => void; onCre
           <button
             disabled={!ok}
             onClick={create}
-            className={`w-full h-11 rounded-xl font-semibold text-[14px] ${ok ? 'bg-[#d1fe17] text-black cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'}`}
+            className={`w-full h-11 rounded-xl font-semibold text-[14px] ${ok ? 'bg-[#ff3d9a] text-[#fff] cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'}`}
           >
             Continue
           </button>
@@ -853,9 +853,9 @@ const BuildModal: React.FC<{ vaultItems: VaultItem[]; onClose: () => void; onCre
 };
 
 const RuleCard: React.FC<{ good?: boolean; title: string; items: string[] }> = ({ good, title, items }) => (
-  <div className={`rounded-xl p-3 border ${good ? 'border-[#d1fe17]/30 bg-[#d1fe17]/5' : 'border-red-400/30 bg-red-400/5'}`}>
+  <div className={`rounded-xl p-3 border ${good ? 'border-[#ff3d9a]/30 bg-[#ff3d9a]/5' : 'border-red-400/30 bg-red-400/5'}`}>
     <div className="flex items-center gap-1.5 text-[13px] font-semibold mb-2">
-      {good ? <CheckCircle2 className="w-4 h-4 text-[#d1fe17]" /> : <XCircle className="w-4 h-4 text-red-400" />} {title}
+      {good ? <CheckCircle2 className="w-4 h-4 text-[#ff3d9a]" /> : <XCircle className="w-4 h-4 text-red-400" />} {title}
     </div>
     <ul className="text-[12px] text-neutral-300 space-y-1">
       {items.map((i) => (
@@ -899,10 +899,10 @@ const AssetPicker: React.FC<{ vaultItems: VaultItem[]; gens: string[]; onClose: 
                 n.has(s) ? n.delete(s) : n.add(s);
                 setSel(n);
               }}
-              className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer ${sel.has(s) ? 'ring-2 ring-[#d1fe17]' : ''}`}
+              className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer ${sel.has(s) ? 'ring-2 ring-[#ff3d9a]' : ''}`}
             >
               <img src={s} alt="" loading="lazy" className="w-full h-full object-cover" />
-              {sel.has(s) && <Check className="absolute top-1 right-1 w-4 h-4 text-[#d1fe17]" />}
+              {sel.has(s) && <Check className="absolute top-1 right-1 w-4 h-4 text-[#ff3d9a]" />}
             </button>
           ))}
         </div>
@@ -910,7 +910,7 @@ const AssetPicker: React.FC<{ vaultItems: VaultItem[]; gens: string[]; onClose: 
       <button
         disabled={!sel.size}
         onClick={() => onAdd([...sel])}
-        className="mt-3 w-full h-9 rounded-xl bg-[#d1fe17] text-black text-[13px] font-semibold disabled:opacity-40 cursor-pointer"
+        className="mt-3 w-full h-9 rounded-xl bg-[#ff3d9a] text-[#fff] text-[13px] font-semibold disabled:opacity-40 cursor-pointer"
       >
         Add {sel.size || ''} selected
       </button>

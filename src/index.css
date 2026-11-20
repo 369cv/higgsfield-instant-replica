@@ -14,7 +14,7 @@
   --line: 40 42 53;
   --muted: 113 118 132;
   --soft: 186 189 197;
-  --accent-ink: 209 254 23;
+  --accent-ink: 255 61 154;
   --n-50: 250 250 250;
   --n-100: 245 245 245;
   --n-200: 229 229 229;
@@ -37,7 +37,7 @@
   --line: 216 216 222;
   --muted: 110 110 118;
   --soft: 72 72 80;
-  --accent-ink: 82 104 0;
+  --accent-ink: 200 20 110;
   /* neutral scale inverted so secondary text keeps its contrast */
   --n-50: 10 10 10;
   --n-100: 23 23 23;

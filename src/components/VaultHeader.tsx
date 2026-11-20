@@ -154,7 +154,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
               aria-label={item.label}
               className={`relative shrink-0 flex items-center gap-2 px-2.5 lg:px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-[#d1fe17] text-black font-bold shadow-[0_0_15px_rgba(209,254,23,0.25)]'
+                  ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow-[0_0_15px_rgba(255,61,154,0.25)]'
                   : 'text-neutral-400 hover:text-white hover:bg-white/[0.06]'
               }`}
             >
@@ -202,7 +202,7 @@ export const VaultHeader: React.FC<VaultHeaderProps> = ({
           onClick={() => onSelectTab('assets')}
           className={`w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all cursor-pointer active:scale-95 ${
             activeTab === 'assets'
-              ? 'bg-[#d1fe17]/15 text-accent-ink border border-[#d1fe17]/30'
+              ? 'bg-[#ff3d9a]/15 text-accent-ink border border-[#ff3d9a]/30'
               : 'bg-white/[0.06] hover:bg-white/10 text-neutral-300 hover:text-white'
           }`}
           title="Assets"

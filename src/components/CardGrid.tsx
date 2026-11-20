@@ -225,7 +225,7 @@ const GridImageCard: React.FC<GridImageCardProps> = ({
           >
             <div className="relative w-7 h-7 flex items-center justify-center">
               <div className="absolute inset-0 rounded-full border border-white/10" />
-              <div className="absolute inset-0 rounded-full border border-[#d1fe17] border-t-transparent animate-spin" />
+              <div className="absolute inset-0 rounded-full border border-[#ff3d9a] border-t-transparent animate-spin" />
             </div>
             <span className="text-[10px] font-medium text-neutral-500 tracking-wider uppercase font-mono">
               Loading more drops...
@@ -261,7 +261,7 @@ const GridImageCard: React.FC<GridImageCardProps> = ({
         >
           <div className="relative w-7 h-7 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full border border-white/10" />
-            <div className="absolute inset-0 rounded-full border border-[#d1fe17] border-t-transparent animate-spin" />
+            <div className="absolute inset-0 rounded-full border border-[#ff3d9a] border-t-transparent animate-spin" />
           </div>
           <span className="text-[10px] font-medium text-neutral-500 tracking-wider uppercase font-mono">
             Loading more drops...

@@ -28,11 +28,11 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
         {/* Left: Brand + Higgsfield Suite Links */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#d1fe17] text-black font-black flex items-center justify-center text-xs shadow-lg shadow-[#d1fe17]/25">
+            <div className="w-8 h-8 rounded-xl bg-[#ff3d9a] text-[#fff] font-black flex items-center justify-center text-xs shadow-lg shadow-[#ff3d9a]/25">
               HF
             </div>
             <span className="font-extrabold text-sm tracking-tight text-white">Halal Fans</span>
-            <span className="text-[10px] bg-[#d1fe17]/20 text-accent-ink px-2 py-0.5 rounded-full font-bold">SOUL 2.0</span>
+            <span className="text-[10px] bg-[#ff3d9a]/20 text-accent-ink px-2 py-0.5 rounded-full font-bold">SOUL 2.0</span>
           </div>
 
           <nav className="hidden lg:flex items-center gap-1.5 text-xs font-semibold text-neutral-300">
@@ -102,7 +102,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Natural language prompt search (e.g. 'abaya', 'car', 'flash')..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] transition-colors"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a] transition-colors"
             />
             {searchQuery && (
               <button
@@ -149,7 +149,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
 
           <button
             onClick={onCreateClick}
-            className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-xs rounded-xl shadow-lg shadow-[#d1fe17]/25 flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            className="px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-extrabold text-xs rounded-xl shadow-lg shadow-[#ff3d9a]/25 flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
           >
             <span>+ Create Soul Drop</span>
           </button>
@@ -175,7 +175,7 @@ export const HiggsfieldSuiteHeader: React.FC<HiggsfieldSuiteHeaderProps> = ({
               onClick={() => onSelectCategory(cat.name)}
               className={`px-3 py-1 rounded-full whitespace-nowrap transition-all cursor-pointer font-medium ${
                 isSelected
-                  ? 'bg-white text-black font-bold shadow-md shadow-white/10'
+                  ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow-md shadow-white/10'
                   : 'bg-white/5 hover:bg-white/10 text-neutral-300'
               }`}
             >

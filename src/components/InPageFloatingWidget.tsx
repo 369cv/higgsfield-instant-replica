@@ -99,7 +99,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
                     onClick={() => setSelectedSoulId(soul.id)}
                     className={`flex items-center gap-2 p-2 rounded-xl border transition-all ${
                       selectedSoulId === soul.id
-                        ? 'bg-[#d1fe17]/10 border-[#d1fe17] text-white'
+                        ? 'bg-[#ff3d9a]/10 border-[#ff3d9a] text-white'
                         : 'bg-surface border-line text-muted hover:border-line'
                     }`}
                   >
@@ -141,7 +141,7 @@ export const InPageFloatingWidget: React.FC<InPageFloatingWidgetProps> = ({
           {/* Generate CTA */}
           <button
             type="submit"
-            className="w-full py-2.5 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-xs flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] shadow-md shadow-[#d1fe17]/20"
+            className="w-full py-2.5 rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-bold text-xs flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] shadow-md shadow-[#ff3d9a]/20"
           >
             <Sparkles className="w-3.5 h-3.5 fill-black" />
             <span>Generate</span>

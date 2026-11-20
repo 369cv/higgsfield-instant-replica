@@ -317,7 +317,7 @@ export const HiggsfieldProfileModal: React.FC<ProfileProps> = ({
           maxLength={30}
           placeholder="Your name"
           autoComplete="nickname"
-          className="w-full h-12 px-4 rounded-xl bg-surface border border-white/[0.08] text-[17px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
+          className="w-full h-12 px-4 rounded-xl bg-surface border border-white/[0.08] text-[17px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a]"
         />
         <div className="text-[13px] uppercase tracking-wide text-neutral-500 px-1 pt-5 pb-2">Avatar colour</div>
         <div role="radiogroup" aria-label="Avatar colour" className="flex gap-3 px-1">
@@ -330,7 +330,7 @@ export const HiggsfieldProfileModal: React.FC<ProfileProps> = ({
               aria-label={`Colour ${h}`}
               onClick={() => setDraftHue(h)}
               className={`w-9 h-9 rounded-full cursor-pointer ring-offset-2 ring-offset-base transition-shadow ${
-                draftHue === h ? 'ring-2 ring-[#d1fe17]' : ''
+                draftHue === h ? 'ring-2 ring-[#ff3d9a]' : ''
               }`}
               style={{ background: `linear-gradient(135deg, hsl(${h} 85% 62%), hsl(${(h + 50) % 360} 80% 52%))` }}
             />

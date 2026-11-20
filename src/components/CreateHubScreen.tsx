@@ -145,7 +145,7 @@ export const CreateHubScreen: React.FC<CreateHubScreenProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-md font-mono">
                   Generation Canvas
                 </span>
-                <span className="text-[10px] text-accent-ink font-bold bg-[#d1fe17]/10 px-2 py-0.5 rounded-md font-mono">
+                <span className="text-[10px] text-accent-ink font-bold bg-[#ff3d9a]/10 px-2 py-0.5 rounded-md font-mono">
                   Studio
                 </span>
               </div>

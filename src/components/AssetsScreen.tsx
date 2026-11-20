@@ -650,7 +650,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
             {activeTab === 'projects' && (
               <button
                 onClick={() => setIsCreatingProject(true)}
-                className="px-3 py-1.5 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                className="px-3 py-1.5 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md shadow-[#ff3d9a]/20"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="12" y1="5" x2="12" y2="19" />
@@ -702,7 +702,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                   </div>
                   <button
                     onClick={() => setIsCreatingProject(true)}
-                    className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                    className="px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#ff3d9a]/20"
                   >
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19" />
@@ -768,7 +768,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
               {onNavigateToStudio && (
                 <button
                   onClick={() => onNavigateToStudio('video')}
-                  className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                  className="px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#ff3d9a]/20"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -906,7 +906,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
               {onNavigateToStudio && (
                 <button
                   onClick={() => onNavigateToStudio('create')}
-                  className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                  className="px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#ff3d9a]/20"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -937,7 +937,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
               {onNavigateToStudio && (
                 <button
                   onClick={() => onNavigateToStudio('create')}
-                  className="px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#d1fe17]/20"
+                  className="px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl inline-flex items-center gap-1.5 transition-all shadow-md shadow-[#ff3d9a]/20"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19" />
@@ -963,7 +963,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                         onClick={() => toggleSelectDateGroup(items)}
                         className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
                           allSelected
-                            ? 'bg-[#d1fe17] border-[#d1fe17] text-black'
+                            ? 'bg-[#ff3d9a] border-[#ff3d9a] text-[#fff]'
                             : 'border-white/20 hover:border-white/50 bg-white/5'
                         }`}
                         title="Select All for Date"
@@ -1002,7 +1002,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                             onClick={() => onSelectItem(item)}
                             className={`group relative rounded-2xl overflow-hidden aspect-[3/4] bg-base border transition-all cursor-pointer ${
                               isSelected
-                                ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/20 shadow-lg'
+                                ? 'border-[#ff3d9a] ring-2 ring-[#ff3d9a]/20 shadow-lg'
                                 : 'border-white/10 hover:border-white/25 hover:shadow-xl'
                             }`}
                           >
@@ -1021,7 +1021,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                               }}
                               className={`absolute top-2.5 left-2.5 w-6 h-6 rounded-lg border backdrop-blur-md flex items-center justify-center transition-all ${
                                 isSelected
-                                  ? 'bg-[#d1fe17] border-[#d1fe17] text-black shadow-md'
+                                  ? 'bg-[#ff3d9a] border-[#ff3d9a] text-[#fff] shadow-md'
                                   : 'bg-black/40 border-white/20 hover:border-white text-white opacity-0 group-hover:opacity-100'
                               }`}
                             >
@@ -1131,7 +1131,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                   onChange={(e) => setNewProjectTitle(e.target.value)}
                   placeholder="e.g. Dubai Nightlife Editorial"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17]"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a]"
                 />
               </div>
 
@@ -1142,7 +1142,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                 <select
                   value={newProjectCategory}
                   onChange={(e) => setNewProjectCategory(e.target.value as any)}
-                  className="w-full bg-neutral-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#d1fe17]"
+                  className="w-full bg-neutral-900 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#ff3d9a]"
                 >
                   <option value="Cinema studio">Cinema studio</option>
                   <option value="Marketing Studio">Marketing Studio</option>
@@ -1160,7 +1160,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                   type="checkbox"
                   checked={newProjectPrivate}
                   onChange={(e) => setNewProjectPrivate(e.target.checked)}
-                  className="w-4 h-4 accent-[#d1fe17]"
+                  className="w-4 h-4 accent-[#ff3d9a]"
                 />
               </div>
 
@@ -1174,7 +1174,7 @@ export const AssetsScreen: React.FC<AssetsScreenProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#d1fe17] text-black font-extrabold rounded-xl shadow-md shadow-[#d1fe17]/20"
+                  className="px-4 py-2 bg-[#ff3d9a] text-[#fff] font-extrabold rounded-xl shadow-md shadow-[#ff3d9a]/20"
                 >
                   Create Project
                 </button>

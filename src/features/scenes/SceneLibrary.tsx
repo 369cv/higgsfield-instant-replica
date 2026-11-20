@@ -223,7 +223,7 @@ const LibraryTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onReport
           <button
             onClick={() => setFiltersOpen(!filtersOpen)}
             aria-expanded={filtersOpen}
-            className={`h-8 px-3 rounded-full text-[12.5px] flex items-center gap-1.5 cursor-pointer transition-colors duration-150 ${active ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'}`}
+            className={`h-8 px-3 rounded-full text-[12.5px] flex items-center gap-1.5 cursor-pointer transition-colors duration-150 ${active ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'}`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" /> Filters{active ? ` · ${active}` : ''}
             <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} />
@@ -318,7 +318,7 @@ const Chip: React.FC<{ on: boolean; onClick: () => void; children: React.ReactNo
   <button
     onClick={onClick}
     aria-pressed={on}
-    className={`h-8 px-3 rounded-full text-[12.5px] capitalize transition-colors duration-200 cursor-pointer ${on ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'}`}
+    className={`h-8 px-3 rounded-full text-[12.5px] capitalize transition-colors duration-200 cursor-pointer ${on ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'}`}
   >
     {children}
   </button>
@@ -408,7 +408,7 @@ const ClipCard: React.FC<{ clip: Clip; onRemix: (c: Clip) => void; onReport: (c:
       </div>
       <div className={`absolute top-2 right-2 flex gap-1 transition-opacity duration-150 ${show ? 'opacity-100' : 'opacity-0'}`}>
         <button onClick={() => setSaveOpen(!saveOpen)} className="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center cursor-pointer" aria-label="Save to collection">
-          <Bookmark className={`w-4 h-4 ${saved ? 'fill-[#d1fe17] text-[#d1fe17]' : ''}`} />
+          <Bookmark className={`w-4 h-4 ${saved ? 'fill-[#ff3d9a] text-[#ff3d9a]' : ''}`} />
         </button>
         {clip.visibility === 'public' && (
           <button onClick={() => onReport(clip)} className="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center cursor-pointer" aria-label="Report clip">
@@ -429,7 +429,7 @@ const ClipCard: React.FC<{ clip: Clip; onRemix: (c: Clip) => void; onReport: (c:
           </button>
           {extra}
         </div>
-        <button onClick={() => onRemix(clip)} className="w-full h-9 rounded-lg bg-[#d1fe17] text-black text-[12.5px] font-semibold flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]">
+        <button onClick={() => onRemix(clip)} className="w-full h-9 rounded-lg bg-[#ff3d9a] text-[#fff] text-[12.5px] font-semibold flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]">
           <Repeat2 className="w-3.5 h-3.5" /> Remix
         </button>
       </div>
@@ -462,7 +462,7 @@ const AddToCollection: React.FC<{ clipId: string; onClose: () => void }> = ({ cl
             <button key={c.id} onClick={() => toggleInCollection(c.id, clipId)} className="w-full px-2 py-1.5 rounded-lg flex items-center gap-2 text-left text-[12.5px] hover:bg-white/[0.07] cursor-pointer">
               <span className="flex-1 truncate">{c.name}</span>
               <span className="text-neutral-500 text-[11px]">{c.clip_ids.length}</span>
-              <Check className={`w-3.5 h-3.5 text-[#d1fe17] ${on ? '' : 'invisible'}`} />
+              <Check className={`w-3.5 h-3.5 text-[#ff3d9a] ${on ? '' : 'invisible'}`} />
             </button>
           );
         })}
@@ -474,7 +474,7 @@ const AddToCollection: React.FC<{ clipId: string; onClose: () => void }> = ({ cl
             toast('Saved to new collection');
             onClose();
           }}
-          className="w-full mt-1 px-2 py-1.5 rounded-lg flex items-center gap-2 text-[12.5px] text-[#d1fe17] hover:bg-white/[0.07] cursor-pointer"
+          className="w-full mt-1 px-2 py-1.5 rounded-lg flex items-center gap-2 text-[12.5px] text-[#ff3d9a] hover:bg-white/[0.07] cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" /> New collection{q.trim() ? ` “${q.trim()}”` : ''}
         </button>
@@ -513,7 +513,7 @@ const CollectionsTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onRe
         {cols.map((c, i) => {
           const cover = byId(c.cover_clip_id || '');
           return (
-            <li key={c.id} className={`rounded-xl p-2 flex items-center gap-2 border transition-colors duration-150 ${c.id === active.id ? 'border-[#d1fe17]/60 bg-white/[0.04]' : 'border-transparent hover:bg-white/[0.03]'}`}>
+            <li key={c.id} className={`rounded-xl p-2 flex items-center gap-2 border transition-colors duration-150 ${c.id === active.id ? 'border-[#ff3d9a]/60 bg-white/[0.04]' : 'border-transparent hover:bg-white/[0.03]'}`}>
               <button onClick={() => setOpen(c.id)} className="w-11 h-11 rounded-lg overflow-hidden bg-surface shrink-0 cursor-pointer">
                 {cover && <ClipMedia clip={cover} still className="w-full h-full object-cover" />}
               </button>
@@ -602,7 +602,7 @@ const CollectionsTab: React.FC<{ clips: Clip[]; onRemix: (c: Clip) => void; onRe
                       >
                         <ArrowUp className="w-3.5 h-3.5" />
                       </button>
-                      <button onClick={() => updateCollection(active.id, { cover_clip_id: id })} className={`p-1 cursor-pointer ${active.cover_clip_id === id ? 'text-[#d1fe17]' : ''}`} aria-label="Set as cover">
+                      <button onClick={() => updateCollection(active.id, { cover_clip_id: id })} className={`p-1 cursor-pointer ${active.cover_clip_id === id ? 'text-[#ff3d9a]' : ''}`} aria-label="Set as cover">
                         <Bookmark className="w-3.5 h-3.5" />
                       </button>
                     </span>
@@ -630,7 +630,7 @@ const IconBtn: React.FC<{ label: string; icon: React.ReactNode; onClick: () => v
 const BADGE: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
   private: { label: 'Private', cls: 'bg-white/10 text-white', icon: <Lock className="w-3 h-3" /> },
   pending: { label: 'Pending review', cls: 'bg-amber-400/90 text-black', icon: <Clock className="w-3 h-3" /> },
-  public: { label: 'Public', cls: 'bg-[#d1fe17] text-black', icon: <Globe className="w-3 h-3" /> },
+  public: { label: 'Public', cls: 'bg-[#ff3d9a] text-[#fff]', icon: <Globe className="w-3 h-3" /> },
 };
 
 const UploadsTab: React.FC<{ onRemix: (c: Clip) => void; onUpload: () => void }> = ({ onRemix, onUpload }) => {
@@ -641,7 +641,7 @@ const UploadsTab: React.FC<{ onRemix: (c: Clip) => void; onUpload: () => void }>
         <Upload className="w-6 h-6 mx-auto text-neutral-500 mb-3" />
         <div className="text-[15px] font-semibold">No uploads yet</div>
         <p className="text-[13px] text-neutral-500 mt-1 mb-4">Upload a 4–30s MP4 or MOV you own. It stays private unless you publish it.</p>
-        <button onClick={onUpload} className="h-9 px-4 rounded-xl bg-[#d1fe17] text-black text-[13px] font-semibold cursor-pointer">
+        <button onClick={onUpload} className="h-9 px-4 rounded-xl bg-[#ff3d9a] text-[#fff] text-[13px] font-semibold cursor-pointer">
           Upload clip
         </button>
       </div>
@@ -664,7 +664,7 @@ const UploadsTab: React.FC<{ onRemix: (c: Clip) => void; onUpload: () => void }>
                 <ShieldCheck className="w-3 h-3" /> Rights attested {new Date(u.rights_attested_at!).toLocaleDateString()}
               </div>
               <div className="flex gap-1.5">
-                <button onClick={() => onRemix(u)} className="flex-1 h-8 rounded-lg bg-[#d1fe17] text-black text-[12px] font-semibold cursor-pointer">
+                <button onClick={() => onRemix(u)} className="flex-1 h-8 rounded-lg bg-[#ff3d9a] text-[#fff] text-[12px] font-semibold cursor-pointer">
                   Remix
                 </button>
                 {u.visibility === 'private' ? (
@@ -741,8 +741,8 @@ const UploadModal: React.FC<{ onClose: () => void; onDone: () => void }> = ({ on
           </button>
         </div>
 
-        <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${attested ? 'border-[#d1fe17]/60 bg-[#d1fe17]/5' : 'border-white/10'}`}>
-          <input type="checkbox" checked={attested} onChange={(e) => setAttested(e.target.checked)} className="mt-0.5 accent-[#d1fe17] w-4 h-4" />
+        <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-colors ${attested ? 'border-[#ff3d9a]/60 bg-[#ff3d9a]/5' : 'border-white/10'}`}>
+          <input type="checkbox" checked={attested} onChange={(e) => setAttested(e.target.checked)} className="mt-0.5 accent-[#ff3d9a] w-4 h-4" />
           <span className="text-[13px]">
             <span className="font-semibold">{RIGHTS_STATEMENT}</span>
             <span className="block text-[11.5px] text-neutral-500 mt-0.5">We store this statement with the upload. Clips that match known copyrighted content are blocked.</span>
@@ -819,7 +819,7 @@ const UploadModal: React.FC<{ onClose: () => void; onDone: () => void }> = ({ on
           </div>
         )}
 
-        <button onClick={save} disabled={!meta || !attested} className="w-full h-11 rounded-xl bg-[#d1fe17] text-black font-semibold text-[14px] disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed">
+        <button onClick={save} disabled={!meta || !attested} className="w-full h-11 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-[14px] disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed">
           Save privately
         </button>
       </div>
@@ -849,7 +849,7 @@ export const ReportModal: React.FC<{ clip?: Clip; targetLabel?: string; targetId
               ['other', 'Other'],
             ] as const
           ).map(([id, l]) => (
-            <button key={id} onClick={() => setReason(id)} className={`h-9 rounded-lg text-[12.5px] cursor-pointer ${reason === id ? 'bg-[#d1fe17] text-black font-semibold' : 'bg-white/[0.06]'}`}>
+            <button key={id} onClick={() => setReason(id)} className={`h-9 rounded-lg text-[12.5px] cursor-pointer ${reason === id ? 'bg-[#ff3d9a] text-[#fff] font-semibold' : 'bg-white/[0.06]'}`}>
               {l}
             </button>
           ))}

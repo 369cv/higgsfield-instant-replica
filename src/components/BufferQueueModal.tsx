@@ -97,7 +97,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#d1fe17]/20 border border-[#d1fe17]/30 flex items-center justify-center text-accent-ink">
+            <div className="w-8 h-8 rounded-lg bg-[#ff3d9a]/20 border border-[#ff3d9a]/30 flex items-center justify-center text-accent-ink">
               <Calendar className="w-4 h-4" />
             </div>
             <div>
@@ -119,7 +119,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
               <button
                 onClick={() => setActiveTab('compose')}
                 className={`px-3 py-1 rounded-md font-medium transition-colors ${
-                  activeTab === 'compose' ? 'bg-[#d1fe17] text-black font-semibold' : 'text-neutral-400 hover:text-white'
+                  activeTab === 'compose' ? 'bg-[#ff3d9a] text-[#fff] font-semibold' : 'text-neutral-400 hover:text-white'
                 }`}
               >
                 + New Post
@@ -145,7 +145,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                   <p className="text-sm font-medium">No posts currently scheduled in Buffer queue.</p>
                   <button
                     onClick={() => setActiveTab('compose')}
-                    className="mt-4 px-4 py-2 bg-[#d1fe17] hover:bg-[#bfee00] text-black text-xs font-bold rounded-xl"
+                    className="mt-4 px-4 py-2 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] text-xs font-bold rounded-xl"
                   >
                     Schedule First Post
                   </button>
@@ -173,7 +173,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                           <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
                           <span className="font-semibold text-white">{post.handle}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs text-accent-ink font-medium bg-[#d1fe17]/10 px-2 py-0.5 rounded">
+                        <div className="flex items-center gap-1.5 text-xs text-accent-ink font-medium bg-[#ff3d9a]/10 px-2 py-0.5 rounded">
                           <Clock className="w-3 h-3" />
                           <span>{post.scheduledTime}</span>
                         </div>
@@ -212,7 +212,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                   value={composerCaption}
                   onChange={(e) => setComposerCaption(e.target.value)}
                   placeholder="Write your Instagram caption..."
-                  className="w-full p-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-[#d1fe17] transition-colors resize-none"
+                  className="w-full p-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-neutral-500 text-sm focus:outline-none focus:border-[#ff3d9a] transition-colors resize-none"
                 />
               </div>
 
@@ -246,7 +246,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                       onClick={() => setScheduledSlot(slot)}
                       className={`p-2.5 rounded-xl border text-left transition-colors ${
                         scheduledSlot === slot
-                          ? 'border-[#d1fe17] bg-[#d1fe17]/10 text-white font-medium'
+                          ? 'border-[#ff3d9a] bg-[#ff3d9a]/10 text-white font-medium'
                           : 'border-white/10 bg-white/5 text-neutral-400 hover:text-white'
                       }`}
                     >
@@ -260,7 +260,7 @@ export const BufferQueueModal: React.FC<BufferQueueModalProps> = ({ isOpen, onCl
                 <button
                   onClick={handleAddPost}
                   disabled={isSuccess}
-                  className="w-full py-3 bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-transform active:scale-98 shadow-lg shadow-[#d1fe17]/20"
+                  className="w-full py-3 bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-transform active:scale-98 shadow-lg shadow-[#ff3d9a]/20"
                 >
                   {isSuccess ? (
                     <>

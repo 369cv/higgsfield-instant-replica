@@ -69,7 +69,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
                 onClick={() => onSelectCategory(niche.id === 'All' ? 'All' : niche.label)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#d1fe17] text-black font-bold shadow-[0_0_15px_rgba(209,254,23,0.25)]'
+                    ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow-[0_0_15px_rgba(255,61,154,0.25)]'
                     : 'bg-white/[0.04] text-neutral-400 hover:text-white hover:bg-white/[0.08] border border-white/5'
                 }`}
               >
@@ -85,7 +85,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
             onClick={() => setIsDrawerOpen(!isDrawerOpen)}
             className={`p-2 rounded-xl transition-all cursor-pointer flex items-center justify-center relative ${
               isDrawerOpen || activeFiltersCount > 0
-                ? 'bg-[#d1fe17] text-black shadow-[0_0_15px_rgba(209,254,23,0.3)]'
+                ? 'bg-[#ff3d9a] text-[#fff] shadow-[0_0_15px_rgba(255,61,154,0.3)]'
                 : 'bg-white/[0.04] text-neutral-400 hover:text-white hover:bg-white/10 border border-white/5'
             }`}
             title="Filter"
@@ -103,7 +103,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
               <line x1="17" y1="16" x2="23" y2="16" />
             </svg>
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black text-accent-ink text-[9px] font-black flex items-center justify-center border border-[#d1fe17]">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black text-accent-ink text-[9px] font-black flex items-center justify-center border border-[#ff3d9a]">
                 {activeFiltersCount}
               </span>
             )}
@@ -126,7 +126,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-[#d1fe17]/10 flex items-center justify-center text-accent-ink">
+                  <div className="w-8 h-8 rounded-xl bg-[#ff3d9a]/10 flex items-center justify-center text-accent-ink">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <line x1="4" y1="21" x2="4" y2="14" />
                       <line x1="4" y1="10" x2="4" y2="3" />
@@ -172,7 +172,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
                     value={filters.searchChat}
                     onChange={(e) => onUpdateFilters({ searchChat: e.target.value })}
                     placeholder="Search drops, outfits, or settings..."
-                    className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] pr-16"
+                    className="w-full bg-white/[0.04] border border-white/10 rounded-2xl px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a] pr-16"
                   />
                   {filters.searchChat && (
                     <button
@@ -197,7 +197,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
                       onClick={() => onUpdateFilters({ aspectRatio: ratio })}
                       className={`py-2 px-2.5 rounded-xl text-xs font-medium cursor-pointer transition-all ${
                         filters.aspectRatio === ratio
-                          ? 'bg-[#d1fe17] text-black font-bold shadow'
+                          ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow'
                           : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -225,7 +225,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
                       onClick={() => onUpdateFilters({ lighting: lt.id })}
                       className={`py-2 px-2.5 rounded-xl text-left truncate text-xs font-medium cursor-pointer transition-all ${
                         filters.lighting === lt.id
-                          ? 'bg-[#d1fe17] text-black font-bold shadow'
+                          ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow'
                           : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -253,7 +253,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
                       onClick={() => onUpdateFilters({ shotType: st.id })}
                       className={`py-2 px-2.5 rounded-xl text-left truncate text-xs font-medium cursor-pointer transition-all ${
                         filters.shotType === st.id
-                          ? 'bg-[#d1fe17] text-black font-bold shadow'
+                          ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow'
                           : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -278,7 +278,7 @@ export const PromptsNicheSubheader: React.FC<PromptsNicheSubheaderProps> = ({
               )}
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="flex-1 py-2 rounded-xl bg-[#d1fe17] text-black text-xs font-extrabold transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer shadow-lg text-center"
+                className="flex-1 py-2 rounded-xl bg-[#ff3d9a] text-[#fff] text-xs font-extrabold transition-transform hover:scale-[1.02] active:scale-95 cursor-pointer shadow-lg text-center"
               >
                 Apply
               </button>

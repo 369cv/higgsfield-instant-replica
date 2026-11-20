@@ -99,7 +99,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             e.preventDefault();
             runSearch(searchQuery);
           }}
-          className="flex-1 flex items-center bg-white/[0.08] sm:bg-white/5 sm:border border-white/10 rounded-[10px] sm:rounded-2xl px-2.5 sm:px-4 h-9 sm:h-auto sm:py-3 sm:focus-within:border-[#d1fe17] transition-colors"
+          className="flex-1 flex items-center bg-white/[0.08] sm:bg-white/5 sm:border border-white/10 rounded-[10px] sm:rounded-2xl px-2.5 sm:px-4 h-9 sm:h-auto sm:py-3 sm:focus-within:border-[#ff3d9a] transition-colors"
         >
           <Search className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-400 mr-2 sm:mr-3 shrink-0" />
           <input
@@ -164,7 +164,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     onClose();
                     onSelectItem(item);
                   }}
-                  className="w-20 h-28 shrink-0 rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#d1fe17]/60 cursor-pointer"
+                  className="w-20 h-28 shrink-0 rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-[#ff3d9a]/60 cursor-pointer"
                 >
                   <img src={item.imageUrl} alt="" loading="lazy" className="w-full h-full object-cover" />
                 </button>
@@ -235,7 +235,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <button
                     key={s.label}
                     onClick={() => runSearch(s.query)}
-                    className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#d1fe17] hover:text-black text-xs font-medium text-neutral-200 cursor-pointer transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#ff3d9a] hover:text-[#fff] text-xs font-medium text-neutral-200 cursor-pointer transition-colors"
                   >
                     {s.label}
                   </button>

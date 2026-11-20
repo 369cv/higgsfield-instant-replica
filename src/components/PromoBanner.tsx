@@ -13,7 +13,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onAction }) => {
   return (
     <div className="relative w-full rounded-2xl bg-base border border-line px-4 py-2.5 md:px-6 md:py-3 mb-6 flex items-center justify-between gap-4 overflow-hidden shadow-xl">
       {/* Subtle Lime Ambient Glow on Left */}
-      <div className="absolute -left-12 top-0 w-36 h-full bg-[#d1fe17]/10 blur-2xl pointer-events-none" />
+      <div className="absolute -left-12 top-0 w-36 h-full bg-[#ff3d9a]/10 blur-2xl pointer-events-none" />
 
       {/* Left Typography */}
       <div className="flex flex-col items-start z-10 select-none">
@@ -40,7 +40,7 @@ export const PromoBanner: React.FC<PromoBannerProps> = ({ onAction }) => {
       <div className="flex items-center gap-3 z-10 flex-shrink-0">
         <button
           onClick={onAction}
-          className="px-4 py-2 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-extrabold text-xs tracking-tight transition-transform active:scale-95 shadow-md shadow-[#d1fe17]/20"
+          className="px-4 py-2 rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-extrabold text-xs tracking-tight transition-transform active:scale-95 shadow-md shadow-[#ff3d9a]/20"
         >
           Create your Influencer
         </button>

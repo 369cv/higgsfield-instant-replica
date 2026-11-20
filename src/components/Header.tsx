@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onHomeClick}
               className={`hidden md:flex w-10 h-10 rounded-xl items-center justify-center transition-all cursor-pointer ${
                 activeTab === 'home'
-                  ? 'text-accent-ink bg-[#d1fe17]/10'
+                  ? 'text-accent-ink bg-[#ff3d9a]/10'
                   : 'text-neutral-400 hover:text-white hover:bg-white/5'
               }`}
               title="Home Feed (1,604 drops)"
@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 7. Plus / Create (Higgsfield Prompt Studio) */}
             <button
               onClick={() => onOpenSidebar('create')}
-              className="w-10 h-10 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-black flex items-center justify-center transition-transform active:scale-95 shadow-lg shadow-[#d1fe17]/25 cursor-pointer"
+              className="w-10 h-10 rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-black flex items-center justify-center transition-transform active:scale-95 shadow-lg shadow-[#ff3d9a]/25 cursor-pointer"
               title="Generate Soul Drop (Higgsfield Studio)"
             >
               <Plus className="w-5 h-5 stroke-[3]" />
@@ -133,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 9. Profile Avatar (Persona Identity Drawer) */}
             <button
               onClick={() => onOpenSidebar('persona')}
-              className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20 hover:border-[#d1fe17] ring-1 ring-white/10 flex-shrink-0 transition-all cursor-pointer shadow-md"
+              className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/20 hover:border-[#ff3d9a] ring-1 ring-white/10 flex-shrink-0 transition-all cursor-pointer shadow-md"
               title="Persona Identity & Consistency Lock"
             >
               <img
@@ -158,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* 11. Quick Remix */}
             <button
               onClick={() => onOpenSidebar('create')}
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-accent-ink bg-[#d1fe17]/10 hover:bg-[#d1fe17]/20 transition-all cursor-pointer"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-accent-ink bg-[#ff3d9a]/10 hover:bg-[#ff3d9a]/20 transition-all cursor-pointer"
               title="Quick Prompt Remix"
             >
               <Sparkles className="w-5 h-5" />
@@ -189,7 +189,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <button
           onClick={() => onOpenSidebar('create')}
-          className="w-11 h-11 rounded-2xl bg-[#d1fe17] text-black font-black flex items-center justify-center shadow-lg shadow-[#d1fe17]/25 -translate-y-2 cursor-pointer"
+          className="w-11 h-11 rounded-2xl bg-[#ff3d9a] text-[#fff] font-black flex items-center justify-center shadow-lg shadow-[#ff3d9a]/25 -translate-y-2 cursor-pointer"
           title="Create Soul Drop"
         >
           <Plus className="w-6 h-6 stroke-[3]" />

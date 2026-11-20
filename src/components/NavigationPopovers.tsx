@@ -198,7 +198,7 @@ export const MoreMenuPopover: React.FC<PopoverProps & {
             <Calendar className="w-5 h-5 text-accent-ink" />
             <span className="font-medium text-white">Scheduled content</span>
           </span>
-          <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-[#d1fe17]/20 text-accent-ink rounded">Buffer</span>
+          <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-[#ff3d9a]/20 text-accent-ink rounded">Buffer</span>
         </button>
 
         <button

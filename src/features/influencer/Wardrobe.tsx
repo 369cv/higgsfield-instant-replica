@@ -162,7 +162,7 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
                   aria-label={c.name}
                   onClick={() => commit({ characterId: c.id })}
                   className={`theme-dark shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 cursor-pointer bg-neutral-100 ${
-                    active ? 'border-[#d1fe17]' : 'border-transparent hover:border-white/30'
+                    active ? 'border-[#ff3d9a]' : 'border-transparent hover:border-white/30'
                   }`}
                 >
                   <img src={presetFace(c.id)} alt="" loading="lazy" className="w-full h-full object-cover object-top" />
@@ -190,7 +190,7 @@ export const WardrobePanel: React.FC<{ w: WardrobeApi; embedded?: boolean }> = (
               aria-selected={category === c}
               onClick={() => setCategory(c)}
               className={`shrink-0 h-8 px-3 rounded-full text-[12px] font-medium cursor-pointer border ${
-                category === c ? 'bg-[#d1fe17] text-black border-[#d1fe17]' : 'border-white/[0.08] text-neutral-400 hover:text-white'
+                category === c ? 'bg-[#ff3d9a] text-[#fff] border-[#ff3d9a]' : 'border-white/[0.08] text-neutral-400 hover:text-white'
               }`}
             >
               {c}
@@ -282,7 +282,7 @@ const OutfitCard: React.FC<{
     onClick={onClick}
     style={{ animationDelay: `${delay}ms` }}
     className={`theme-dark group relative h-[150px] rounded-xl overflow-hidden border cursor-pointer text-left wd-card-in transition-transform hover:-translate-y-0.5 bg-[radial-gradient(120%_90%_at_50%_30%,#f3f1ee,#d9d6d1)] ${
-      active ? 'border-[#d1fe17] ring-2 ring-[#d1fe17]/40' : 'border-white/15'
+      active ? 'border-[#ff3d9a] ring-2 ring-[#ff3d9a]/40' : 'border-white/15'
     }`}
   >
     <img
@@ -530,7 +530,7 @@ export const WardrobeStage: React.FC<StageProps> = ({ w, onSendToMotion, embedde
             <button
               type="button"
               onClick={() => onSendToMotion(current)}
-              className="h-10 px-4 rounded-xl bg-[#d1fe17] text-black text-[13px] font-bold flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
+              className="h-10 px-4 rounded-xl bg-[#ff3d9a] text-[#fff] text-[13px] font-bold flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
             >
               <Clapperboard className="w-4 h-4" /> Turn to motion
             </button>

@@ -110,7 +110,7 @@ export const InspectorModal: React.FC<InspectorModalProps> = ({
         >
           <button
             onClick={handleCopy}
-            className="flex-1 h-[50px] md:h-12 rounded-[14px] md:rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
+            className="flex-1 h-[50px] md:h-12 rounded-[14px] md:rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-bold text-sm flex items-center justify-center gap-2 active:scale-[0.98] transition-transform cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             {copied ? 'Copied' : 'Copy prompt'}

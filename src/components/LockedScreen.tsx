@@ -42,7 +42,7 @@ export const LockedScreen: React.FC<LockedScreenProps> = ({
       {/* Lock card */}
       <div className="relative z-10 flex items-center justify-center min-h-app-content p-6">
         <div className="w-full max-w-sm text-center rounded-3xl bg-surface/85 border border-white/10 backdrop-blur-xl p-8 shadow-2xl">
-          <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#d1fe17]/10 border border-[#d1fe17]/30 flex items-center justify-center">
+          <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#ff3d9a]/10 border border-[#ff3d9a]/30 flex items-center justify-center">
             <Lock className="w-6 h-6 text-accent-ink" />
           </div>
           <div className="inline-block mb-3 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold tracking-[0.14em] uppercase text-neutral-300">
@@ -52,7 +52,7 @@ export const LockedScreen: React.FC<LockedScreenProps> = ({
           <p className="text-sm text-neutral-400 leading-relaxed mb-6">{description}</p>
           <button
             onClick={onReturnToVault}
-            className="w-full h-11 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-sm cursor-pointer active:scale-[0.98] transition-transform"
+            className="w-full h-11 rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-bold text-sm cursor-pointer active:scale-[0.98] transition-transform"
           >
             Browse today's prompts
           </button>

@@ -278,7 +278,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-canvas text-white flex flex-col relative selection:bg-[#d1fe17] selection:text-black">
+    <div className="min-h-screen bg-canvas text-white flex flex-col relative selection:bg-[#ff3d9a] selection:text-[#fff]">
       {/* Mobile (iOS-style): top nav bar with hamburger + search */}
       <MobileNavBar
         title={MOBILE_TITLES[mobileView] || 'Prompts'}
@@ -328,7 +328,7 @@ export const App: React.FC = () => {
               <p className="text-sm text-neutral-400 mb-6">Tap the heart on any prompt to keep it here.</p>
               <button
                 onClick={() => handleMobileNavigate('vault')}
-                className="h-11 px-5 rounded-xl bg-[#d1fe17] text-black font-semibold text-sm active:scale-[0.98]"
+                className="h-11 px-5 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-sm active:scale-[0.98]"
               >
                 Browse prompts
               </button>

@@ -151,7 +151,7 @@ export const BuilderPanel: React.FC<BuilderPanelProps> = ({
               onClick={() => setNicheFilter(n)}
               aria-pressed={nicheFilter === n}
               className={`shrink-0 h-8 px-3 rounded-full text-[12px] cursor-pointer ${
-                nicheFilter === n ? 'bg-[#d1fe17] text-black font-semibold' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'
+                nicheFilter === n ? 'bg-[#ff3d9a] text-[#fff] font-semibold' : 'bg-white/[0.06] text-neutral-300 hover:bg-white/10'
               }`}
             >
               {n || `All · ${CHARACTER_PRESETS.length}`}
@@ -191,7 +191,7 @@ export const BuilderPanel: React.FC<BuilderPanelProps> = ({
         <button
           type="button"
           onClick={onGenerate}
-          className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#e4ff3a] to-[#c3f000] text-black font-bold text-[15px] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] shadow-[0_0_20px_rgba(209,254,23,0.25)]"
+          className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#ff63b1] to-[#e8197f] text-[#fff] font-bold text-[15px] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] shadow-[0_0_20px_rgba(255,61,154,0.25)]"
         >
           <Sparkles className="w-4 h-4" /> Generate
         </button>
@@ -214,7 +214,7 @@ const PresetTile: React.FC<{ id: string; name: string; active: boolean; onClick:
     aria-label={name}
     onClick={onClick}
     className={`theme-dark relative shrink-0 ${wide ? 'w-full' : 'w-[76px]'} aspect-[4/5] rounded-lg overflow-hidden border-2 bg-neutral-100 cursor-pointer transition-all ${
-      active ? 'border-[#d1fe17] scale-[1.02]' : 'border-transparent hover:border-white/20'
+      active ? 'border-[#ff3d9a] scale-[1.02]' : 'border-transparent hover:border-white/20'
     }`}
   >
     <img src={presetFace(id)} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover object-top" />
@@ -222,7 +222,7 @@ const PresetTile: React.FC<{ id: string; name: string; active: boolean; onClick:
       {name}
     </span>
     {active && (
-      <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#d1fe17] text-black flex items-center justify-center">
+      <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#ff3d9a] text-[#fff] flex items-center justify-center">
         <Check className="w-3 h-3" strokeWidth={3} />
       </span>
     )}
@@ -439,7 +439,7 @@ export const MotionPanel: React.FC<MotionPanelProps> = ({ state, onChange, onGen
                 rows={4}
                 maxLength={1500}
                 placeholder="Describe your new scene. Reference attachments with @image1…"
-                className="w-full rounded-lg bg-white/[0.04] border border-white/[0.08] p-2.5 text-[13px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] resize-none"
+                className="w-full rounded-lg bg-white/[0.04] border border-white/[0.08] p-2.5 text-[13px] text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a] resize-none"
               />
             </div>
           )}
@@ -461,7 +461,7 @@ export const MotionPanel: React.FC<MotionPanelProps> = ({ state, onChange, onGen
           type="button"
           onClick={onGenerate}
           disabled={!canGenerate}
-          className="w-full h-12 rounded-xl bg-gradient-to-r from-[#e4ff3a] to-[#c3f000] text-black font-bold text-[15px] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full h-12 rounded-xl bg-gradient-to-r from-[#ff63b1] to-[#e8197f] text-[#fff] font-bold text-[15px] flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Sparkles className="w-4 h-4" /> Generate
         </button>
@@ -500,7 +500,7 @@ export const MotionPanel: React.FC<MotionPanelProps> = ({ state, onChange, onGen
                     setStyleOpen(false);
                   }}
                   className={`aspect-square rounded-xl border-2 p-2 flex items-end text-left text-[12px] font-medium cursor-pointer overflow-hidden relative ${
-                    active ? 'border-[#d1fe17]' : 'border-transparent bg-surface hover:bg-white/[0.04]'
+                    active ? 'border-[#ff3d9a]' : 'border-transparent bg-surface hover:bg-white/[0.04]'
                   }`}
                 >
                   {s.image && <img src={s.image} alt="" className="absolute inset-0 w-full h-full object-cover" />}

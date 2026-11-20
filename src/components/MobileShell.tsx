@@ -158,7 +158,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, active, save
     >
       <span
         className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-          isActive ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.08] text-neutral-200'
+          isActive ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.08] text-neutral-200'
         }`}
       >
         <Icon className="w-4 h-4" />

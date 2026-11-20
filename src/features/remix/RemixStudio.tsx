@@ -231,7 +231,7 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
             aria-selected={leftTab === id}
             onClick={() => setLeftTab(id)}
             className={`pb-2.5 text-[13px] font-medium border-b-2 -mb-px cursor-pointer ${
-              leftTab === id ? 'border-[#d1fe17] text-white' : 'border-transparent text-neutral-500 hover:text-white'
+              leftTab === id ? 'border-[#ff3d9a] text-white' : 'border-transparent text-neutral-500 hover:text-white'
             }`}
           >
             {label}
@@ -289,7 +289,7 @@ export const RemixStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultItems 
             key={id}
             onClick={() => setCanvasTab(id)}
             className={`pb-2.5 text-[13px] font-medium border-b-2 -mb-px flex items-center gap-1.5 cursor-pointer ${
-              canvasTab === id ? 'border-[#d1fe17] text-white' : 'border-transparent text-neutral-500 hover:text-white'
+              canvasTab === id ? 'border-[#ff3d9a] text-white' : 'border-transparent text-neutral-500 hover:text-white'
             }`}
           >
             <Icon className="w-3.5 h-3.5" /> {label}
@@ -414,7 +414,7 @@ const CreatePanel: React.FC<{
             <Pencil className="w-3 h-3" /> Change
           </button>
           <div className="absolute left-3 bottom-2.5">
-            <div className="text-[18px] font-black uppercase tracking-tight text-[#d1fe17] leading-none">{modelLabel}</div>
+            <div className="text-[18px] font-black uppercase tracking-tight text-[#ff3d9a] leading-none">{modelLabel}</div>
             <div className="text-[11px] text-neutral-300 mt-1">{modelTagline}</div>
           </div>
         </div>
@@ -445,7 +445,7 @@ const CreatePanel: React.FC<{
           </span>
           <span className="flex-1">
             <span className="flex items-center gap-1.5 text-[11px] text-neutral-500">
-              Style <span className="px-1.5 rounded bg-[#d1fe17] text-black text-[9px] font-bold">NEW</span>
+              Style <span className="px-1.5 rounded bg-[#ff3d9a] text-[#fff] text-[9px] font-bold">NEW</span>
             </span>
             <span className="block text-[13px] text-white">{styleName(state)}</span>
           </span>
@@ -540,7 +540,7 @@ const CreatePanel: React.FC<{
           <label className="flex items-center justify-between cursor-pointer">
             <span className="text-[13px] font-medium text-white">Prompt</span>
             <input type="checkbox" className="sr-only peer" checked={state.usePrompt} onChange={(e) => set({ usePrompt: e.target.checked })} />
-            <span className="w-9 h-5 rounded-full bg-white/10 peer-checked:bg-[#d1fe17] relative transition-colors after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
+            <span className="w-9 h-5 rounded-full bg-white/10 peer-checked:bg-[#ff3d9a] relative transition-colors after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
           </label>
           {state.usePrompt && (
             <>
@@ -603,7 +603,7 @@ const CreatePanel: React.FC<{
                     </button>
                     <button
                       onClick={() => set({ prompt: buildSwapPrompt(builder, constraints) })}
-                      className="h-7 px-2 rounded-lg bg-white/[0.06] text-[11.5px] text-[#d1fe17] cursor-pointer"
+                      className="h-7 px-2 rounded-lg bg-white/[0.06] text-[11.5px] text-[#ff3d9a] cursor-pointer"
                     >
                       Write prompt
                     </button>
@@ -628,7 +628,7 @@ const CreatePanel: React.FC<{
           onClick={onGenerate}
           disabled={!canGenerate}
           className={`w-full h-12 rounded-xl font-semibold text-[14px] flex items-center justify-center gap-2 transition-all ${
-            canGenerate ? 'bg-[#d1fe17] text-black hover:brightness-95 cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
+            canGenerate ? 'bg-[#ff3d9a] text-[#fff] hover:brightness-95 cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
           }`}
         >
           Generate
@@ -675,7 +675,7 @@ const EditPanel: React.FC<{ onGenerate: (g: Omit<RemixGeneration, 'id' | 'create
             <span className="flex-1">
               <span className="flex items-center gap-1.5 text-[13px] font-medium text-white">
                 {t.name}
-                {t.isNew && <span className="px-1.5 rounded bg-[#d1fe17] text-black text-[9px] font-bold">NEW</span>}
+                {t.isNew && <span className="px-1.5 rounded bg-[#ff3d9a] text-[#fff] text-[9px] font-bold">NEW</span>}
               </span>
               <span className="block text-[11.5px] text-neutral-500">{t.desc}</span>
             </span>
@@ -807,7 +807,7 @@ const EditPanel: React.FC<{ onGenerate: (g: Omit<RemixGeneration, 'id' | 'create
             })
           }
           className={`w-full h-12 rounded-xl font-semibold text-[14px] flex items-center justify-center gap-2 ${
-            canGen ? 'bg-[#d1fe17] text-black cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
+            canGen ? 'bg-[#ff3d9a] text-[#fff] cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
           }`}
         >
           {meta.name} {canGen && <span className="flex items-center gap-1"><Sparkles className="w-3.5 h-3.5" /> {credits}</span>}
@@ -861,7 +861,7 @@ const DrawModal: React.FC<{ video: string; onClose: () => void; onSave: (png: st
     if (!drawingRef.current) return;
     const ctx = canvas.current!.getContext('2d')!;
     ctx.globalCompositeOperation = tool === 'eraser' ? 'destination-out' : 'source-over';
-    ctx.strokeStyle = 'rgba(209,254,23,0.75)';
+    ctx.strokeStyle = 'rgba(255,61,154,0.75)';
     ctx.lineWidth = size;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
@@ -911,13 +911,13 @@ const DrawModal: React.FC<{ video: string; onClose: () => void; onSave: (png: st
         <button onClick={() => setTool('eraser')} className={`p-2.5 rounded-lg cursor-pointer ${tool === 'eraser' ? 'bg-white/15 text-white' : 'text-neutral-400'}`} aria-label="Eraser">
           <Eraser className="w-4 h-4" />
         </button>
-        <input type="range" min={4} max={60} value={size} onChange={(e) => setSize(Number(e.target.value))} className="w-32 accent-[#d1fe17]" aria-label="Brush size" />
+        <input type="range" min={4} max={60} value={size} onChange={(e) => setSize(Number(e.target.value))} className="w-32 accent-[#ff3d9a]" aria-label="Brush size" />
         <button onClick={undo} className="p-2.5 rounded-lg text-neutral-400 hover:text-white cursor-pointer" aria-label="Undo">
           <Undo2 className="w-4 h-4" />
         </button>
         <button
           onClick={() => onSave(canvas.current!.toDataURL('image/png'))}
-          className="ml-4 h-10 px-5 rounded-xl bg-[#d1fe17] text-black font-semibold text-[13px] cursor-pointer"
+          className="ml-4 h-10 px-5 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-[13px] cursor-pointer"
         >
           Use sketch
         </button>
@@ -947,7 +947,7 @@ const StyleModal: React.FC<{
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`pb-3 text-[13px] font-medium capitalize border-b-2 -mb-px cursor-pointer ${tab === t ? 'border-[#d1fe17] text-white' : 'border-transparent text-neutral-500'}`}
+              className={`pb-3 text-[13px] font-medium capitalize border-b-2 -mb-px cursor-pointer ${tab === t ? 'border-[#ff3d9a] text-white' : 'border-transparent text-neutral-500'}`}
             >
               {t}
             </button>
@@ -965,12 +965,12 @@ const StyleModal: React.FC<{
                   key={s.id}
                   onClick={() => setPick(s.id)}
                   className={`theme-dark relative aspect-[4/5] rounded-xl overflow-hidden border-2 text-left cursor-pointer ${
-                    pick === s.id ? 'border-[#d1fe17]' : 'border-transparent'
+                    pick === s.id ? 'border-[#ff3d9a]' : 'border-transparent'
                   }`}
                   style={{ background: `linear-gradient(135deg, hsl(${(i * 47) % 360} 55% 30%), hsl(${(i * 47 + 80) % 360} 60% 14%))` }}
                 >
                   <span className="absolute left-2 bottom-2 text-[12px] font-medium text-white drop-shadow">{s.name}</span>
-                  {pick === s.id && <Check className="absolute top-2 right-2 w-4 h-4 text-[#d1fe17]" />}
+                  {pick === s.id && <Check className="absolute top-2 right-2 w-4 h-4 text-[#ff3d9a]" />}
                 </button>
               ))}
             </div>
@@ -989,7 +989,7 @@ const StyleModal: React.FC<{
           </button>
           <button
             onClick={() => onApply(tab === 'custom' && img ? 'none' : pick, tab === 'custom' ? img : null)}
-            className="h-10 px-5 rounded-xl bg-[#d1fe17] text-black font-semibold text-[13px] cursor-pointer"
+            className="h-10 px-5 rounded-xl bg-[#ff3d9a] text-[#fff] font-semibold text-[13px] cursor-pointer"
           >
             Apply
           </button>
@@ -1017,7 +1017,7 @@ const ModelSheet: React.FC<{ value: string; onPick: (id: string) => void; onClos
       </div>
       <div className="flex flex-wrap items-center gap-2 mb-4">
         {(['All', 'Studio', 'Partner'] as const).map((p) => (
-          <button key={p} onClick={() => setProv(p)} className={`h-8 px-3 rounded-full text-[12.5px] cursor-pointer ${prov === p ? 'bg-[#d1fe17] text-black' : 'bg-white/[0.06] text-neutral-300'}`}>
+          <button key={p} onClick={() => setProv(p)} className={`h-8 px-3 rounded-full text-[12.5px] cursor-pointer ${prov === p ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/[0.06] text-neutral-300'}`}>
             {p}
           </button>
         ))}
@@ -1031,7 +1031,7 @@ const ModelSheet: React.FC<{ value: string; onPick: (id: string) => void; onClos
           <button
             key={m.id}
             onClick={() => onPick(m.id)}
-            className={`rounded-xl p-4 text-left bg-surface border cursor-pointer hover:bg-white/[0.04] ${value === m.id ? 'border-[#d1fe17]' : 'border-white/[0.06]'}`}
+            className={`rounded-xl p-4 text-left bg-surface border cursor-pointer hover:bg-white/[0.04] ${value === m.id ? 'border-[#ff3d9a]' : 'border-white/[0.06]'}`}
           >
             <div className="flex items-center gap-2">
               <span className="text-[15px] font-semibold flex-1">{m.name}</span>
@@ -1095,7 +1095,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
         {g.output?.poster && <img src={g.output.poster} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm" />}
         <span className="relative">{g.status === 'queued' ? 'Queued…' : `Generating · ${g.progress ?? 0}%`}</span>
         <span className="relative w-2/3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-          <span className="block h-full bg-[#d1fe17] transition-[width] duration-300" style={{ width: `${g.progress ?? 2}%` }} />
+          <span className="block h-full bg-[#ff3d9a] transition-[width] duration-300" style={{ width: `${g.progress ?? 2}%` }} />
         </span>
       </div>
     ) : (
@@ -1117,7 +1117,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
         <Heart className={`w-4 h-4 ${g.liked ? 'fill-red-500 text-red-500' : 'text-neutral-400'}`} />
       </button>
       <button onClick={() => download(g)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Download">
-        <Download className={`w-4 h-4 ${g.downloaded ? 'text-[#d1fe17]' : 'text-neutral-400'}`} />
+        <Download className={`w-4 h-4 ${g.downloaded ? 'text-[#ff3d9a]' : 'text-neutral-400'}`} />
       </button>
       {g.scene && g.status === 'done' && (
         <>
@@ -1185,7 +1185,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
                 {i === 1 && <div className="text-[11px] uppercase tracking-wide text-neutral-500 pt-1">Activity</div>}
                 <label className="flex items-center justify-between text-[13px] cursor-pointer">
                   {l}
-                  <input type="checkbox" checked={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.checked })} className="accent-[#d1fe17]" />
+                  <input type="checkbox" checked={f[k]} onChange={(e) => setF({ ...f, [k]: e.target.checked })} className="accent-[#ff3d9a]" />
                 </label>
               </React.Fragment>
             ))}
@@ -1209,7 +1209,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
             {view !== 'list' && (
               <label className="block text-[11px] text-neutral-500">
                 Card size
-                <input type="range" min={1} max={5} value={6 - size} onChange={(e) => setSize(6 - Number(e.target.value))} className="w-full accent-[#d1fe17]" />
+                <input type="range" min={1} max={5} value={6 - size} onChange={(e) => setSize(6 - Number(e.target.value))} className="w-full accent-[#ff3d9a]" />
               </label>
             )}
           </div>
@@ -1231,7 +1231,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
                   <span className="text-[10.5px] px-1.5 py-0.5 rounded bg-white/[0.07] text-neutral-300">
                     {g.kind === 'edit' ? EDIT_TOOLS.find((t) => t.id === g.tool)?.name : MODES.find((m) => m.id === g.mode)?.label}
                   </span>
-                  {g.parentId && <span className="text-[10.5px] px-1.5 py-0.5 rounded bg-[#d1fe17]/15 text-[#d1fe17]">Remix</span>}
+                  {g.parentId && <span className="text-[10.5px] px-1.5 py-0.5 rounded bg-[#ff3d9a]/15 text-[#ff3d9a]">Remix</span>}
                   <div className="ml-auto">
                     <Actions g={g} />
                   </div>

@@ -69,7 +69,7 @@ export interface Palette {
 export const CURATED_PALETTES: Palette[] = [
   { id: 'dune', name: 'Dune', colors: ['#3b2a1e', '#8a5a34', '#c98f55', '#e8c9a0', '#f5ead8'] },
   { id: 'harbor', name: 'Harbor', colors: ['#0f1c2e', '#1f3b57', '#4f7a99', '#a9c4d6', '#eef3f6'] },
-  { id: 'citrus', name: 'Citrus', colors: ['#2d3a10', '#6b8f1a', '#d1fe17', '#f6d84a', '#fff6d6'] },
+  { id: 'citrus', name: 'Citrus', colors: ['#2d3a10', '#6b8f1a', '#ff3d9a', '#f6d84a', '#fff6d6'] },
   { id: 'rosewater', name: 'Rosewater', colors: ['#3a1f26', '#8c3f55', '#d77a92', '#f2b8c6', '#fbe9ee'] },
   { id: 'graphite', name: 'Graphite', colors: ['#0d0d0d', '#2b2b2b', '#595959', '#a3a3a3', '#f2f2f2'] },
   { id: 'lagoon', name: 'Lagoon', colors: ['#06302f', '#0f6b66', '#22a59b', '#86dcc8', '#e2f7f1'] },

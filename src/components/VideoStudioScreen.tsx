@@ -105,7 +105,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
           <button
             onClick={() => setActiveTab('create')}
             className={`flex-1 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-              activeTab === 'create' ? 'bg-[#d1fe17] text-black shadow-sm' : 'text-neutral-400 hover:text-white'
+              activeTab === 'create' ? 'bg-[#ff3d9a] text-[#fff] shadow-sm' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Create Video
@@ -113,7 +113,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
           <button
             onClick={() => setActiveTab('edit')}
             className={`flex-1 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-              activeTab === 'edit' ? 'bg-[#d1fe17] text-black font-bold shadow-sm' : 'text-neutral-400 hover:text-white'
+              activeTab === 'edit' ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow-sm' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Edit Video
@@ -121,7 +121,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
           <button
             onClick={() => setActiveTab('motion')}
             className={`flex-1 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
-              activeTab === 'motion' ? 'bg-[#d1fe17] text-black font-bold shadow-sm' : 'text-neutral-400 hover:text-white'
+              activeTab === 'motion' ? 'bg-[#ff3d9a] text-[#fff] font-bold shadow-sm' : 'text-neutral-400 hover:text-white'
             }`}
           >
             Motion Control
@@ -204,7 +204,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
           <button
             onClick={() => setMultiShot(!multiShot)}
             className={`w-9 h-5 rounded-full transition-colors relative cursor-pointer ${
-              multiShot ? 'bg-[#d1fe17]' : 'bg-white/10'
+              multiShot ? 'bg-[#ff3d9a]' : 'bg-white/10'
             }`}
           >
             <span
@@ -223,7 +223,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder="Describe your scene in detail. Use @ to reference assets"
-            className="w-full bg-surface border border-white/10 rounded-xl p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#d1fe17] resize-none"
+            className="w-full bg-surface border border-white/10 rounded-xl p-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-[#ff3d9a] resize-none"
           />
           <div className="flex items-center gap-1.5 text-[10px]">
             <button className="px-2 py-0.5 rounded-md bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white border border-white/5">
@@ -232,7 +232,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             <button
               onClick={() => setAudioEnabled(!audioEnabled)}
               className={`px-2 py-0.5 rounded-md border text-neutral-400 ${
-                audioEnabled ? 'bg-[#d1fe17]/10 text-accent-ink border-[#d1fe17]/20 font-bold' : 'border-white/5'
+                audioEnabled ? 'bg-[#ff3d9a]/10 text-accent-ink border-[#ff3d9a]/20 font-bold' : 'border-white/5'
               }`}
             >
               Audio {audioEnabled ? 'On' : 'Off'}
@@ -277,7 +277,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
             className={`w-full py-3 rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer ${
               isGeneratingVideo
                 ? 'bg-white/10 text-neutral-400 cursor-not-allowed'
-                : 'bg-[#d1fe17] text-black hover:bg-[#bce414] active:scale-95'
+                : 'bg-[#ff3d9a] text-[#fff] hover:bg-[#e8197f] active:scale-95'
             }`}
           >
             {isGeneratingVideo ? (
@@ -313,7 +313,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                 <button
                   onClick={() => setModelFamily('seedance')}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                    modelFamily === 'seedance' ? 'bg-[#d1fe17] text-black' : 'bg-white/5 text-neutral-400'
+                    modelFamily === 'seedance' ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/5 text-neutral-400'
                   }`}
                 >
                   Seedance 2.0
@@ -321,7 +321,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                 <button
                   onClick={() => setModelFamily('kling')}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                    modelFamily === 'kling' ? 'bg-[#d1fe17] text-black' : 'bg-white/5 text-neutral-400'
+                    modelFamily === 'kling' ? 'bg-[#ff3d9a] text-[#fff]' : 'bg-white/5 text-neutral-400'
                   }`}
                 >
                   Kling 3.0
@@ -347,7 +347,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                     setSelectedPreset(p);
                     setShowPresetPicker(false);
                   }}
-                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#d1fe17] cursor-pointer transition-all flex flex-col justify-end p-3 shadow-lg"
+                  className="group relative aspect-[3/4] rounded-2xl overflow-hidden bg-surface border border-white/10 hover:border-[#ff3d9a] cursor-pointer transition-all flex flex-col justify-end p-3 shadow-lg"
                 >
                   <img src={p.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -369,7 +369,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                 className="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-[#d1fe17] text-black flex items-center justify-center shadow-[0_0_30px_rgba(209,254,23,0.5)] hover:scale-110 transition-transform cursor-pointer">
+                <div className="w-16 h-16 rounded-full bg-[#ff3d9a] text-[#fff] flex items-center justify-center shadow-[0_0_30px_rgba(255,61,154,0.5)] hover:scale-110 transition-transform cursor-pointer">
                   <svg className="w-7 h-7 fill-current ml-0.5" viewBox="0 0 24 24">
                     <polygon points="5 3 19 12 5 21 5 3" />
                   </svg>
@@ -438,7 +438,7 @@ export const VideoStudioScreen: React.FC<VideoStudioScreenProps> = ({
                     alt=""
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 border-2 border-[#d1fe17] rounded-2xl" />
+                  <div className="absolute inset-0 border-2 border-[#ff3d9a] rounded-2xl" />
                 </div>
                 <div>
                   <h4 className="text-xs font-extrabold text-white uppercase">Choose Preset</h4>

@@ -362,7 +362,7 @@ export const InfluencerStudio: React.FC<{ vaultItems: VaultItem[] }> = ({ vaultI
                   aria-selected={galleryTab === id}
                   onClick={() => setGalleryTab(id)}
                   className={`h-8 px-3.5 rounded-full text-[12.5px] font-medium flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
-                    galleryTab === id ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
+                    galleryTab === id ? 'bg-[#ff3d9a] text-[#fff]' : 'text-neutral-400 hover:text-white'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" /> {label}
@@ -732,7 +732,7 @@ const JobDetail: React.FC<JobDetailProps> = ({ job, onClose, onRecreate, onTurnT
           {job.kind === 'character' && (
             <button
               onClick={() => onTurnToMotion(job)}
-              className="w-full h-11 rounded-xl bg-[#d1fe17] hover:bg-[#bfee00] text-black font-bold text-[14px] flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full h-11 rounded-xl bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-bold text-[14px] flex items-center justify-center gap-2 cursor-pointer"
             >
               <Clapperboard className="w-4 h-4" /> Turn to motion
             </button>

@@ -164,7 +164,7 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
             <ClipMedia clip={clip} still className="w-full h-full object-cover" />
             {method === 'running' && (
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <div className="absolute inset-x-0 h-0.5 bg-[#d1fe17] shadow-[0_0_12px_#d1fe17] animate-scan" />
+                <div className="absolute inset-x-0 h-0.5 bg-[#ff3d9a] shadow-[0_0_12px_#ff3d9a] animate-scan" />
                 <span className="text-[12px] text-white font-medium">Detecting people…</span>
               </div>
             )}
@@ -188,8 +188,8 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
                       onClick={(ev) => (ev.stopPropagation(), setActive(p.index), setPicker(p.index))}
                       style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
                       className={`absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-2 text-[12px] font-bold flex items-center justify-center overflow-hidden shadow-lg transition-all duration-200 cursor-pointer animate-pop ${
-                        inf || e?.keep ? 'border-[#d1fe17]' : 'border-white'
-                      } ${active === p.index ? 'scale-110 ring-2 ring-[#d1fe17]/60' : ''} bg-black/70 text-white`}
+                        inf || e?.keep ? 'border-[#ff3d9a]' : 'border-white'
+                      } ${active === p.index ? 'scale-110 ring-2 ring-[#ff3d9a]/60' : ''} bg-black/70 text-white`}
                       aria-label={`Person ${p.index}`}
                     >
                       {inf ? <img src={inf.face} alt="" className="w-full h-full object-cover" /> : p.index}
@@ -265,7 +265,7 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
               <span className="block text-[11px] text-neutral-500">Products or outfits · up to {LIMITS.maxObjectRefs}</span>
             </span>
             <input type="checkbox" className="sr-only peer" checked={swap} onChange={(e) => setSwap(e.target.checked)} />
-            <span className="w-9 h-5 rounded-full bg-white/10 peer-checked:bg-[#d1fe17] relative transition-colors after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
+            <span className="w-9 h-5 rounded-full bg-white/10 peer-checked:bg-[#ff3d9a] relative transition-colors after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-white after:transition-transform peer-checked:after:translate-x-4" />
           </label>
           <div className={`grid transition-[grid-template-rows] duration-300 ${swap ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
             <div className="overflow-hidden">
@@ -325,7 +325,7 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
           onClick={submit}
           disabled={!ready}
           className={`w-full h-12 rounded-xl font-semibold text-[14px] flex items-center justify-center gap-2 transition-all duration-200 ${
-            ready ? 'bg-[#d1fe17] text-black hover:brightness-95 cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
+            ready ? 'bg-[#ff3d9a] text-[#fff] hover:brightness-95 cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
           }`}
         >
           Generate
@@ -368,12 +368,12 @@ const CastPicker: React.FC<{ person: number; value: string | null; onPick: (id: 
   const Tile: React.FC<{ i: Influencer }> = ({ i }) => (
     <button
       onClick={() => onPick(i.id)}
-      className={`theme-dark relative rounded-xl overflow-hidden bg-surface border-2 text-left transition-all duration-150 hover:scale-[1.02] cursor-pointer ${value === i.id ? 'border-[#d1fe17] shadow-[0_0_0_3px_rgba(209,254,23,0.25)]' : 'border-transparent'}`}
+      className={`theme-dark relative rounded-xl overflow-hidden bg-surface border-2 text-left transition-all duration-150 hover:scale-[1.02] cursor-pointer ${value === i.id ? 'border-[#ff3d9a] shadow-[0_0_0_3px_rgba(255,61,154,0.25)]' : 'border-transparent'}`}
     >
       <img src={i.sheet} alt={i.name} loading="lazy" className="w-full aspect-[4/5] object-cover object-top" />
       <span className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/85 text-[12px] font-medium text-white truncate">{i.name}</span>
       {value === i.id && (
-        <span className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-[#d1fe17] text-black flex items-center justify-center animate-pop">
+        <span className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-[#ff3d9a] text-[#fff] flex items-center justify-center animate-pop">
           <Check className="w-3.5 h-3.5" />
         </span>
       )}

@@ -25,8 +25,8 @@ export const Switch: React.FC<SwitchProps> = ({ checked, onChange, disabled, lab
       e.stopPropagation();
       onChange(!checked);
     }}
-    className={`relative inline-flex h-[31px] w-[51px] shrink-0 items-center rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d1fe17]/60 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
-      checked ? 'bg-[#d1fe17]' : 'bg-neutral-700'
+    className={`relative inline-flex h-[31px] w-[51px] shrink-0 items-center rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3d9a]/60 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${
+      checked ? 'bg-[#ff3d9a]' : 'bg-neutral-700'
     }`}
   >
     <span
@@ -173,7 +173,7 @@ const MiniPhone: React.FC<{ mode: 'light' | 'dark' }> = ({ mode }) => {
       <div className="h-1.5 w-1/2 rounded-full" style={{ background: line }} />
       <div className="grid grid-cols-2 gap-1 flex-1">
         {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="rounded-[3px]" style={{ background: i === 0 ? '#d1fe17' : card }} />
+          <div key={i} className="rounded-[3px]" style={{ background: i === 0 ? '#ff3d9a' : card }} />
         ))}
       </div>
       <div className="h-2 rounded-[3px]" style={{ background: card }} />
@@ -202,7 +202,7 @@ export const ThemePicker: React.FC<{ value: ThemeValue; onChange: (v: ThemeValue
           >
             <span
               className={`relative w-full aspect-[3/4] max-w-[88px] rounded-[12px] overflow-hidden border-2 transition-colors theme-dark ${
-                active ? 'border-[#d1fe17]' : 'border-transparent ring-1 ring-black/10'
+                active ? 'border-[#ff3d9a]' : 'border-transparent ring-1 ring-black/10'
               }`}
             >
               {o.value === 'system' ? (
@@ -225,7 +225,7 @@ export const ThemePicker: React.FC<{ value: ThemeValue; onChange: (v: ThemeValue
             <span className="text-[14px] text-white">{o.label}</span>
             <span
               className={`w-[22px] h-[22px] rounded-full flex items-center justify-center border-2 transition-colors ${
-                active ? 'bg-[#d1fe17] border-[#d1fe17] text-black' : 'border-neutral-600'
+                active ? 'bg-[#ff3d9a] border-[#ff3d9a] text-[#fff]' : 'border-neutral-600'
               }`}
               aria-hidden="true"
             >
@@ -295,7 +295,7 @@ export const Sheet: React.FC<SheetProps> = ({ open, title, onClose, children, fo
 export const PrimaryButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ className = '', ...p }) => (
   <button
     {...p}
-    className={`w-full h-[50px] rounded-[14px] bg-[#d1fe17] hover:bg-[#bfee00] text-black font-semibold text-[16px] active:scale-[0.98] transition-transform disabled:opacity-40 cursor-pointer ${className}`}
+    className={`w-full h-[50px] rounded-[14px] bg-[#ff3d9a] hover:bg-[#e8197f] text-[#fff] font-semibold text-[16px] active:scale-[0.98] transition-transform disabled:opacity-40 cursor-pointer ${className}`}
   />
 );
 
