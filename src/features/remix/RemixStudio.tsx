@@ -62,6 +62,7 @@ import {
   useGenerations,
   toggleLibraryLike,
   useLibraryLikes,
+  upgradeToHd,
 } from './store';
 
 /* ============================================================
@@ -1053,6 +1054,26 @@ const ModelSheet: React.FC<{ value: string; onPick: (id: string) => void; onClos
   );
 };
 
+/** Draft → 1080p upgrade for remix-engine jobs. */
+const HdButton: React.FC<{ g: RemixGeneration }> = ({ g }) => {
+  const hd = g.engine?.hd?.state || 'idle';
+  if (hd === 'done') return <span className="self-center px-2 h-6 rounded-md bg-[#ff3d9a]/15 text-[11px] font-semibold text-accent-ink flex items-center">1080p</span>;
+  if (hd === 'running')
+    return <span className="self-center px-2 h-6 rounded-md bg-white/[0.06] text-[11px] text-neutral-400 flex items-center" title={g.engine?.hd?.stage}>1080p · rendering</span>;
+  return (
+    <button
+      onClick={async () => {
+        const err = await upgradeToHd(g.id);
+        toast(err || 'Rendering 1080p. It will replace the draft when ready.');
+      }}
+      className="self-center px-2.5 h-7 rounded-md bg-[#ff3d9a] text-[#fff] text-[11.5px] font-semibold cursor-pointer active:scale-95"
+      title={hd === 'error' ? g.engine?.hd?.error : 'Upgrade this draft to 1080p'}
+    >
+      {hd === 'error' ? 'Retry 1080p' : 'Upgrade to 1080p'}
+    </button>
+  );
+};
+
 /* ============================================================
  * History (filter + view)
  * ============================================================ */
@@ -1097,6 +1118,12 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
         <span className="relative w-2/3 h-1.5 rounded-full bg-white/10 overflow-hidden">
           <span className="block h-full bg-[#ff3d9a] transition-[width] duration-300" style={{ width: `${g.progress ?? 2}%` }} />
         </span>
+        {g.engine?.stage && <span className="relative max-w-[80%] text-center text-[11px] text-neutral-500 line-clamp-2">{g.engine.stage}</span>}
+      </div>
+    ) : g.status === 'failed' ? (
+      <div className={`${className} aspect-[9/16] max-h-[420px] rounded-xl bg-white/[0.04] border border-white/[0.06] flex flex-col items-center justify-center gap-1.5 p-4 text-center`}>
+        <span className="text-[13px] font-semibold text-white">Remix failed</span>
+        <span className="text-[11.5px] text-neutral-400 line-clamp-4">{g.error || 'Something went wrong.'}</span>
       </div>
     ) : (
       <div className={`${className} relative overflow-hidden`}>
@@ -1143,6 +1170,7 @@ const HistoryView: React.FC<{ gens: RemixGeneration[]; onRemixAgain: (g: RemixGe
           </button>
         </>
       )}
+      {g.engine && g.status === 'done' && <HdButton g={g} />}
       <button onClick={() => deleteGeneration(g.id)} className="p-1.5 rounded-lg hover:bg-white/10 cursor-pointer" aria-label="Delete">
         <Trash2 className="w-4 h-4 text-neutral-400" />
       </button>

@@ -107,43 +107,68 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
   };
   const [w, h] = clip.aspect.split(':').map(Number);
 
-  const submit = () => {
-    if (!ready) return;
-    const provenance = buildProvenance({ model, clip, cast });
-    addGeneration({
-      kind: 'remix',
-      mode: swap ? 'swap' : 'transfer',
-      model,
-      quality,
-      aspect: clip.aspect,
-      seconds: clip.duration_s,
-      inputs: {
-        video: clip.storage_url || undefined,
-        videoName: clip.title,
-        refs: [...cast.filter((c) => c.influencer_id).map((c) => INFLUENCERS.find((i) => i.id === c.influencer_id)!.face), ...(swap ? objects : [])],
-        prompt,
-        style: RENDER_STYLES.find((s) => s.id === style)?.name || 'No style',
-      },
-      output: { url: clip.storage_url || clip.poster_url || '', poster: clip.poster_url || undefined },
-      parentId: clip.id,
-      credits,
-      scene: {
-        clipId: clip.id,
-        clipTitle: clip.title,
-        cast: cast.map((c) => ({ person_index: c.person_index, influencerId: c.influencer_id, name: c.influencer_id ? influencerName(c.influencer_id) : 'Original' })),
-        provenance: { ...provenance },
-        watermark: WATERMARK,
-        parentRemixId,
-      },
-    });
-    // Best effort: register the job server-side too (no-op if the API isn't deployed).
-    fetch('/api/scenes/remixes', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ clip_id: clip.id, character_map: cast, object_refs: [], style: style === 'none' ? null : style, prompt, model, quality, parent_remix_id: parentRemixId }),
-    }).catch(() => {});
-    toast(`Queued · ${credits} credits`);
-    onSubmitted();
+  const [sending, setSending] = useState(false);
+
+  /** Real generation on the remix engine (Railway). Nothing is simulated. */
+  const submit = async () => {
+    if (!ready || sending) return;
+    if (swap) return toast('Objects swap isn’t available on the remix engine yet. Turn it off to recast.');
+    const castIds = cast.filter((c) => c.influencer_id).map((c) => c.influencer_id!) as string[];
+    if (castIds.length > 2) return toast('The remix engine can recast up to 2 people per clip.');
+    if (!clip.storage_url) return toast('This clip has no video file to remix.');
+    setSending(true);
+    try {
+      const t = await fetch('/api/engine', { method: 'POST' });
+      const ticket = await t.json().catch(() => ({}));
+      if (t.status === 503 || ticket.error === 'engine_not_connected') return toast('The remix engine isn’t connected yet.');
+      if (!t.ok || !ticket.engine_url) return toast('Couldn’t start the remix. Try again.');
+
+      let video: Blob;
+      try {
+        video = await (await fetch(clip.storage_url)).blob();
+      } catch {
+        return toast('This clip is no longer available in this browser. Upload it again.');
+      }
+      const infs = castIds.map((id) => INFLUENCERS.find((i) => i.id === id)!).filter(Boolean);
+      const form = new FormData();
+      form.append('token', ticket.ticket);
+      form.append('video', video, `${clip.id}.mp4`);
+      form.append('refs', JSON.stringify(infs.map((i) => new URL(i.sheet, location.origin).href)));
+      form.append('names', JSON.stringify(infs.map((i) => i.name)));
+      form.append('title', clip.title);
+      const r = await fetch(`${ticket.engine_url}/v1/jobs`, { method: 'POST', body: form });
+      const job = await r.json().catch(() => ({}));
+      if (!r.ok || !job.id) return toast(job.detail || 'The remix engine rejected this clip.');
+
+      const provenance = buildProvenance({ model, clip, cast });
+      addGeneration({
+        kind: 'remix',
+        mode: 'transfer',
+        model,
+        quality,
+        aspect: clip.aspect,
+        seconds: clip.duration_s,
+        inputs: { video: undefined, videoName: clip.title, refs: infs.map((i) => i.face), prompt, style: 'No style' },
+        output: { url: '', poster: clip.poster_url || undefined },
+        parentId: clip.id,
+        credits,
+        scene: {
+          clipId: clip.id,
+          clipTitle: clip.title,
+          cast: cast.map((c) => ({ person_index: c.person_index, influencerId: c.influencer_id, name: c.influencer_id ? influencerName(c.influencer_id) : 'Original' })),
+          provenance: { ...provenance, engine_job: job.id },
+          watermark: WATERMARK,
+          parentRemixId,
+        },
+        engine: { base: ticket.engine_url, jobId: job.id, stage: 'Queued' },
+      });
+      toast('Remix started. A draft will appear in History.');
+      onSubmitted();
+    } catch {
+      toast('Couldn’t reach the remix engine. Try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -323,12 +348,12 @@ export const ScenePanel: React.FC<{ clip: Clip; parentRemixId?: string; initialC
       <div className="shrink-0 p-3 border-t border-white/[0.06]">
         <button
           onClick={submit}
-          disabled={!ready}
+          disabled={!ready || sending}
           className={`w-full h-12 rounded-xl font-semibold text-[14px] flex items-center justify-center gap-2 transition-all duration-200 ${
             ready ? 'bg-[#ff3d9a] text-[#fff] hover:brightness-95 cursor-pointer' : 'bg-white/[0.06] text-neutral-500 cursor-not-allowed'
           }`}
         >
-          Generate
+          {sending ? 'Uploading…' : 'Generate'}
           <span className="flex items-center gap-1 tabular-nums">
             <Sparkles className="w-3.5 h-3.5" /> {shown}
           </span>
