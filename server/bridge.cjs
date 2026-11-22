@@ -125,7 +125,7 @@ function getCredentials() {
     console.error('Error reading Higgsfield config:', err.message);
   }
   return {
-    token: process.env.HIGGSFIELD_TOKEN || 'oat_O7KY63444YM6W8EM25GE4G2FJXDRPHMB',
+    token: process.env.HIGGSFIELD_TOKEN || '',
     workspaceId: process.env.HIGGSFIELD_WORKSPACE_ID || '2aaba1d1-1494-48db-b962-bcb047481c9a'
   };
 }
@@ -219,20 +219,7 @@ async function syncFromHiggsfield() {
 
       lastSyncTime = Date.now();
 
-      // Automated Cloud Sync to halalfans.me whenever a new generation arrives
-      if (isNewGeneration && !isDeploying) {
-        isDeploying = true;
-        console.log(`🚀 [Auto-Sync] Detected new generation: ${currentLatestId} (${inMemoryItems.length} total). Syncing to live cloud...`);
-        const { exec } = require('child_process');
-        exec('npx vercel --prod --yes', { cwd: path.join(__dirname, '..') }, (err) => {
-          isDeploying = false;
-          if (err) {
-            console.error('Vercel auto-deploy notice:', err.message);
-          } else {
-            console.log(`✅ [Auto-Sync] Cloud production deployment updated on halalfans.me!`);
-          }
-        });
-      }
+      // No auto-deploy: halalfans.me reads new Soul generations live via /api/vault.
     }
   } catch (err) {
     console.error('Sync error:', err.message);
