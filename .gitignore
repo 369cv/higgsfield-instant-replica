@@ -10,3 +10,5 @@ yarn-debug.log*
 yarn-error.log*
 server/vault-data.json
 .cache/
+__pycache__/
+*.pyc
